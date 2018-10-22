@@ -20,4 +20,3 @@
     * make sure to have already enabled CORS either from Azure or your app (note Azure > app CORS settings)
     * in order to enable your api to be granted as access to the UI, go to the App Services > your_api_here > Managed service identity > On
     * set the `oauthAllowImplicitFlow` to `true`
-    * 

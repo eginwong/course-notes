@@ -1,10 +1,4 @@
-# Interview Prep
-
-spring boot + cloud, base knowledge on functional and reactive programming that is at teachable and coachable level with a potential to learn.
-
-Functional, Reactive programing in depth and Kotlin
-
-
+# Spring WebFlux
 
 * Spring WebFlux framework
 * be wary that your data repository supports non-blocking reactive streams (Mongo)
@@ -76,6 +70,7 @@ RouterFunction<ServerResponse> getEmployeeByIdRoute() {
 * Reactive and non-blocking benefits are the predictable scale with less required memory
 * Spring WebFlux uses a small number of threads, as it is assumed that they will not be blocking
 * WebClient makes use of the event loop style
+
 
 ## Resources
 * [Spring Boot Course, Jack Ton](https://spring-boot-course-labs.herokuapp.com/11-spring-boot-webflux.html)
