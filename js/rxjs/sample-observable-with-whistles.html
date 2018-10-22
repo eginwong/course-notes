@@ -1,7 +1,7 @@
 <html>
 
 <body>
-    <h1>Keyword search RX</h1>
+    <h1>Keyword search RX-whistles</h1>
     <div>Results returned: <span id="query-total"></span></div>
     <input type="text" style="width: 100%" id="rick-and-morty-query" placeholder="search for a Rick and Morty title">
 
@@ -11,20 +11,25 @@
     <script src="https://npmcdn.com/@reactivex/rxjs@6.3.3/dist/global/rxjs.umd.js"></script>
     <script>
         const {
-            fromEvent,
-            of
+            fromEvent
         } = rxjs;
         const {
             ajax
         } = rxjs.ajax;
         const {
+            debounceTime,
+            distinctUntilChanged,
             map,
+            tap
         } = rxjs.operators;
 
         const input = document.getElementById("rick-and-morty-query");
 
         const keyEvent$ = fromEvent(input, 'keyup').pipe(
-            map(i => i.currentTarget.value)
+            map(i => i.currentTarget.value),
+            debounceTime(500),
+            distinctUntilChanged(),
+            tap(val => console.log('currently searching for ' + val))
         );
 
         keyEvent$.subscribe(query =>
@@ -34,8 +39,7 @@
             )
             .subscribe(
                 res => displayResults(res),
-                error => displayNoResults()
-            )
+                error => displayNoResults())
         )
 
         function displayResults(res) {

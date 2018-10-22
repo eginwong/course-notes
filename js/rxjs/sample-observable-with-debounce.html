@@ -1,7 +1,7 @@
 <html>
 
 <body>
-    <h1>Keyword search RX</h1>
+    <h1>Keyword search RX-debounced</h1>
     <div>Results returned: <span id="query-total"></span></div>
     <input type="text" style="width: 100%" id="rick-and-morty-query" placeholder="search for a Rick and Morty title">
 
@@ -18,13 +18,15 @@
             ajax
         } = rxjs.ajax;
         const {
+            debounceTime,
             map,
         } = rxjs.operators;
 
         const input = document.getElementById("rick-and-morty-query");
 
         const keyEvent$ = fromEvent(input, 'keyup').pipe(
-            map(i => i.currentTarget.value)
+            map(i => i.currentTarget.value),
+            debounceTime(500)
         );
 
         keyEvent$.subscribe(query =>

@@ -56,7 +56,7 @@
 * bridge between observer and Observable
 * can subscribe to 0+ Observables, and can re-emit + emit them
 * are hot
-* > if the source Observable is external (outside of your code), *do not* a subject, otherwise *do* 
+* > if the source Observable is external (outside of your code), *do not* use a subject, otherwise *do* 
     * use subject when converting a cold observable to hot
     * generating a hot observable imperatively and with state, without any direct external source
 * determine what you start with (hot or cold) and what you need to output (hot or cold)

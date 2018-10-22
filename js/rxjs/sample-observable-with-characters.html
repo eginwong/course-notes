@@ -1,0 +1,95 @@
+<html>
+
+<body>
+    <h1>Keyword search RX-characters</h1>
+    <div>Results returned: <span id="query-total"></span></div>
+    <input type="text" style="width: 100%" id="rick-and-morty-query" placeholder="search for a Rick and Morty title">
+
+    <h2>Results</h2>
+    <div id="results">Search me</div>
+
+    <script src="https://npmcdn.com/@reactivex/rxjs@6.3.3/dist/global/rxjs.umd.js"></script>
+    <script>
+        const {
+            fromEvent,
+            forkJoin,
+            of ,
+            throwError,
+        } = rxjs;
+        const {
+            ajax
+        } = rxjs.ajax;
+        const {
+            catchError,
+            debounceTime,
+            distinctUntilChanged,
+            map,
+            switchMap,
+            tap,
+        } = rxjs.operators;
+
+        const input = document.getElementById("rick-and-morty-query");
+
+        const keyEvent$ = fromEvent(input, 'keyup')
+            .pipe(
+                map(i => i.currentTarget.value),
+                debounceTime(500),
+                distinctUntilChanged(),
+            );
+
+        keyEvent$.subscribe(query =>
+            of (query).pipe(
+                map(input => 'https://rickandmortyapi.com/api/episode/?name=' + input + '&status=alive'),
+                switchMap(query => ajax(query)),
+                map(data => retrieveCharacters(data.response)),
+            ).subscribe(
+                res => displayResults(res),
+                error => displayNoResults()
+            )
+        );
+
+        function retrieveCharacters(raw) {
+            const clone = raw.results.slice();
+            clone.map(episode => episode.characters)
+                .forEach((episode, index) => {
+                    // for each array of character APIS
+                    const characters$ = [];
+                    episode.forEach(char => {
+                        characters$.push(ajax(char));
+                    })
+                    forkJoin(characters$).subscribe(responses => {
+                        clone[index].characters = responses.map(response =>
+                            response.response.name);
+                    });
+                });
+            return Object.assign(raw, {
+                results: clone
+            });
+        }
+
+        function displayResults(res) {
+            setTimeout(() => {
+                document.getElementById("results").innerHTML = createTableRepresentation(res);
+            }, 0);
+            document.getElementById("query-total").innerText = res.info.count;
+        }
+
+        function createTableRepresentation(res) {
+            const header = '<table border="1"><tbody><tr><td>Name</td><td>Episode</td><td>Characters</td></tr>';
+            const footer = '</tbody></table>';
+
+            return header +
+                res.results.map(episode =>
+                    '<tr><td>' + episode.name + '</td><td>' + episode.episode +
+                    '</td><td>' + episode.characters +
+                    '</td></tr>').join('') + footer;
+        }
+
+        function displayNoResults() {
+            document.getElementById("query-total").innerText = 0;
+            document.getElementById("results").innerHTML = '<h2>No results found</h2>';
+        }
+    </script>
+</body>
+
+</html>

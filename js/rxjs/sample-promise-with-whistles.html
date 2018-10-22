@@ -1,7 +1,7 @@
 <html>
 
 <body>
-    <h1>Keyword Search Promises</h1>
+    <h1>Keyword Search Promises-whistles</h1>
     <div>Results returned: <span id="query-total"></span></div>
     <input type="text" style="width: 100%" id="rick-and-morty-query" placeholder="search for a Rick and Morty title">
 
@@ -9,10 +9,21 @@
     <div id="results">Search me</div>
 
     <script>
+        let previousState;
+
         function keyupFunction() {
             const query = document.getElementById("rick-and-morty-query").value;
+            if(previousState === query) {
+                return;
+            }
+
             const url = 'https://rickandmortyapi.com/api/episode/?name=' + query + '&status=alive';
 
+            // distinct until changed
+            previousState = (' ' + document.getElementById("rick-and-morty-query").value).slice(1);
+
+            // tap
+            console.log('currently searching for ' + query);
             fetch(url).then(data => data.json())
                 .then(res => displayResults(res))
                 .catch(error => displayNoResults());
@@ -37,7 +48,25 @@
             document.getElementById("results").innerHTML = '<h2>No results found</h2>';
         }
 
-        document.getElementById("rick-and-morty-query").addEventListener('keyup', keyupFunction);
+        /* ========================================================================================= */
+        // debounce operator
+        function debounce(func, wait, immediate) {
+            var timeout;
+            return function () {
+                var context = this,
+                    args = arguments;
+                var later = function () {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                var callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
+        };
+
+        document.getElementById("rick-and-morty-query").addEventListener('keyup', debounce(keyupFunction, 500));
     </script>
 </body>
 
