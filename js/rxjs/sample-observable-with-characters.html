@@ -10,23 +10,9 @@
 
     <script src="https://npmcdn.com/@reactivex/rxjs@6.3.3/dist/global/rxjs.umd.js"></script>
     <script>
-        const {
-            fromEvent,
-            forkJoin,
-            of ,
-            throwError,
-        } = rxjs;
-        const {
-            ajax
-        } = rxjs.ajax;
-        const {
-            catchError,
-            debounceTime,
-            distinctUntilChanged,
-            map,
-            switchMap,
-            tap,
-        } = rxjs.operators;
+        const { fromEvent, forkJoin, of, throwError } = rxjs;
+        const { ajax } = rxjs.ajax;
+        const { catchError, debounceTime, distinctUntilChanged, map,        switchMap, tap } = rxjs.operators;
 
         const input = document.getElementById("rick-and-morty-query");
 
@@ -70,7 +56,7 @@
         function displayResults(res) {
             setTimeout(() => {
                 document.getElementById("results").innerHTML = createTableRepresentation(res);
-            }, 0);
+            }, 10);
             document.getElementById("query-total").innerText = res.info.count;
         }
 
