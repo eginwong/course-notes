@@ -14,3 +14,24 @@
 
 ### Testing
 * test with `StepVerifier` and make sure to end with `verify()` to trigger test
+* *reactor-test* uses `StepVerifier` for testing a sequence
+* Producing fake data for tests uses `TestPublisher`
+```java
+StepVerifier.create(
+    Flux....)
+    .expectNext("")
+    .expectErrorMessage("")
+    .verify();
+```
+* When you want to make a custom assertion on the content of the signal, use `consumeNextWith`
+* In order to manipulate time, make use of `StepVerifier.withVirtualTime(Supplier)`
+```java
+StepVerifier.withVirtualTime(() -> Mono.delay(Duration.ofDays(1)))
+    .expectSubscription()
+    .expectNoEvent(Duration.ofDays(1))
+    .expectNext(0L)
+    .verifyComplete();
+```
+* Can test specific contexts as well
+* Can also use `TestPublisher` to control source of data in test, and also create non-compliant 
+* Create a `Probe` if need to make assertions between two forking sequences that both result in `Mono<Unit>` 
