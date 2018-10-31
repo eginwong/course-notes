@@ -76,6 +76,9 @@
 * `inline` is the keyword
 * if lambda is used later, cannot inline
 * sequences cannot inline, because they are held up to execute later
+* to reduce the creation of the function every time in a loop, but must use `internal` and `@PublishedApi` for values that are required from within the enclosing class
+* `crossinline` is used to mark lambdas that cannot have non-local returns. Essentially, cannot return value in lambda
+* [resource](https://android.jlelse.eu/inline-noinline-crossinline-what-do-they-mean-b13f48e113c2)
 
 ## Generics support in Kotlin
 * can constrain generics

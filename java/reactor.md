@@ -35,3 +35,7 @@ StepVerifier.withVirtualTime(() -> Mono.delay(Duration.ofDays(1)))
 * Can test specific contexts as well
 * Can also use `TestPublisher` to control source of data in test, and also create non-compliant 
 * Create a `Probe` if need to make assertions between two forking sequences that both result in `Mono<Unit>` 
+
+### Context
+* key/value store that is propogated between components via context protocol, ideal for transporting orthogonail info like tracing or security tokens
+* thread-safe, immutable
