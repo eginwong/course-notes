@@ -141,3 +141,22 @@ public static void main(String[] args) {
 * class modifier takes precedence over other levels
 * interfaces are always public, they cannot include other access modifiers
 * for subclasses, cannot decrease visibility of parent but can increase it, i.e. go from protected or default to public
+
+## Type System
+* java.lang.Object is the top of the class hierarchy in Java, only primitives and lambdas do not inherit from it
+* byte: signed 8-bit value
+* short: signed 16-bit value
+* char: unsigned 16-bit value
+* int: signed 32-bit value
+* long: signed 64-bit value
+* float: 32-bit single precision floating-point
+* double: 64-bit double precision floating-point
+* abstract vs. interface: abstract needs to be subclassed, interface defines capability and can have multiple interfaces
+* inner class vs static nested class is that inner class requires that the outer class be instantiated first
+* `equals()` for object reference and `==` is for sameness, for primitives. can use either for enums
+* marker interface is one that has no methods, to signify a property i.e. `Serializable`, `Cloneable`, `Remote`
+* FunctionalInterface is only for one single abstract method, default methods do not count
+
+## Annotations
+* are metadata bound to elements of source code that serve as info for compiler, compile-time/deployment-time processing, runtime processing
+* can specify `@Target` to tell the compiler where the annotation should actually go
