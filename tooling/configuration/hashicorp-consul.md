@@ -27,3 +27,7 @@
     * yes if we want transparent changes to app server
 * Don't need look Spring-Cloud-Vault, always either Consul or Cloud Config
 * Do we encrypt everything?
+* Pros and Cons of Consul vs. ETCD?
+    * Consul - distributed, HA, easy updating via CLI for kv pairs, full support with Vault, documentation is better, data center aware
+    * ETCD - backed by Google, distributed, RAFT concensus algorithm, written in GO, supposedly better performance back in 2014
+* Both have curl-able and HTTP/JSON based API, communicates with Docker over docker0
