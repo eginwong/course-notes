@@ -68,7 +68,19 @@
 * display client secret when required
 * view/manage authorizations
 
+## Thoughts
+[ref](https://stackoverflow.com/questions/34784644/what-is-the-difference-between-oauth-based-and-token-based-authentication)
+* API Keys vs OAuth Tokens vs JSON Web Tokens
+    * API keys are simple and best for developers
+        * more easily compromised
+        * `Authorization: ApiKey ...`
+    * OAuth
+        * will send an access token to allow the application to access a user's data
+        * `Authorization: Bearer ...`
+    * JWT requires less db lookups and is good in conjunction with OAuth
+        * no looking up access token so JWT cannot be revoked, only expired
+        * `Authorization: Bearer ...`
+        * 
 
-  
 Relevant resources:
 * [Documentation](https://oauth.net/)

@@ -1,6 +1,6 @@
-# Azure
+# Azure OAuth
 
-# Deploying your applications with VsTS
+# Deploying your applications with VSTS
 * must set up resource groups > service apps
 * use `Web App` for templating as it is the most straightfoward
 * Azure requires the artifacts to be in a `zip`ped format so there may be need to make use of special libraries, like `pack-zip` for npm to bundle
