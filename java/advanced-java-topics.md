@@ -61,7 +61,7 @@ public static void main(String[] args) {
 ```
 * stack space created for primitive -> String added to String pool and reference stored in stack, reference p for Person is created in stack and new stack created for constructor with `this` reference, primitive, and String reference variable 
 * GC steps:
-  1. new objects1
+  1. new objects
   2. next GC, will alternate clearing Eden + one survivor space and storing in the other
   3. Will then move any particularly old objects to old gen
   4. For every major GC, several minor GCs 
