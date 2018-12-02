@@ -237,6 +237,33 @@
 
 [>>> HOMEWORK](#HOMEWORK#1)
 
+[>>> HOMEWORK](#HOMEWORK#2)
+
+#### Fragments
+* represents a behavior or a portion of UI in a `FragmentActivity`
+    * can be combined for modularity in a multi-pane UI
+    * each with its own lifecylce and input events
+    * always hosted in an activity and is directly affected by host lifecycle
+    * actions on a `Fragment` will be placed on the back stack
+    * inserted via `<fragment>` in XML layout or added to `ViewGroup`
+* Design Philosophy was for dynamic and flexible UI
+    * modularity
+    * ![fragment_lifecycle](https://developer.android.com/images/fragment_lifecycle.png)
+    * implementation requires `onCreate()`, `onCreateView()`, `onPause()`
+    * could extend `DialogFragment`, `ListFragment`, `PreferenceFragmentCompat`
+    * the way to add UI to a fragment is to inflate from a XML layout, with parameter for `container` being the parent `ViewGroup`
+        * arguments are (ID of layout, `ViewGroup` to be parent of layout, boolean indicator of attaching to second parameter during inflation or not, but would be redundant)
+* Managing Fragments with `FragmentManager` via `getSupportFragmentManager()`
+    * modifying fragments in activity are considered `FragmentTransaction`s
+        * explicit methods for `addToBackStack()` and `commit()` to propagate change
+    * after `commit()`, transaction is executed based on UI thread scheduling
+* to manage communication between fragments and activity, make use of event callbacks
+    * listener is added `onAttach()` of Fragment to Activity
+* main difference between Activity to Fragment is how one is placed in the back stack while the other is only explicitly placed there, respectively
+* use `FragmentScenario` for testing
+
+Aside: Lifecycle of a Fragment is overly complicated and happens to bind business and presentation logic together. Best use is to leave most of the work to `ViewModel` and use as little of a Fragment as generally required.
+
 
 # whee
 
@@ -263,6 +290,14 @@ Coursework:
     * error: was crashing when adding second activity, put code outside of the `onCreate` hook
         * `Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String android.content.Intent.getStringExtra(java.lang.String)' on a null object reference`
  
+### HOMEWORK#2: 
+Assigned Reading:
+1. [Fragment section](https://developer.android.com/guide/components/fragments)
+2. [Square Engineering on Fragment use](https://medium.com/square-corner-blog/advocating-against-android-fragments-81fd0b462c97)
+3. [Fragments in 2018](https://medium.com/inloopx/using-android-fragments-in-2018-b9cf0b05b718)
+Coursework:
+N/A
+
 
 Path: finish fundamentals > dummy app > testing
 
