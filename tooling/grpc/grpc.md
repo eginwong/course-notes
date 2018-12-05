@@ -25,4 +25,7 @@
 * metadata is also associated with each RPC call, dependent on language
 
 ## Authentication
-* 
+
+
+## Further Reading
+* [Apache Thrift](https://thrift.apache.org/tutorial/), a similar protocol used by Facebook
