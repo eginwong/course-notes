@@ -234,6 +234,40 @@
 * task is cohesive unit that can move to "background"
 * activities can be instantiated multiple times, even from other tasks
     * this can be configured 
+* managing tasks
+    * new tasks, or retrieving an old one, etc.
+    * can be managed through flags in the intent or in the XML
+    * defining launch modes (how instance of an activity is associated with the *current* task)
+        * manifest or intent flags
+        * the instigating activity has precedence over the activity being called, in terms of how to associate with current task
+    * from the manifest file:
+        * `standard`, in task from which it was created and routes intent to it, can be instantiated multiple times and can have multiple instances
+        * `singleTop`, will route to top of current task if there but will create a new one if not; cannot use the back button in this case as it is the same activity
+        * `singleTask`, activity is set as root of new task created by system, if activity exists elsewhere, will route intents to existing instance instead
+        * > only one instance of the activity can exist at at ime
+        * `singleInstance`, you'll always ever only have one activity per task
+    * it is possible combine activties from within a task with other activities in the back stack, if pulled in via `singleTask` or `singleInstance`
+    * using Intent Flags:
+        * similar to `singleTop` and `similarTask`
+        * `FLAG_ACTIVITY_CLEAR_TOP`, would destroy all other activities above it and assigned the execution
+    * handling affinities:
+        * activities have affinity for their own app
+        * `taskAffinity` attribute, takes a string that's not the package name (for resolving the default app affinity)
+        * applies when `FLAG_ACTIVITY_NEW_TASK`, will search for another task that has similarly affinitied activities
+            * take care too that the app can get back to the started task
+        * `allowTaskReparenting = true`, activity can be pulled to be part of another (more affinitied) task
+    * clearing back stack
+        * after a long time, all but the root activity are cleared
+        * `alwaysRetainTaskState`, ignore default behaviour
+        * `clearTaskOnLaunch`, always wipe activity stack on departure
+        * `finishOnTaskLaunch`, clears a single activity and can wipe root activity
+    * starting a task
+        * set launcher and main to define entry point of app, typically for app launcher
+        * need to make sure there is some way to re-launch the app when using these various launchers
+
+#### Processes and Application Lifecycle
+* 
+
 
 [>>> HOMEWORK](#HOMEWORK#1)
 
@@ -298,6 +332,33 @@ Assigned Reading:
 Coursework:
 N/A
 
+### HOMEWORK#3:
+Keygan-only: look at native component transitions, i.e., moving fragment activity between (parent) activities
+Eric-only: look at `finishOnTaskLaunch`
+when would you not use an entry point for your Android app
+Assigned Reading:
+* [App shortcuts](https://developer.android.com/guide/topics/ui/shortcuts/)
+* [App widgets](https://developer.android.com/guide/topics/appwidgets/overview)
+* [Processes and Application Lifecycle](https://developer.android.com/guide/components/activities/process-lifecycle)
+* [Parcelables and app lifecycle](https://developer.android.com/guide/components/activities/parcelables-and-bundles)
+* [Handling app links](https://developer.android.com/training/app-links/)
+* [Interacting with other apps](https://developer.android.com/training/basics/intents/)
+
+Coursework:
+* find examples of when to use task affinities (NEW_TASK, Task Reparenting)
+* Add a shortcut to your application
+* Add a widget to your application
+* Add app link to your application
+* Add a fragment to your application
+* Interact with other apps in your application
+* See if parcelables and bundles are relevant
+* use Android Jetpack in another application
+
+### HOMEWORK#4:
+Assigned Reading:
+* [Recents screen](https://developer.android.com/guide/components/activities/recents)
+* [Multi-window support]https://developer.android.com/guide/topics/ui/multi-window)
+* optional: [Loaders](https://developer.android.com/guide/components/loaders)
 
 Path: finish fundamentals > dummy app > testing
 
@@ -306,3 +367,4 @@ future HOMEWORK: split best practices
 future EXERCISE:
     * trigger all the different lifecycles 
     * review [testing an activity doc](https://developer.android.com/guide/components/activities/testing)
+    * test out LAUNNNNNNNCHMODES
