@@ -1,9 +1,22 @@
 # HTTP/3, QUIC
 [ref](https://blog.cloudflare.com/the-road-to-quic/)
+[ref](https://ma.ttias.be/googles-quic-protocol-moving-web-tcp-udp/)
 
 > Quick UDP Internet Connections
 > ... encrypted-by-default Internet transport protocol
 > ... replace TCP and TLS on the web
+
+[TCP Fast Open](https://en.wikipedia.org/wiki/TCP_Fast_Open) will improve TCP but it isn't widely adopted yet (storing a cookie on client header to speed up TLS acknowledgment)
+
+## Why is QUIC needed?
+* much faster iteration cycles as updates to TCP can take years or decades due to regulation
+* QUIC would replace TLS and parts of HTTP/2
+* implements its own [crypto-layer](https://docs.google.com/document/d/1g5nIXAIkN_Y-7XJW5K45IblHd_L2f5LTaDUDwvZ5L6g/edit) so no need for TLS 1.2
+* head-of-line blocking means block when TCP packet is missed because processing order matters
+* FEC, forward error correction, every packet includes enough data of other packets such that a missing packet can be reconstructed without having to retransmit
+    * each packet is actually contains more payload (about 10%) than necessary, for contingency
+* TCP needs quadruplet (source,dest ip/port) but UDP has **Connection UUID** which can be preserved between networks
+* firewall needs to be opened at 443/UDP on in and out ports
 
 ## Improvements
 * QUIC has been accepted into IETF and is different from its predecessor, gQUIC

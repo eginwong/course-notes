@@ -55,6 +55,7 @@ StepVerifier.withVirtualTime(() -> Mono.delay(Duration.ofDays(1)))
     * `Schedulers.single()`, for a single, reusable thread for all calls
     * `Schedulers.elastic()`, elastic thread pool creates new worker pools as needed and reuses idle ones. 
     * `Schedulers.parallel()`, many workers as you have CPU cores
+    * [ref](https://www.e4developer.com/2018/04/28/springs-webflux-reactor-parallelism-and-backpressure/)
 * Two means of switching execution context, via `publishOn` or `subscribeOn`
     * `publishOn` will switch the whole sequence to a Thread picked from the Scheduler pool and remain on that one until switched by another `publishOn` or completed
     * `subscribeOn` applies to subscription process, and can change from original subscriber thread to another pool of available threads determined by the argument passed
