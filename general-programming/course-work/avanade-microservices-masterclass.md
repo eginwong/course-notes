@@ -1,19 +1,19 @@
 # Microservices Masterclass
 
 ## Intro to Microservices
-* Domain-driven design
+- Domain-driven design
 
 ## Designing Microservices
-* Business Domain
+- Business Domain
   * break into subdomains
   * use business capability mapping to determine bounded contexts
   * use DDD for complex models
   * use ubiquitous language to make sure everyone is on the same page
-* Event StormingHow to transform?
-* How to transform from old to new?
+- Event StormingHow to transform?
+- How to transform from old to new?
   * Iterate and change over time
   * decomposition > strangler pattern > asset capture
-* Digital Decoupling
+- Digital Decoupling
   1. Define Subdomains
   2. Define concepts and language (ubiquity)
   3. Define contracts
@@ -25,24 +25,24 @@
   9. Create a factory
   10. Roadmap and Prioritize
   11. Scale the Delivery (product-focused)
-* Bubble Contexts, protecting old system from forcing design of new system or anti-corruption layer
-* Conway's Law
-* Mythical Man Month
+- Bubble Contexts, protecting old system from forcing design of new system or anti-corruption layer
+- Conway's Law
+- Mythical Man Month
 
 ## Building Transactional Systems
-* Synchronous Communication
+- Synchronous Communication
   * HTTP-based REST Endpoints
     * follow its principles, layered system, uniform interface, stateless
-* Actions / Commands over REST
-* Chained Composition Pattern
+- Actions / Commands over REST
+- Chained Composition Pattern
   * one service calls another, which calls another, which can lead to an increase in latencies, errors, retries, etc.
-* Aggregator Pattern
+- Aggregator Pattern
   * orchestrate calls to various services
   * API Gateway
-* Scaling Synchronous Services
+- Scaling Synchronous Services
   * Service Registry, or service side load balancer
   * Broker Pattern
-* Asynchronous Communication
+- Asynchronous Communication
   * Fire and Forget
   * Direct Async Communication
     * Polling or use Webhooks
@@ -52,7 +52,7 @@
     * messages, queues, topics and polling
     * queues with single consumer, or competing consumers, or fanout
     * topics/subscriptions, a key of some sort, with durable and non-durable subscriptions
-* Transactions
+- Transactions
   * Data Consistency is most important
   * need to apply ACID
   * Transactions are hard in distributed systems
@@ -61,5 +61,5 @@
   * multi-step commit phases
 
 Homework:
-* [https://martinfowler.com/articles/201701-event-driven.html](https://martinfowler.com/articles/201701-event-driven.html)
-* [https://www.youtube.com/watch?v=STKCRSIsyP0](https://www.youtube.com/watch?v=STKCRSIsyP0) 
+- [https://martinfowler.com/articles/201701-event-driven.html](https://martinfowler.com/articles/201701-event-driven.html)
+- [https://www.youtube.com/watch?v=STKCRSIsyP0](https://www.youtube.com/watch?v=STKCRSIsyP0) 

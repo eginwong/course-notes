@@ -3,14 +3,14 @@
 ## BEANS
 
 ### Lifecycle
-* Init -> Dependency Injection, if any -> Post Construct -> Destroy
+- Init -> Dependency Injection, if any -> Post Construct -> Destroy
 
 ### Description
-* Java Beans are:
+- Java Beans are:
     * serializable
     * have getter and setters for properties
     * have a default parameterless constructor
-* Spring Beans are:
+- Spring Beans are:
     * managed by Spring container for IoC
     * for dependency injection, so they are of familiar format to autowire and configure
     * default scope is singleton per instance of Spring IoC
@@ -22,14 +22,14 @@
 ## Spring Boot Application
 
 ### Annotation
-* `@SpringBootApplication` enables
+- `@SpringBootApplication` enables
     * `@EnableAutoConfiguration`
     * `@ComponentScan`
     * `@Configuration`
 
 ## Cross Cutting Concerns
-* concern: cannot be cleanly decomposed from rest of the system
-* do not fit cleanly into OOP
+- concern: cannot be cleanly decomposed from rest of the system
+- do not fit cleanly into OOP
     * i18n
     * logging
     * memory management
@@ -38,13 +38,13 @@
     * transaction processing
     * security
     * caching
-* Solve with aspect-oriented programming (AOP)
+- Solve with aspect-oriented programming (AOP)
     * creates "advice" that doesn't touch the code but is applied on top of via `pointcut` specification
     * `Aspect` is pointcut + advice
 
 ## JSON Marshalling
-* JSR-310 dependency for date/time serialization
-* can create custom `JSON/De/Serializer` by passing to the `ObjectMapper`
-* using Jackson for serialization
-* `mapper.writeValueAsString()`
-* `mapper.readValue(json, new TypeReference<Map<String, String>>);`
+- JSR-310 dependency for date/time serialization
+- can create custom `JSON/De/Serializer` by passing to the `ObjectMapper`
+- using Jackson for serialization
+- `mapper.writeValueAsString()`
+- `mapper.readValue(json, new TypeReference<Map<String, String>>);`

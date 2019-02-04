@@ -73,16 +73,16 @@
 
 
 ## A Pragmatic Philosophy
-* aware of the big picture
-* responsible
+- aware of the big picture
+- responsible
     * commitment to doing something right
     * when we make mistakes/errors, admit them honestly and offer options
     * must plan out risks ahead of time and prepare contingencies
     * rubber duck talking to your boss about the problem and try to think about what next steps they would provide
-* fix small and big problems immediately or mitigate them to avoid future rot
-* trick people into assisting with helpful efforts if necessary
-* get things working good enough, acceptable enough and signed off by users and move on
-* think about exactly what message you want to get across
+- fix small and big problems immediately or mitigate them to avoid future rot
+- trick people into assisting with helpful efforts if necessary
+- get things working good enough, acceptable enough and signed off by users and move on
+- think about exactly what message you want to get across
     * know your audience
     * choose your timing
     * listen
@@ -90,8 +90,8 @@
     * communicate and get back to people
 
 ## A Pragmatic Approach
-* orthogonality makes things easier to test, reason about, and update
-* for #17, look into BNF or metaprogramming
-* for #18, beware the unit of estimation, as that will anchor people in its fluctuation
+- orthogonality makes things easier to test, reason about, and update
+- for #17, look into BNF or metaprogramming
+- for #18, beware the unit of estimation, as that will anchor people in its fluctuation
   * use models to reduce ambiguity 
   * record your estimates to get better and identify what went wrong

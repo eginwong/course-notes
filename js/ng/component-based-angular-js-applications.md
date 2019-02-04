@@ -1,3 +1,3 @@
 # Component-based Angular JS applications - Pluralsight
 
-* template, controller, binding
+- template, controller, binding
