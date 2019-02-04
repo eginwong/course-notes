@@ -1,6 +1,8 @@
 # 10 Personal Finance Lessons for Technology Professionals
 [ref](https://www.troyhunt.com/10-personal-finance-lessons-for-technology-professionals/)
 
+@dlc
+
 Lessons:
 * Money buys choices
   * on having a choice to do one thing over another

@@ -1,6 +1,8 @@
 # Programmer Imposter Syndrome: 6 Ways to Get Over Yours
 [ref](https://www.codingdojo.com/blog/programmer-imposter-syndrome)
 
+@dlc
+
 > It’s called imposter syndrome: the constant feeling of not being good enough or knowing enough to do your job well
 
 1. Have you ever experienced IS?

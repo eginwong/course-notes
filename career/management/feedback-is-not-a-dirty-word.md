@@ -1,6 +1,8 @@
 # Feedback is not a dirty word
 [ref](https://blog.alexmaccaw.com/feedback-is-not-a-dirty-word)
 
+@dlc
+
 > Effective critical feedback should be: private, regular, love and good intentions, specific and avoid sweeping statements, non-violent communication
 
 1. Does the idea of feedback make you nervous?
