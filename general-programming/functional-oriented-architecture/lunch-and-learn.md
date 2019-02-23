@@ -3,6 +3,14 @@
 ## What does that even mean?
 
 ## Where do we commonly see Functional Programming? Is this related to Functional Programming?
+* Yes, it is. This is the over-arching structure required to support a more functional-in-nature design than that of most impure languages.
+* Inspired by Haskell
+* Better able to harness the key concepts of FP
+  * function composition
+  * purity
+  * functions-as-first-citizens
+  * immutability
+  * closures, currying, higher-order functions
 
 ## FOA, case study with client
 
@@ -28,7 +36,7 @@ Major source of inspiration, talk on functional paradigm for architecture
 microservices, service oriented, monolithic, layered, event-driven, component-based, peer-to-peer (networking), data-centric, client-server
 
 ## Flow
-1. discuss various types of architecture, progression through age and use case (5 min)
+1. discuss various types of architecture, progression through age and use case (2 min)
 2. discuss what functional oriented architecture is (20 min)
    1. compare with functional programming 
    2. function-flow pattern?
@@ -43,4 +51,3 @@ microservices, service oriented, monolithic, layered, event-driven, component-ba
    5. terraform
    6. vault
 5. Talk about process and how this came about; how do we develop? (5 min)
-6. Talk about real-life use case and when and how to use this (5 min)
