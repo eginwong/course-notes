@@ -1,0 +1,67 @@
+# Create Containerized Solutions
+
+- container is lightweight alternative to virtual machines, smaller less expensive, fast to start-up, self-contained
+- docker is the de-facto container application
+  - leading open-source containerization platform
+  - supported natively in Azure
+  - client: CLI to interface with Docker
+  - Dockerfile: text to assemble a Docker image
+  - Image: hierarchies of files built from a Dockerfile
+  - container: running instance of an image from `docker run`
+  - Registry: image repository
+  - build and run docker image
+    - `docker build -t aspnetapp .`
+    - `docker run -p 8080:80 --name myapp aspnetapp`
+- docker compose
+  - compose is a tool for defining multi-container Docker applications
+  - need to build Dockerfile
+  - must create a `docker-compose.yml` to define the app
+  - Run `docker-compose up` and the entire app is run
+- working with docker
+  - `docker images` pulls the docker images available locally
+  - `docker ps` shows the process currently running
+  - `docker rm` will remove the container, `-f` will force kill
+  - to kill all containers, `docker rm $(docker ps -a -q)`
+  - `docker build -t webappdemo .`, you can pass name with `-t` parameter, and `.` indicates where the Dockerfile is located locally
+- Kubernetes
+  - container orchestration
+- Azure Kubernetes Service
+  - managed k8s cluster
+  - easily integrate with RBAC and Azure AD
+  - Azure Monitor
+  - Azure DevOps
+  - VNet Integration
+  - only have to pay for the worker nodes, not the master
+- Container Registry
+  - public Docker Hub
+  - Azure Container Registry
+    - geo-replication
+    - reduced network latency
+    - private repository
+  - admin user should only be used in development, create proper user + service principal in for production
+- Kubernetes objects to know
+  - pod 
+    - smallest unit in terms of deployment and scaling
+    - encapsulates containers, storage, network IPs, deployment options
+    - containers within a pod share an IP address and port space, communicate via `localhost`
+  - service
+    - pod objects will die, can't rely on IP addresses
+    - services define logical set of pods and a policy to access them
+    - provides a stable IP
+    - virtual load balancer in front of pods
+  - replica set
+    - HA
+    - defines how many copies of pods
+    - reconciles desired and actual state
+    - self-healing
+  - deployment
+    - declarative
+    - zero downtime with application deployment
+    - happens in rolling fashion
+    - rollout history is kept and can be rolled back at any time
+
+## Troubleshooting
+- under Avanade domain, may need to create an Azure Active Directory to get around permissions re: RBAC
+  - to make service principals
+- after creating new AAD, go to Avanade cloud, click Subscriptions + Change Directory
+  - select the new AAD and change
