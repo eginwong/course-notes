@@ -6,4 +6,3 @@
 - they influence technical direction of the company and find problems to solve instead of being assigned them
 - intended to strengthen and 10x their team's output by being the support beam
 - become the technical face of the company, and are expected to have an impact and lead by example
-- 
