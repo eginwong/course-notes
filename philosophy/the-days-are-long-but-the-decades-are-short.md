@@ -1,0 +1,65 @@
+# The days are long but the decades are short
+[ref](https://blog.samaltman.com/the-days-are-long-but-the-decades-are-short)
+
+@dlc
+
+- never put your family, friends, or significant other low on your priority list
+  - have parties
+  - don't lose touch with old friends
+  - prefer handful of close friends than tons of acquaintances
+- make the time count
+  - do what makes you happy and fulfilled
+  - don't spend time trying to maintain relationships with people you don't like
+  - don't let yourself make execuses for not doing the things you want to do
+- pick the right thing to do
+  - focus and believe in yourself
+  - learn to identify talented people
+  - work hard
+- on work, difficult to find a great job you don't care about
+  - don't work so hard that life passes you buy
+  - aim to be the best in the world at whatever you do professionally
+  - don't waste time being unorganized or working suboptimally
+  - don't be afraid to take some career risks, especially early on
+- money can buy freedom
+  - lack of money is very stressful
+- talk to people more
+  - read more long content
+  - spend less time on the internet
+- don't waste time
+- don't let yourself get pushed around
+- have clear goals for yourself every day, every year, every decade
+- jump on opportunities that present themselves, even if they go against your earlier plans
+- go out of you way to be around smart, ambitious, interesting peoeple
+  - work for them
+  - hire them
+  - you are the average of the people you hang around with
+- minimize your own cognitive load from distracting things that don't matter
+  - avoid mental crap
+- keep your personal burn rate low
+- don't worry so much
+- ask for what you want
+- don't regret things
+- exercise, eat well, sleep, get out in nature
+- go out of your way to help people
+  - be nice even when it doesn't matter
+- youth is a great thing
+- tell your parents you love them more often
+  - go home and visit as often as you can
+- this, too, shall pass
+- learn voraciously
+- do new things often
+  - aim to do something big, new, risky every year in your professional and personal life
+- love intensely and get excited
+- pick your battles
+- forgive people
+- don't chase status without substance
+- most things are okay in moderation
+- existential angst is part of life
+- be grateful and keep problems in perspective
+  - don't complain too much
+  - don't hate other people's success
+- be a doer, not a talker
+- humans will adjust
+- think before you act
+- don't judge other people too quickly
+- the days are long but the decades are short
