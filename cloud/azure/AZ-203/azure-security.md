@@ -1,0 +1,38 @@
+# Azure Security´
+
+- 10-15% on the AZ-203 exam
+- implement authentication
+  - using certs, forms-based auth, or tokens
+  - multi-factor or Windows auth by Azure AD
+  - OAuth2 auth
+  - implement Managed Service Identity (MSI)/Service Principal authentication
+- Authentication is act of challenging a party for legitimate credential, providing the basis for creation of a **security principal** to be used for identity and access control
+  - knowing the identity of the user
+- Certificate-based authentication (trusted apps or Microsoft Apps)
+  - eliminates need to enter a username/password for certain Microsoft Office apps on your mobile device
+- Forms-based Authentication
+  - uses an HTML form to send the user's credentials to the server
+  - easy to implement, built-in to ASP.NET
+  - requires a browser, not standard HTTP auth mechanism and uses HTTP cookies instead, CSRF, credentials sent as plain-text, some users disable cookies
+- Azure Active Directory
+  - fully managed multi-tenant service from Microsoft that offers identity and access capabilities for apps running in Microsoft Azure
+- Application Model (things we must support)
+  - identify app according to the authentication protocols it supports
+  - handle user consent during token request
+- What's inside the token?
+  - Claims!
+  - validate the token, identify subject's directory tenant, user information, ...
+- [sample](https://github.com/AzureADQuickStarts/AppModelv2-WebApp-OpenIDConnect-DotNet)
+  - create azure ad
+  - create new app registration
+    - name, app type, sign-on url
+  - visual studio, can publish from the Build dropdown
+  - azure, have to change the app to "multi-tenanted" from the app > settings > properties 
+  - get the azure AD url (as the domain) from the Azure Active Directory tab
+  - need to add a new user with AD Url as domain of the user
+  - claims are sensitive information so you should not share that
+- multi-tenant, yes, no, needs to be set "yes" to allow cross-domain (i.e. one is on.microsoft.com, the other is .azurewebsites.com)
+- multi-factor authentication
+  - knowledge (pwd)
+  - possession (phone)
+  - inherence ()
