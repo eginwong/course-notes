@@ -1,0 +1,47 @@
+# Azure App Service Web Apps
+
+- covers web apps, mobile apps, API apps, logic apps
+  - push notification
+  - auto scaling
+  - limited OS interaction
+  - includes deployment slots for reliable testing and version promotion
+- App Service Plans
+  - app runs in it
+  - defines a set of compute resources for a web app to run
+  - can host multiple apps on the same computing resources
+  - defines region, number of VM instances, size, pricing tier
+- Pricing Tiers
+  - shared compute (free, shared), not dedicated server
+  - dedicated compute (basic, standard, premium, premium v2), better scaling
+  - isolated, run on dedicated Azure Virtual Networks, provides network isolation, max scale-out capabilities
+  - consumption, tier only available to function apps
+- TODO: Review Service Pricing Tiers
+- Azure Web Apps
+  - 99.5% SLA
+  - custom domains
+  - auth
+  - continuous deployment
+  - traffic mgmt
+- Application Settings
+  - Managed Pipeline Settings is more for old vs new versions of C#, Integrated for new
+  - ARR is for cookies, turn it off if unnecessary for load balancing
+  - Always On is for cold vs hot starts
+  - Traffic mgmt through deployment slots
+- WebJobs
+  - lightweight background tasks
+  - different file types of scripts, like js, jar, bash, exe, ps
+  - no extra cost
+  - built-in logging and mgmt with Azure Portal
+  - triggered vs. continuous
+    - cts runs on allinstances or you can restrict it if continuous; triggered will be on a single instance chosen for load balancing
+  - App Service > Settings > Webjobs > Add WebJob
+- Diagnostics Logging
+  - both web server and the web app
+  - Web Server Diagnostics
+    - Detailed Error Logging
+    - Failed Request Tracing
+    - Web Server Logging
+  - Application Diagnostics
+    - can specify level of log from C#
+    - Error, Critical, Warning, Info, Trace, Debug
+  - Settings > Diagnostics logs
