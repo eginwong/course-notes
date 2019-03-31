@@ -1,0 +1,97 @@
+# SQL Style Guide
+[ref](https://www.sqlstyle.guide/)
+
+## General
+- consistent and descriptive identifiers and names
+- judicious use of white space and indentation to make code easier to read
+- store ISO-8601 compliant time and date information
+  - `YYYY-MM-DD HH:MM:SS.SSSSS`
+- try to use only standard SQL functions for portability
+- avoid redundant SQL
+- include comments when necessary
+- avoid 
+  - CamelCase
+  - descriptive prefixes or Hungarian notation `sp_`, `tbl`
+  - plurals
+  - quoted identifiers, use SQL92 double quotes if you must
+  - OO design principles
+- naming conventions
+  - ensure name is unique and not as a reserved keyword
+  - keep length max 30B
+  - name must begin with a letter and not end with an _ 
+  - only use letteres, numbers, and _s
+  - avoid consecutive _s
+  - use _s for naturally spacing in a name
+  - avoid abbreviations unless commonly understood
+- tables
+  - use a collective name over plurals
+  - do not prefix tables
+  - never give a table the same name as one of its columns and vice versa
+  - avoid concatenating two table names together to create the name of a relationship table
+- columns
+  - use the singular name
+  - where possible avoid using `id` as the primary identifier of the table
+  - always use lowercase unless proper nouns
+- aliasing or correlations
+  - should relate to object or expression they are aliasing
+  - correlation name should be first letter of each word in the object's name
+  - append a number if the same correlation name is taken
+  - always include `AS` keyword
+  - for computed data, use name you would give if it were a column
+- stored procedures
+  - name must contain a verb
+- uniform suffixes
+  - `_id` 
+  - `_status`
+  - `_total`
+  - `_num`
+  - `_name`
+  - `_seq`
+  - `_date`
+  - `_tally`
+  - `_size`
+  - `_addr`
+
+## Query syntax
+- reserved words
+  - always uppercase reserved words like `SELECT` or `WHERE`
+  - avoid abbreviated keywords and use full length ones where available
+  - avoid vendor-specific keywords where ANSI SQL keyword works just as fine
+- white space
+  - right align keywords when possible and left align the details
+  - include spaces before and after `=`, after `,`, surrounding apostrophes `''`
+  - newline space for
+    - `AND`, `OR`
+    - after `;`
+    - after each keyword definition
+    - after comma when separating multiple columns into logical groups
+    - separate code into related sections
+- indentation
+  - joins should be indented
+  - subqueries
+- preferences
+  - make use of `BETWEEN` over `AND`
+  - use `IN()` over multiple `OR` clauses
+  - avoid `UNION` clauses and temp tables if possible
+
+## Create syntax
+- choosing data types
+  - avoid using vendor-specific data types
+  - only use `REAL` or `FLOAT` types when strictly necessary but prefer `NUMERIC` and `DECIMAL` at all times
+- default values    
+  - come before any `NOT NULL` statement
+- constraints and keys
+  - key should be unique to some degree
+  - consistency in terms of data type and lower likelihood of changing in the future
+  - validated against standard format (like ISO)
+  - keeping key as simple possible
+  - layout and order
+    - primary key right after `CREATE TABLE` statement
+    - constraint defined right after their appropriate column declaration
+    - multi-column constraints can be close to the columns or at the end of the definition
+    - use alphabetical order where `ON DELETE` comes before `ON UPDATE`
+- designs to avoid
+  - OO doesn't always translate well into DB struture
+  - column should make units self evident, use `CHECK` for validation
+  - Entity Attribute Value (EAV), go with a specialist product for this schema-less data
+  - splitting up data that should be in one table across many for time-based archiving because future queries must `UNION` them for querying one table
