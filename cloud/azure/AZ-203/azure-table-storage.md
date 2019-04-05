@@ -1,0 +1,59 @@
+# Azure Blob & Table Storage
+
+- CAP Theorem
+  - Consistency
+  - Availability
+  - Partition Tolerance
+- Azure storage
+  - REST
+  - Client
+  - Pay as you go
+- Storage accounts
+  - unique namespace for your data
+  - General V1 (legacy), General V2, Blob Storage
+  - access tiers
+    - hot: costs the most, cheapest to access
+    - cold: infrequent, stores for around 30 days, mid-way
+    - archived: rarely, stores for at least 100 days; have to be flexible with your latency requirements
+  - replication models (redundancy)
+    - LRS: locally redundant store, cheapest; SLA is 11 9's over a year, 3 replicas 1 region; write protected against disk, node, rack failure
+    - GRS: geo-redundant storage; SLA is 16 9's, and 300 miles away data centre, replicates 2 regions, 6 data centers, asynchronous
+    - RA-GRS: read-access geo-redundant storage; get read-access from your secondary region
+  - access models
+    - every request against your storage account must be authorized
+    - use Azure AD
+    - or shared key
+    - shared access signature, delegation without giving up key
+      - provide granular control for access
+      - validity interval (start and expiry time)
+      - permissions granted by SAS
+      - IP address or range of addresses to accept
+      - restrict protocols accepted by Azure Storage
+- account > container > blob 
+  - block blob
+    - upload large blobs efficiently (docs, images, videos)
+    - 50000 blocks, each block has 100MB
+  - append blob
+    - optimized for appending operations
+    - can't update or delete blocks
+    - block has 4MB
+    - good for logging, data analytics
+  - page blob
+    - optimized for read and writes
+    - 512kb page ???
+- Azure Blob storage Lifecycles
+  - can expire
+  - can transition to different access tiers
+  - run automated jobs
+  - example:
+    - { "version": "0.5", "rules": [{ "name": "ruleName", "type": "Lifecycle", "definition": { "filters": { "blobTypes": [ "blockBlob"]}, "prefixMatch": ["..."], "actions": { "baseBlob": { "tierToCool": {"daysAfterModificationGreater": ...}}}}}]}
+    - can move blobs around access tiers
+  - create lease on block to be an exclusive lock
+  - WORM -> Write once read many
+- Azure tables
+  - used to store NoSQL data in the cloud
+  - can store any number of tables up to max of the storage account
+  - enforce strong consistency
+  - partitioning strategy
+    - primary key of an identity
+    - collection of entities with the same PartitionKey

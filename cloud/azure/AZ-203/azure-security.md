@@ -36,3 +36,35 @@
   - knowledge (pwd)
   - possession (phone)
   - inherence ()
+
+# Azure Security, part II
+- Service principal authentication (accounts run by apps and not by people)
+- RBAC, role-based access control
+  - role (reader, resource-specific or custom role, contributor, owner) by scope (subscription, resource group, resource)
+- flow
+  - security principal (user, group, service principal, managed identity)
+  - role definition
+    - roles will have a set of actions/not-actions defined
+      - built-in and custom  
+  - scope (group of resources on which these actions are applied)
+- can do multiple role assignment
+- select item that you want to grant access control to, and then access control (IAM) > role assignments 
+- shared access signatures (SAS)
+  - provide you with a way to grant limited access to objects in your storage account to other clients
+  - service SAS
+  - account SAS
+  - no need to create portal account
+- TODO: CBAC
+- encryption models
+  - client-side
+  - server-side
+  - must enable "secure transfer required" option in the Storage Account > Configuration
+    - does not work from custom domain
+- encryption of SQL databases
+- transparent data encryption is managed
+
+# Azure Key Vault
+- secrets management
+- key management
+- cert mgmt
+- store secrets backed by hardware security modules

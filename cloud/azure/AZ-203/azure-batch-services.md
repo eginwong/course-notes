@@ -123,10 +123,13 @@ az batch pool delete --pool-id mypool
 - to check results, check the CloudTask `.ComputeNodeInformation` for details
 - you will be charged for the pool while nodes are running
 
-
-
-
-
+### Getting started with Batch CLI
+[ref](https://docs.microsoft.com/en-us/azure/batch/batch-cli-get-started)
+```sh
+az batch pool list
+az batch task list --job-id job001
+# can use --select-clause, filter, or expand
+```
 
 ### Persist task data to Azure Storage with the Batch service API
 [ref](https://docs.microsoft.com/en-us/azure/batch/batch-task-output-files)
