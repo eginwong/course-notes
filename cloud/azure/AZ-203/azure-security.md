@@ -68,3 +68,34 @@
 - key management
 - cert mgmt
 - store secrets backed by hardware security modules
+
+
+# Self Research
+
+## Implement authentication
+
+- authentication is challenging a party for legitimate credentials, providing basis for creation of a security principal to be used for identity and access control
+  - proving you are who you say you are
+- authorization is act of granting an authenticated security principal permission to do something
+- MSFT identity platform is the identity provider, which verifies identity of users and apps that exist in an org's directory, issues security tokens upon successful AuthN
+- app that wants to use MSFT's identity platform must be registered in AAD
+- once a user has authenticated, the app must validate the user's security token to ensure success
+- flow of requests depends on AuthN protocol used: OAuth2, OpenID, WS-Fed, SAML2
+- two sorts of apps: ones that need to securely access resources and others that are the resource
+- application model 
+  - holds all data required to support authN at runtime, all data for deciding what resources an app might need to access and what conditions, infrastructure for implementating app provisioning within the app dev's tenant to any other AAD tenant
+- flow
+  - sign in with app
+  - creds are acquired and verified
+  - user is prompted to consent for app to gain access
+  - MSFT identity platform uses app object in A as blueprint for creating service principal in B
+  - user receives requested token
+- security tokens issued by MSFT identity platform contain claims/assertions of info about the subject that has been authenticated
+  - validation
+  - user info
+  - subject's authZ
+
+
+## Implement access control
+
+## Implement secure data solutions

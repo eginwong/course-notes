@@ -60,9 +60,9 @@
     - happens in rolling fashion
     - rollout history is kept and can be rolled back at any time
 
-## Self-research
+# Self-research
 
-### basic mgmt of ACR via CLI
+## basic mgmt of ACR via CLI
 - managed Docker container registry service for storing private Docker container images
 - create container registry using `az acr create --resource-group ... --name ... --sku Basic`
 - login to acr, `az acr login --name <acrname>`
@@ -73,19 +73,19 @@
   - to show tags, run the same specifying `show-tags` and `--repository <name>`
 - to run image from registry, `docker run <acrLoginServer>/hello-world:v1`
 
-### Create ACR, create, prep, push
+## Create ACR, create, prep, push
 - create resource group, `az group create --name ... --location ...`
 - create acr
 - login to acr
 - to query acr, `az acr show --name <acrName> --query loginServer --output table`
 - tag image
 
-### Create AKS cluster
+## Create AKS cluster
 - only pay for the agent nodes, not the masters
 - for improved security and mgmt, AKS can integrate with Azure AD and use K8s RBAC
 - for scaling, can use horizontal pod autoscaler or cluster autoscaler
 - supports creation of GPU enabld node pools (single or multiple GPU enabled VMs allowed)
-- can mount storage volume sfor persistent data
+- can mount storage volumes for persistent data
 - can be deployed into an existing vnetwork and every pod in the cluster has an assigned IP address and can directly communicate with other pods in the cluster, and other nodes in the vnet
 - can work well with K8S ingress resources as normal
 - Helm, Draft, and other tools work seamlessly with AKS
@@ -97,17 +97,17 @@ az aks create \
     --name myAKSCluster \
     --node-count 1 \
     --enable-addons monitoring \
-    --generate-ssh-keyss
+    --generate-ssh-keys
 ```
 - to connect local kubectl to remote, use the following `az aks get-credentials --resource-group myResourceGroup --name myAKSCluster`
 - use of Azure Dev Spaces helps to rapidly iterate and debug code directly in AKS cluster
 - to watch for changes of deployment `kubectl get service azure-vote-front --watch`
 
-### Create container images for solutions
+## Create container images for solutions
 - `docker build ./ -t <name of repository>`, where `-t` is the tag followed by the name of the image you want to create
 - `-d` is to run in the background, `-p` is to map the port
 
-### Publish an image to ACR
+## Publish an image to ACR
 - use a service principal for authentication in headless scenarios
   - `az ad sp create-for-rbac --name ... --scopes ... --role ... --query password --output tsv`
   - pass in via `--registry-username SPID` and `--registry-password SPPWD`
