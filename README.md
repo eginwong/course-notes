@@ -6,4 +6,4 @@ Online version available [here](https://e-gin-wong.gitbook.io/eginwong-course-no
 ## Tags
 `@dlc`: discussion literature club is an event that I run to facilitate discussion, insight, and foster healthy culture
 
-`reread`: self-explanatory
+`@reread`: self-explanatory

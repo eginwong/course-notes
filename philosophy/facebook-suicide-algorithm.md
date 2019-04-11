@@ -3,9 +3,9 @@
 
 @dlc
 
+> "It's not a question of if they get hacked, it's a question of when[.]"
+> "The technology companies, Facebook included, are no different than that they have to determine whether or not to activate law enforcement to save someone."
+
 1. Do you think companies have an obligation to run these sorts of algorithms for safety?
-2. Do you think users should opt in?
-3. Should users be shown their suicide rating?
-4. What do you think about the ethics of this endeavour?
-5. What do you think about the role of ML and data science affecting parts of our lives that we're not even aware of ourselves?
-6. Do you think this is a good idea?
+2. What do you think about the ethics of this endeavour?
+3. What do you think about the role of ML and data science affecting parts of our lives that we're not even aware of ourselves?

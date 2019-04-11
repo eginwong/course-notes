@@ -1,16 +1,14 @@
 # Look at yourself objectively
 [ref](http://www.aaronsw.com/weblog/semmelweis)
 
-@dlc
+@dlc last run: 2019-02-14
 
-TODO: quotations
->
+> Instead of just accepting we made a mistake, and shouldn’t have compromised…, we start telling ourselves that compromising isn’t so bad.
+> In moments of great emotional stress, we revert to our worst habits: we dig in and fight harder.
 
 - What do you think of Semmelweis' story?
-- Other instances of cognitive dissonance?
-> .. We'd rather change our behaviour than just admit we screwed up
-- Have you thought about the sacrifices that other people are making to get better?
-- What tips do you have for looking at ourselves objectively?
+- Can you recognize other areas of cognitive dissonance in your life?
+- Other tips to look objectively?
   * embrace your failings
   * avoid euphemisms
   * reverse your projections

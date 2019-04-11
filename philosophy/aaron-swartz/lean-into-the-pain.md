@@ -1,7 +1,7 @@
 # Lean into the pain
 [ref](http://www.aaronsw.com/weblog/dalio)
 
-@dlc
+@dlc last run: 2019-02-28
 
 > The problem is that the topics that are most painful also tend to be the topics that are most important for us
 > It’s no longer a scary world, hemming you in, but an exciting one full of exciting adventures to pursue.
