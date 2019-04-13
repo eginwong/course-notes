@@ -1,0 +1,35 @@
+# Basic Number Theory every programmer should know
+[ref](https://www.codechef.com/wiki/tutorial-number-theory/)
+
+- peano axioms
+  - 0 is a natural number
+  - every natural number has a successor, also a natural number
+  - 0 is not the successor of any natural number
+  - different natural numbers have different successors
+  - if a set contains 0 and contains successor of every number in S, S contains every natural number
+    - principle of mathematical induction
+- fundamental theorem of arithmetic and division algorithm
+  - any integer > 1 can be written as a product of prime numbers in a unique way
+  - division algo
+    - given two integers a, b (b!=0), there exists two unique integers q and r st: `a = bq + r, 0 <=r < b`
+    - if r = 0, we say b divides a, and denote as `b | a`
+- Eucid's theorems (1: lemma, 2: theorem)
+  - 1: `p | ab => p | a or p | b`
+  - 2: there are infinitely many primes
+- GCD, LCM, Bezout's Identity
+  - greatest common divisor (GCD) can be found using Euclid's algorithm (2), extremely efficient
+    - denoted as `(a,b)` is gcd of a and b
+  - lowest common multiple is denoted using `[a,b]`
+  - numbers a,b are coprimes: `iff (a,b) = 1, i.e. iff [a,b] = ab`
+  - if gcd(a,b) = d, then (a/d, b/d) = 1
+  - `gcd(a,b) * lcm[a,b] = ab`
+  - bezout's identity states if d = (a,b), there exist integers x and y st `ax+by = d`
+- integer factorization
+  - sieve of eratosthenes, sufficent to scan primes up to sqrt(N) while factorizing N
+- linear congruence equations 
+  - `ax 3= b (mod n)` where x is an unknown integer
+- chinese remainder theorem
+  - a grouping of linear congruences used to solve problems
+- quadratic congruences
+- euler Phi function, divisior function, sum of divsors, mobius function
+- factorials

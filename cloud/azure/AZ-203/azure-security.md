@@ -94,8 +94,231 @@
   - validation
   - user info
   - subject's authZ
+- authN methods:
+  - MFA/SSPR: password, MSFT Authenticator app, OATH Hardware token, SMS, Voice call
+  - SSPR: security questions, email address
+  - MFA: App passwords
+  - security questions
+    - 200 chars for custom question
+    - min char is 3, max char is 40, can't answer same question or same answer, any char set is accepted
 
+- cloud-based Azure MFA
+  - prerequisites
+    - for hybrid identity, require Azure AD connect with on-premise AD with AAD
+    - for on-premises legacy apps published for cloud access, require AAD App proxy
+    - using Azure MFA with RADIUS Auth, require Network Policy Server
+    - users with MSFT Office 2010 or earlier, upgrade to 2013 or later
+  - roll out slowly, deployed by enforcing policies with conditional access based on criteria
+    - including sign-ins from infected devices, IPs, leaked creds, etc
+  - define network location, named locations
+    - open AAD > Conditional Access > Named Locations > New Location > provide name with IP range or country > Create
+  - allow extra authN methods in case of backup
+    - Users > MFA > verification options
+  - plan registration policy
+    - use combined registration experience, or register with identity protection
+    - to force users, create a group and enforce MFA for this group to access resources
+      - slowly remove users who have registered from the group
+  - powershell to identify registered users: `Get-MsolUser -All | where {$_.StrongAuthenticationMethods -ne $null} | Select-Object -Property UserPrincipalName | Sort-Object userprincipalname`
+  - powershell to identify unregistered users: `Get-MsolUser -All | where {$_.StrongAuthenticationMethods.Count -eq 0} | Select-Object -Property UserPrincipalName | Sort-Object userprincipalname`
+  - for conditional access policies, create extra admin accounts to avoid locking yourself out
+    - AAD > Conditional Access > New Policy > Name > users and groups > include all users, exclude emergency accounts > Done 
+    - Cloud apps > select all 
+    - under Conditions, can specify to enable Azure Identity Protection or include/exclude trusted locations
+    - Grant > Grant access and check box for Require MFA > Select > Enable policy to On > Create
+  - for NPS users not enrolled for MFA, use registry `REQUIRE_USER_MATCH` in registry path `HKLM\Software\Microsoft\AzureMFA`
+
+- configure Azure MFA settings (AAD > MFA)
+  - MFA server only: Server settings, one-time bypass, caching rules, server status
+  - block users through AAD > MFA > Block/unblock users > select Replication Group > enter user with reason > Add
+  - can turn on fraud alerts from AAD > MFA > Fraud alert
+  - service settings from AAD > MFA > Getting Started > Configure > Additional cloud-based MFA settings for app passwords, trusted ips, verification options, etc.
+  - app passwords do not work with conditional access based MFA policies
+    - recommend one app password per device 
+    - AAD > Users and groups > All users > MFA > service settings > check the option
+  - enable named locations (trusted IPs, for managed or federated tenant for those within company inranet) by using conditional access: AAD > Conditional access > Named locations > New location > Name > Mark as trusted location > IP range > Create
+
+- authorize access to AAD web apps using OAuth 2.0 code grant flow
+  - register your app with your AD tenant, to receive app ID
+    - App Registrations > New app registration > Sign-on URL should be base URL of app for web apps; native apps, provide a redirect URI, like `http://MyFirstAADApp`
+    - Then you will receive the app id
+  - OAuth2 flow, user signs in and consents to permissions > receives authZ code > requests OAuth bearer token w/authN code > receives access token and refresh token > call Web API with access token in authN header
+  - `/authorize` endpoint is under App Registrations > Endpoints
+  - `/token` to request access token to desired resource
+    - client_secret only for web apps, as not secure on devices
+  - `401` authN failed, `403` AuthZ failed
+  - on refresh, only supported token_type is `bearer`
+
+- what is managed identities for Azure resources?
+  - use azure key vault to store creds/secrets/keys instead of having the creds directly from app code
+  - can authenticate any service that supports AAD authN without creds in your code
+  - client id (app + service principal unique id), principal id (object ID of service principal object for managed identity used to grant role-based access to an Azure resource), azure instance metadata service (IMDS - only accessible within VM, REST endpoint via the ARM) 
+  - two types of managed identities
+    - system-assigned, injected directly into instance of app 
+    - user-assigned, create standalone resource that multiple Azure service instances can be assigned to
+    - special service principals locked to only Azure resources
+  - flow:
+    - ARM receives request to enable system-assigned managed identity on a VM
+    - ARM creates service principal in AAD for identity of VM
+    - ARM configures identity on VM by updating IMDS
+    - after VM has an identity, use service principal info to request resources
+    - code running on VM can request a token from IMDS, only from within the VM
+      - `metadata/identity/oauth2/token`
+    - call made to AAD to request an access token and returns JWT
+    - code then sends access token on a call to a service that requires AAD authN
+
+- use Windows/Linux VM system-assigned managed identity to access RM
+  - when creating VM, under `Management`, set `Managed Access Identity` to `On`
+  - Resource Group > Access Control (IAM) > Add role assignment > Role as Reader > Assign access to resource > Select > Save
+  - powershell to request authN: `$response = Invoke-WebRequest -Uri 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://management.azure.com/' -Method GET -Headers @{Metadata="true"}`
+  - bash to request authN: `curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://management.azure.com/' -H Metadata:true`
+  - retrieve access token from result
 
 ## Implement access control
+- implement Claims-Based Access Control
+  - can grant or deny access based on logic using data available from the claims to make the decision
+  - app receives request that user is authenticated
+  - WIF redirects user to identity provider, after authenticating the application request made by associated security token, associates claims with principal
+  - app passes claims to decision logic mechanism, decision mechansism calculates outcome
+  - access granted based on outcome
+  - `ClaimsAuthorizationManager` is useful for externalizing decision logic for CBAC, part of .NET
+
+- Azure Identity Management and access control security best practices
+  - treat identity as the primary security perimeter (don't rely on network)
+  - centralize identity mgmt
+    - integrate on-prem with AAD using AAD Connect for easier mgmt
+    - turn on password hash synchronization
+  - enable SSO
+    - AAD can use SSO to enable SaaS apps
+    - increases chances of users reusing or having weak passwords
+  - turn on conditional access
+    - based on group, location, or app sensitivity
+  - enable password mgmt
+    - set up SSPR for your users; monitor how and if it is being used
+  - enable MFA for users
+    - set up for all users or conditionally
+  - use RBAC
+    - need-to-know, and lease privilege
+  - lower exposure of privileged accounts
+    - manage, control, monitor with AAD privileged identity management with email notifications of audit 
+    - define at least two emergency access accounts
+  - control locations where resources are created
+  - actively monitor for suspicious activities
+
+- understand role definitions for azure resources
+  - role definition is a collection of permissions
+    - lists operations that ca bn be peformed
+  - `Name, Id, IsCustom, Description, Actions [], NotActions[], DataActions [], NotDataActions [], AssignableScopes []`
+    - `NotActions []` is not a deny rule, just convenience for excludes
+  - operations are defined with strings as: `{Company}.{ProviderName}/{resourceType}/{action}`
+    - read, write, delete, *
+  - even if you have * in `Actions`, you won't be able to see underlying data without `DataActions`
+    - example of Actions []: `Microsoft.Compute/virtualMachines/*`
+  - authorization of operations is given either by ARM or the resource provider
+  - for data operations via REST API, must set the `api-version`
+  - example of DataActions []: `Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read`
+  - assignableScopes limits role for what areas they can be assigned to
+    - `"/subscriptions/c276fc76-9cd4-44c9-99a7-4fd71546436e"`, but built-in roles use the `"/"` root scope
+
+- what is RBAC for Azure resources?
+  - helps you manage who has access to Azure resources, what they can do, and what areas they have access to
+  - built-on ARM that provides fine-grained access
+  - roles vs. scope (subscription, resourcegroup, resource) matrix
+  - security principal is an object that represents a user, group, service principal, or managed identity
+  - role definition: owner, contributor, reader, user access administrator
+  - up to 2000 role assignments in each subscription w/`Microsoft.Authorization/roleAssignments/*` permission
+  - deny assignment roles work too, by using Azure Blueprints
+  - flow:
+    - user/service principal acquires token from ARM
+    - user makes REST API call to ARM w/token attached
+    - ARM retrieves role assignments that apply to resource which action is being taken
+    - ARM narrows role assignments to relevant info
+    - ARM determines if allowable
+    - if not allowed, access is not granted. if denied, will be blocked. Otherwise, granted
+
+- grant user access to Azure resources using RBAC/Azure Portal
+  - portal > Access control (IAM) > Role assignments > Add 
+  - powershell, create password: `$PasswordProfile = New-Object -TypeName Microsoft.Open.AzureAD.Model.PasswordProfile; $PasswordProfile.Password = "Password"`
+  - powershell, create user: `New-AzureADUser -DisplayName "RBAC Tutorial User" -PasswordProfile $PasswordProfile -UserPrincipalName "rbacuser@example.com" -AccountEnabled $true -MailNickName "rbacuser"`
+  - powershell, add role assignment: `New-AzRoleAssignment -SignInName rbacuser@example.com -RoleDefinitionName "Reader" -Scope $subScope`
+  - powershell, list role assignments: `Get-AzRoleAssignment -SignInName rbacuser@example.com -Scope $subScope`
+  - powershell, remove role assignment: `Remove-AzRoleAssignment -SignInName rbacuser@example.com -RoleDefinitionName "Reader" -Scope $subScope`
+
+- create custom role for Azure resources using AzCLI
+  - create new JSON file
+  - define the structure of custom role
+  - get id of subscription: `az account list --output table`
+  - create custom role definition: `az role definition create --role-definition "~/CustomRoles/ReaderSupportRole.json"`
+  - list custom roles: `az role definition list --custom-role-only true`
+  - update custom role: `az role definition update --role-definition "~/CustomRoles/ReaderSupportRole.json"`
+
+- using shared access signatures (SAS)
+  - SAS provides way to grant limited access to objects in your storage account to other clients, without exposing account key
+  - SAS controls interval of validity, permissions, optional IP address range, protocol
+  - use when apps need to write data to storage
+  - service SAS delegates access to a resource in just one of the storage services
+  - account SAS delegates to 1+ resources (blobs/tables/queues/fileshares not permitted with service SAS)
+  - signed URI that points to 1+ storage resources with token containing special set of query params
+    - signature is signed with account key, further used for authZ
+  - SAS token is a string generature on the client side, can be unlimited
+  - 403 if fails
+  - params are
+    - API version
+    - service version
+    - start time
+    - expiry time
+    - permissions
+    - IP
+    - protocol
+    - signature
+    - service SAS has storage resource
+    - account SAS has service(s), storage resource types (service-level, container-level, object-lvel APIs)
+  - can create ad hoc SAS (account must be of adhoc) or SAS with stored access policy
+  - SAS is invalid when expiry time, expiry time of stored access policy is reached, stored access policy is deleted, account key is regenerated
+  - authN from client app w/SAS
+    - using SAS in a connection string: `SharedAccessSignature=sasToken`
+    - will want to encode special characters in config file
+    - or in constructor of client
+  - use stored access policies where possible (easier for revocation)
+  - always use HTTPS
+  - use near-term expiration times
+  - have clients automatically renew the SAS if necessary
+  - be careful with SAS start time
+  - in .NET, to create policy: `SharedAccessBlobPolicy sharedPolicy = new SharedAccessBlobPolicy()`
+  - in .NET to set permissions: `BlobContainerPermissions permissions = await container.GetPermissionsAsync(); permissions.SharedAccessPolicies.Add(policyName, sharedPolicy); await container.SetPermissionsAsync(permissions);`
+
+- Shared Access Signatures, Part 2: Create and use a SAS with Blob storage
+  - `CloudStorageAccount` to interact with Azure
+  - use container `CloudBlobContainer` to create SAS: `SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy(); container.GetSharedAccessSignature(sasConstraints);`
+  - can also create SAS for specific Blob (resource) too
+  - must clear any permissions on container before resetting them
+  - to create new SAS policy: `CreateSharedAccessPolicy(blobClient, container, sharedAccessPolicyName);`
+  - to retrieve SAS based on access policy: `GetSharedAccessSignature(null, policyName);`
+
 
 ## Implement secure data solutions
+
+- define data protection strategy for your hybrid identity solution
+  - uses vnets to isolate tenant's traffic from one another
+  - bitlocker drive encryption: at rest in cloud/on-premise
+  - SQL server encryption: at rest in cloud/on-premise
+  - VM-VM encryption; SSL/TLS; VPN: in transit
+  - can use Azure Rights Management Service for encryption of sensitive files across devices
+  - define incident response options
+    - anomaly reports, integrated app report, error reports, user-specific reports, activity logs
+
+- What is Azure Key Vault?
+  - secrets mgmt
+  - key mgmt
+  - cert mgmt
+  - store secrets backed by HSM
+  - centralizes app secrets, securely store secrets and keys, monitor access and use, simplify admin of app secrets
+  - integrate with disk encryption, app service, storage accounts, event hubs, log analytics
+
+- Azure Key Vault Developer's Guide
+  - register provider: `az provider register -n Microsoft.KeyVault`
+  - create keyvault: `az keyvault create --name "ContosoKeyVault" --resource-group "ContosoResourceGroup" --location "East Asia"`
+  - creating key: `az keyvault key create --vault-name "ContosoKeyVault" --name "ContosoFirstKey" --protection software`
+  - importing key: `az keyvault key import --vault-name "ContosoKeyVault" --name "ContosoFirstKey" --pem-file "./softkey.pem" --pem-password "hVFkk965BuUv" --protection software`
+  - set secret: `az keyvault secret set --vault-name "ContosoKeyVault" --name "SQLPassword" --value "hVFkk965BuUv "`
+  - to authorize app to access key or secret in vault: `az keyvault set-policy --name "ContosoKeyVault" --spn 8f8c4bbd-485b-45fd-98f7-ec6300b7b4ed --key-permissions decrypt sign`
+  - can also use ARM templates
