@@ -100,7 +100,7 @@
     - provides match criteria in an index, execution instructions for the engine, and directives for shaping the response
 ```json
 {
-    "queryType": "simple" 
+    "queryType": "simple",
     "search": "seattle townhouse* +\"lake\"",
     "searchFields": "description, city",
     "count": "true",
@@ -114,7 +114,7 @@
   - for lucene, there are unsafe and reserved characters in URLs, can use grouping with `()`
   - to handle ORs and ANDs, you may need to use `searchMode=all` or `any` depending
   - at most 1024 clauses and 32KB on size of any individual term in a query
-  - field-scoped queries, fuzzy search can be on indivdual words only, and a number between 0 and 2 with the `~`
+  - field-scoped queries (addresses: "Hungry"), fuzzy search can be on indivdual words only, and a number between 0 and 2 with the `~`, ("blue~1")
   - proximity search is done with `"hotel airport"~5` to find terms hotel and airport within 5 words of each other
   - term boosting with `^` with boost factor
   - regex and wildcard
@@ -188,6 +188,7 @@
   - creating subscription in azcli: `az servicebus subscription create --resource-group myResourceGroup --namespace-name $namespaceName --topic-name myTopic --name S1`
   - message expiration; all messages have sequencing and timestamps
   - subscribers can add filters to define which messages they want to receive
+  - message sessions, can demultiplex by appending an id and creating a session object used in the constructor, then  receive method as normal
 - implement solutions that use Azure Queue Storage queues
   - provides cloud messaging between app components; for scale
   - access via HTTP/HTTPS; up to 64 KB in size, with q containing up to millions of messages limited by storage account
