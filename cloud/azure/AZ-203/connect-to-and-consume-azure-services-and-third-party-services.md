@@ -1,3 +1,5 @@
+# Connect to and Consume Azure Services and Third-party Services (20-25%)
+
 # Develop an App Service Logic App
 
 - Azure logic apps is a cloud service to help orchestrate and automate tasks
@@ -13,35 +15,34 @@
 - meant for automating workflows
 - everything is GUI-based
 
-# Redis
-- atomic operations
-- kv can have max size of 512 mb
-- usage
-  - cache-aside, load data items and cache as required
-  - content caching, store static data to decrease load times
-  - use session caching, store cookie
-  - job and message queuing, defer longer running jobs
-  - distributed transactions, executes a batch of commands as a single operation in the form of Transactions
-- TODO: know the tiers of Azure Redis
-  - premium (cluster, persistence, enhanced security, import/export, geo-replication, schedule updates), standard (includes SLA), basic (security via firewall rules, reboot)
-- know the Azure Redis integration API, `StackExchange`
-  - `ICacheable` and `IDatabase`
-  - know methods for execute, delete value, delete etc...
+# Azure Event Hubs
+- push notifications delivered through platform-specific infra called Platform Notification Systems (PNSes)
+  - benefits:
+    - cross platforms/backends
+    - telemetry
+    - scalability
+    - security
+    - delivery patterns
+  - challenges:
+    - platform dependency
+    - scale, lots of calls because of refreshing tokens
+    - routing
+- how do you choose a messaging service?
+  - event grid, reactive programming, event distribution (discrete), react to status changes
+  - event hubs, big data pipeline, event streaming (series), telemetry and distributed data streaming
+  - notification hubs, multi-platform push notifications, push notification service (PNS), sending mass event notifications to multiple platforms
+  - service bus, high value enterprise messaging, message, order processing and financial txns
 
-# CDN
-- Content Delivery Network, distributed network of servers can efficiently deliver web content to users
-- minimize latency, point-of-presence (POP)
-- TODO: know the feature comparison for Microsoft, Akamai, Verizon, and Premium Verizon
-- TODO: Azure CDN lab
-- `using Microsoft.Azure.Management.Cdn`
-- to connect to CDN, require the `TokenCredentials` from `Microsoft.Rest` to authenticate
-- Caching Rules
-  - global caching rules
-  - custom caching rules
-    - override the global caching rule, if set
-- either create a storage account or let it be created for you
-  - can define caching behaviour (bypass cache, override, set if missing, not set)
-  - query string caching behaviour (cache every unique, etc.)
+# Azure Search
+- search as a service cloud solution, provides APIs for easy search
+- create and load data to azure search index
+- `Indexes.Create()` and `Indexes.Delete()`
+- We need a `ISearchIndexClient indexClient` to make use of your index
+- Construct IndexBatch
+- Call `Documents.Index(batch)` to upload the batch to the search service
+- `search` will look in searchable fields, indices
+- `filter` will apply a boolean predicate
+- some questions related to API; note patterns in the API instead
 
 # Self-research
 
