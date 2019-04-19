@@ -14,10 +14,9 @@
   - defines region, number of VM instances, size, pricing tier
 - Pricing Tiers
   - shared compute (free, shared), not dedicated server
-  - dedicated compute (basic, standard, premium, premium v2), better scaling
-  - isolated, run on dedicated Azure Virtual Networks, provides network isolation, max scale-out capabilities
+  - dedicated compute Azure VMs (basic, standard, premium, premium v2), better scaling
+  - isolated, compute isolation + network isolation, run on dedicated Azure Virtual Networks, provides network isolation, max scale-out capabilities
   - consumption, tier only available to function apps
-- TODO: Review Service Pricing Tiers
 - Azure Web Apps
   - 99.5% SLA
   - custom domains
@@ -26,7 +25,7 @@
   - traffic mgmt
 - Application Settings
   - Managed Pipeline Settings is more for old vs new versions of C#, Integrated for new
-  - ARR is for cookies, turn it off if unnecessary for load balancing
+  - ARR (session affinity cookie) is for cookies, turn it off if unnecessary for load balancing
   - Always On is for cold vs hot starts
   - Traffic mgmt through deployment slots
 - WebJobs
@@ -110,7 +109,58 @@
 
 ## Implement Azure Functions
 - an introduction to Azure Functions
+  - C#, F#, js
+  - pay-per-use, bring your own dependencies, integrated securtiy, flexible development, opensource
+  - built-in triggers for http, timer, cosmosdb, blob, queue, eventgrid, eventhub, servicebusqueue, servicebustopic
+  - cost is with consumption plan, or app service plan (no extra cost)
 - implement input and output bindings for a function
+  - triggers have associated data, payload of the function
+  - binding to a fcn is declaratively connecting resource to fcn; input/output bindings or both
+  - triggers + bindings are done with decorators in C# and `function.json` in others
+  - sample JSON for input
+```json
+{
+    "dataType": "binary", // or stream, or string
+    "type": "httpTrigger",
+    "name": "req",
+    "direction": "in" // trigger always in, bindings in/out
+}
+```
+  - event grid no I/O, hubs, webhooks only O
+  - register azure functions binding extensions
+    - HTTP/Timer are out of box
+    - other binding extensions provided via Azure Core Tools or NuGet packages
+    - use `func extensions install` on your `function.json` file to include all bindings that the function needs as part of Azure Functions Core Tools
+    - in powershell, `Install-Package Microsoft.Azure.WebJobs.Extensions.ServiceBus -Version <target_version>`
+    - in dotnetcore, `dotnet add package Microsoft.Azure.WebJobs.Extensions.ServiceBus --version <target_version>`
+    - use of decorators in C#
+```C#
+[FunctionName("QueueTriggerTableOutput")]
+    [return: Table("outTable", Connection = "MY_TABLE_STORAGE_ACCT_APP_SETTING")]
+```
 - implement function triggers by using data operations, timers, and webhooks
+  - function triggered by CosmosDB
 - implement Azure Durable Functions
+  - stateful functions in serverless env: state, checkpoints, restarts
+  - define stateful workflows using an orchestrator function
+    - no JSON schema or designers required
+    - can be called with async/sync functions
+    - progress is automatically checkpointed through restarts
+    - used for chaining, fan-out/fan-in, async http apis, monitoring, human interaction
+    - C#, F#, js
+    - same billing
+  - patterns
+    - function chaining, like typical functional chaining concept
+    - fan out/fan in, execute multiple fcns in parallel and then wait for them all to finish
+      - `context.CallActivityAsync`, `Task.WhenAll(parallelTasks)`
+    - async HTTP APIs, for long running functions so kick off, then separate call for status
+      - `DurableOrchestrationClient.CreateCheckStatusResponse`
+    - monitor
+    - human interaction
+      - orchestrator function can wait for an event with `        Task<bool> approvalEvent = context.WaitForExternalEvent<bool>("ApprovalEvent");`
+      - external client can deliver event notification via `DurableOrchestrationClient.RaiseEventAsync` 
+  - must use `DurableOrchestrationContext` or `context.df` objects to invoke other fcns by name, params, retrieve fcn output
+  - orchestrator must be deterministic as it will be replayed multiple times
+  - storage and scalability is achieved via use of queues, tables, and blobs in Azure Storage to persist state 
+  - to sync with queue, create azure storage and sync up with Az Functions
 - Create Azure Function apps by using Visual Studio

@@ -122,8 +122,43 @@
 
 ## Establish API Gateways
 - create an APIM instance
+  - portal > Create a resource > Integration > API Mgmt
+  - in powershell: `New-AzApiManagement -ResourceGroupName "myResourceGroup" -Location "West US" -Name "apim-name" -Organization "myOrganization" -AdminEmail "myEmail" -Sku "Developer"`
 - configure authN for APIs
+  - use of TLS/SSL certificates, TLS mutual authN or client cert authN
+  - to enable client certs, in azcli: `az webapp update --set clientCertEnabled=true --name <app_name> --resource-group <group_name>`
+  - the cert is forwarded by front-end lb, and is retrievable through `HttpRequest.ClientCertificate`
+  - use app code to verify authenticity of certificate
+  - under APIM > Client certificates > + Add / - Delete
+  - in order to configure APIM to use client cert for gateway authN, go to APIM > APIs > Design > Backend > Gateway credentials to Client cert
+    - for self-signed certs, must use `-SkipCertificateChainValidation` in powershell to update the `AzApiManagementBackend`; otherwise, 500 errors
+  - authorize developer accounts by using AAD in Azure API Mgmt
+    - API Mgmt > Security > Identities > Add Identity Provider > Provider type is AAD > keep track of redirect URL
+    - THEN: go to AAD > Manage > App Registrations > New App REgistration  Create name for Web App / API. Sign-in URL is sign-in URL of the developer portal > Create
+    - Make sure the Reply URL == the Redirect URL
+    - If multiple AAD instances will be used, set Multi-tenanted to Yes
+    - Set app permissions by selecting Required permissions, select your app, select read directory data + Sign in and read user profile check boxes > grant permissions
+    - Then, copy App ID, switch back to APIM, in add identity provider, paste app id value in the client-id box
+    - switch back to AAD > Keys > create new key and save
+    - switch back to APIM > paste key in client secret text box
+    - may have to get global administrator to accept consent, from `/aadadminconsent`, prefixe by the azure portal url
+    - in APIM, can associate AAD groups with permissions
 - define policies for APIs
+  - can change behaviour through config
+  - policies are collection of statements executed sequentially on request/response of an API
+  - defined in XML, for sections with `inbound`, `backend`, `outbound`, `on-error`
+  - any errors in the other rules will automatically put the request into the `on-error` track
+  - sample policies:
+    - forwarded header to inbound requests
+    - add header containing a correlation ID for inbound request
+    - add capabilities to a backend service, cache response
+    - authorize access based on JWT
+    - authorize access using Google OAuth or other authorizer
+    - generate SAS and forward request to Azure Storage
+    - route request based on size of body
+    - send request context info to backend service
+    - filter response content on outbound
+    - log errors to stackify on-error
 
 ## Develop event-based solutions
 - event grid / event hubs / service bus

@@ -105,17 +105,121 @@ az batch task file download \
 az batch pool delete --pool-id mypool
 ```
 
+# Azure Blob & Table Storage
 
-# Self Study
+- CAP Theorem
+  - Consistency
+  - Availability
+  - Partition Tolerance
+- Azure storage
+  - REST
+  - Client
+  - Pay as you go
+- Storage accounts
+  - unique namespace for your data
+  - General V1 (legacy), General V2, Blob Storage
+  - access tiers
+    - hot: costs the most, cheapest to access
+    - cold: infrequent, stores for around 30 days, mid-way
+    - archived: rarely, stores for at least 100 days; have to be flexible with your latency requirements
+  - replication models (redundancy)
+    - LRS: locally redundant store, cheapest; SLA is 11 9's over a year, 3 replicas 1 region; write protected against disk, node, rack failure
+    - GRS: geo-redundant storage; SLA is 16 9's, and 300 miles away data centre, replicates 2 regions, 6 data centers, asynchronous
+    - RA-GRS: read-access geo-redundant storage; get read-access from your secondary region
+  - access models
+    - every request against your storage account must be authorized
+    - use Azure AD
+    - or shared key
+    - shared access signature, delegation without giving up key
+      - provide granular control for access
+      - validity interval (start and expiry time)
+      - permissions granted by SAS
+      - IP address or range of addresses to accept
+      - restrict protocols accepted by Azure Storage
+- account > container > blob 
+  - block blob
+    - upload large blobs efficiently (docs, images, videos)
+    - 50000 blocks, each block has 100MB
+  - append blob
+    - optimized for appending operations
+    - can't update or delete blocks
+    - block has 4MB
+    - good for logging, data analytics
+  - page blob
+    - optimized for read and writes
+    - 512kb page ???
+- Azure Blob storage Lifecycles
+  - can expire
+  - can transition to different access tiers
+  - run automated jobs
+  - example:
+    - { "version": "0.5", "rules": [{ "name": "ruleName", "type": "Lifecycle", "definition": { "filters": { "blobTypes": [ "blockBlob"]}, "prefixMatch": ["..."], "actions": { "baseBlob": { "tierToCool": {"daysAfterModificationGreater": ...}}}}}]}
+    - can move blobs around access tiers
+  - create lease on block to be an exclusive lock
+  - WORM -> Write once read many
+- Azure tables
+  - used to store NoSQL data in the cloud
+  - can store any number of tables up to max of the storage account
+  - enforce strong consistency
+  - partitioning strategy
+    - primary key of an identity
+    - collection of entities with the same PartitionKey
 
-# Batch
+# Self-research
+
+## Develop Solutions that use storage tables
+- azure storage table design guide
+  - must have partitionKey and rowKey to be a unique combination
+  - account + table names + partitionkey identify the partition within the storage service
+  - entity group txns (EGTs) are the only built-in mechanism for performing atomic updates across multiple entities
+    - need to be in the same partition
+    - limited to a max of 100 entities
+    - max of 255 props, 1MB per individual entity; max azure storage is 500TB
+    - size of partitionkey/rowkey is string up to 1KB
+  - design guidelines:  
+    - read-heavy: querying in read-heavy apps; specify both partition/row keys in queries; store duplicate copies of entities for efficiency; denormalizing data; compound key values; query projection
+    - write-heavy: don't create hot partitions, avoid spikes in traffic, don't necessarily create a separatate table for each type of entity; consider max throughput required
+  - ideal point query (row + partition keys) > range query (partition key on range of row keys) > partition scan (partition key + non-row key) > table scan (no partition key)
+  - several optimal patterns for lookup, optimizing on CUD operations
+  - design patterns:
+    - intra-partition secondary index pattern: store multiple copies of each entity in same partition
+    - inter-partition secondary index pattern: store multiple copies of each entity using different RowKey values in separate partitions/in separate tables
+    - eventually consistent txns pattern: eventually consistent behaviour
+    - index entities pattern: enable efficient searches that return lists of entities
+    - dernomalization pattern: break data
+    - compound key pattern: RowKey + PartitionKey
+- query table storage by using code
+  - ps: `Install-Module AzTable`
+  - create table, in ps: `New-AzStorageTable –Name $tableName –Context $ctx`
+  - add rows, in ps: `Add-AzTableRow -table $cloudTable -partitionKey $partitionKey1 -rowKey ("CA") -property @{"username"="Chris";"userid"=1}`
+  - to retrieve rows, in ps: `Get-AzTableRow -table $cloudTable`
+    - with customfilter, `-customFilter "(userid eq 1)"`
+  - to update row, must retrieve, update, and then commit, in ps: `Update-AzTableRow`
+  - to delete row, in ps: `Remove-AzTableRow`
+  - to delete table, can pipe everything into individual deletes or batch, in ps: `Remove-AzStorageTable`
+- implement partitioning schemes
+  - horizontal / vertical / functional data partitioning
+  - improves scalability, reduce contention, optimize performance, operational flexibility, availability
+  - horizontal (sharding): duplicates of same schema but subsets of data only
+    - more important to balance the requests
+  - vertical: each partition holds a subset of the fields, divided by their column use
+    - sensitive data can have extra security controls
+    - reduce the amount of concurrent access required
+    - operates at an entity level
+  - functional: data is aggregated according to how it is used by each bounded context
+    - maybe read data in one and read/write data in another
+  - partition data that is causing slow performance
+  - minimize cross-partition data access operations; embrace eventual consistency
+  - may need to rebalance partitions at a later date; plan for how and when to do that
+
+## Batch
 
 ### for batch jobs, focus on knowing how to use the .NET SDK for creating jobs, setting them up, and executing
 - `CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();`
 - files in storage are defined as `ResourceFile` objects
 - use the `BatchClient` object to create and manage pools, jobs, tasks in the Batch service
   - uses shared key authentication
-- `BatchClient.PoolOperations.CreatePool` to set nmber of nodes, VM size, pool config
+- `BatchClient.PoolOperations.CreatePool` to set number of nodes, VM size, pool config
   - `VirtualMachineConfiguration` can be used to specify exact node agent, image reference, `targetDedicatedComputeNodes`
   - `CloudPool pool`, and must be `Commit()`
 - `CloudJob job = batchClient.JobOperations.CreateJob()`
@@ -124,13 +228,12 @@ az batch pool delete --pool-id mypool
   - `taskCommandLine` is the actual command from the image you wish to run
   - `task.ResourceFiles = new List<ResourceFile> { inputFiles[i]}` to add resource files
 - `batchClient.JobOperations.AddTask(JobId, tasks)` wherein the `tasks` are a `List<CloudTask>`
-- to wait for the tasks to finish, use 
 - to check results, check the CloudTask `.ComputeNodeInformation` for details
 - you will be charged for the pool while nodes are running
 
 ### Getting started with Batch CLI
 [ref](https://docs.microsoft.com/en-us/azure/batch/batch-cli-get-started)
-```sh
+```s
 az batch pool list
 az batch task list --job-id job001
 # can use --select-clause, filter, or expand
@@ -154,6 +257,7 @@ string containerSasUrl = container.Uri.AbsoluteUri + containerSasToken;
 ```
 - writing output to container, have to differentiate storage path because dupes
 ```C#
+
 new CloudTask(taskId, "cmd /v:ON /c \"echo off && set && (FOR /L %i IN (1,1,100000) DO (ECHO !RANDOM!)) > output.txt\"")
 {
     OutputFiles = new List<OutputFile>
@@ -176,7 +280,7 @@ new CloudTask(taskId, "cmd /v:ON /c \"echo off && set && (FOR /L %i IN (1,1,1000
             uploadCondition: OutputFileUploadCondition.TaskCompletion)),
 }
 ```
-- ` TaskExecutionInformation.FailureInformation` to diagnose upload errors, `fileuploadout` and `fileuploaderr` files
+- `TaskExecutionInformation.FailureInformation` to diagnose upload errors, `fileuploadout` and `fileuploaderr` files
 - Batch File Conventions standards from .NET can help you view files in Azure Portal, plus sets standards
 
 ### Persist job and task data to Azure Storage with the Batch File Conventions library for .NET
@@ -185,7 +289,7 @@ new CloudTask(taskId, "cmd /v:ON /c \"echo off && set && (FOR /L %i IN (1,1,1000
 - code is easy to modify to follow standards
 - automatically name storage containers and task files
 - requires linking Azure storage account with Batch account
-  - all job and task outputs are st˝ored in the same storage container so *throttling* may occur
+  - all job and task outputs are stored in the same storage container so *throttling* may occur
 - link the accounts, typically in client code
 ```C#
 CloudJob job = batchClient.JobOperations.CreateJob(
@@ -336,114 +440,6 @@ az batch file download --file-group ffmpeg-output --local-path
     c:\output_lowres_videos
 ```
 
-
-# Azure Blob & Table Storage
-
-- CAP Theorem
-  - Consistency
-  - Availability
-  - Partition Tolerance
-- Azure storage
-  - REST
-  - Client
-  - Pay as you go
-- Storage accounts
-  - unique namespace for your data
-  - General V1 (legacy), General V2, Blob Storage
-  - access tiers
-    - hot: costs the most, cheapest to access
-    - cold: infrequent, stores for around 30 days, mid-way
-    - archived: rarely, stores for at least 100 days; have to be flexible with your latency requirements
-  - replication models (redundancy)
-    - LRS: locally redundant store, cheapest; SLA is 11 9's over a year, 3 replicas 1 region; write protected against disk, node, rack failure
-    - GRS: geo-redundant storage; SLA is 16 9's, and 300 miles away data centre, replicates 2 regions, 6 data centers, asynchronous
-    - RA-GRS: read-access geo-redundant storage; get read-access from your secondary region
-  - access models
-    - every request against your storage account must be authorized
-    - use Azure AD
-    - or shared key
-    - shared access signature, delegation without giving up key
-      - provide granular control for access
-      - validity interval (start and expiry time)
-      - permissions granted by SAS
-      - IP address or range of addresses to accept
-      - restrict protocols accepted by Azure Storage
-- account > container > blob 
-  - block blob
-    - upload large blobs efficiently (docs, images, videos)
-    - 50000 blocks, each block has 100MB
-  - append blob
-    - optimized for appending operations
-    - can't update or delete blocks
-    - block has 4MB
-    - good for logging, data analytics
-  - page blob
-    - optimized for read and writes
-    - 512kb page ???
-- Azure Blob storage Lifecycles
-  - can expire
-  - can transition to different access tiers
-  - run automated jobs
-  - example:
-    - { "version": "0.5", "rules": [{ "name": "ruleName", "type": "Lifecycle", "definition": { "filters": { "blobTypes": [ "blockBlob"]}, "prefixMatch": ["..."], "actions": { "baseBlob": { "tierToCool": {"daysAfterModificationGreater": ...}}}}}]}
-    - can move blobs around access tiers
-  - create lease on block to be an exclusive lock
-  - WORM -> Write once read many
-- Azure tables
-  - used to store NoSQL data in the cloud
-  - can store any number of tables up to max of the storage account
-  - enforce strong consistency
-  - partitioning strategy
-    - primary key of an identity
-    - collection of entities with the same PartitionKey
-
-# Self-research
-
-## Develop Solutions that use storage tables
-- azure storage table design guide
-  - must have partitionKey and rowKey to be a unique combination
-  - account + table names + partitionkey identify the partition within the storage service
-  - entity group txns (EGTs) are the only built-in mechanism for performing atomic updates across multiple entities
-    - need to be in the same partition
-    - limited to a max of 100 entities
-    - max of 255 props, 1MB per individual entity; max azure storage is 500TB
-    - size of partitionkey/rowkey is string up to 1KB
-  - design guidelines:  
-    - read-heavy: querying in read-heavy apps; specify both partition/row keys in queries; store duplicate copies of entities for efficiency; denormalizing data; compound key values; query projection
-    - write-heavy: don't create hot partitions, avoid spikes in traffic, don't necessarily create a separatate table for each type of entity; consider max throughput required
-  - ideal point query (row + partition keys) > range query (partition key on range of row keys) > partition scan (partition key + non-row key) > table scan (no partition key)
-  - several optimal patterns for lookup, optimizing on CUD operations
-  - design patterns:
-    - intra-partition secondary index pattern: store multiple copies of each entity in same partition
-    - inter-partition secondary index pattern: store multiple copies of each entity using different RowKey values in separate partitions/in separate tables
-    - eventually consistent txns pattern: eventually consistent behaviour
-    - index entities pattern: enable efficient searches that return lists of entities
-    - dernomalization pattern: break data
-    - compound key pattern: RowKey + PartitionKey
-- query table storage by using code
-  - ps: `Install-Module AzTable`
-  - create table, in ps: `New-AzStorageTable –Name $tableName –Context $ctx`
-  - add rows, in ps: `Add-AzTableRow -table $cloudTable -partitionKey $partitionKey1 -rowKey ("CA") -property @{"username"="Chris";"userid"=1}`
-  - to retrieve rows, in ps: `Get-AzTableRow -table $cloudTable`
-    - with customfilter, `-customFilter "(userid eq 1)"`
-  - to update row, must retrieve, update, and then commit, in ps: `Update-AzTableRow`
-  - to delete row, in ps: `Remove-AzTableRow`
-  - to delete table, can pipe everything into individual deletes or batch, in ps: `Remove-AzStorageTable`
-- implement partitioning schemes
-  - horizontal / vertical / functional data partitioning
-  - improves scalability, reduce contention, optimize performance, operational flexibility, availability
-  - horizontal (sharding): duplicates of same schema but subsets of data only
-    - more important to balance the requests
-  - vertical: each partition holds a subset of the fields, divided by their column use
-    - sensitive data can have extra security controls
-    - reduce the amount of concurrent access required
-    - operates at an entity level
-  - functional: data is aggregated according to how it is used by each bounded context
-    - maybe read data in one and read/write data in another
-  - partition data that is causing slow performance
-  - minimize cross-partition data access operations; embrace eventual consistency
-  - may need to rebalance partitions at a later date; plan for how and when to do that
-
 ## Develop Solutions that use CosmosDB storage
 - implement partitioning schemes
   - logical partitions to physical partitions (hash-based)
@@ -475,7 +471,7 @@ az batch file download --file-group ffmpeg-output --local-path
   - cost-effective for scaling multiple dbs with unpredictable usage demands; share set number of resources at a set price
   - charged per hour a pool exists at the highest eDTU or vCores
   - basic, standard, premium; deltas in backup retention, CPU, IOPS, storage sizes, DTU
-  - tradeoff is at 1.5x the resources of a standalone SQL server versus a pool
+  - tradeoff is at 1.5x the resources of a standalone SQL server versus an elastic pool
   - choose pool size based on max resources utilized by all dbs in the pool or by max storage bytes utilized
     - estimate eDTUs or vCores first, then the storage space, then find the appropriate model, then determine min pool size, then compare to standalone single db costs
   - can use elastic jobs, and point-in-time/geo restores or active geo-replication
