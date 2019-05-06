@@ -87,3 +87,67 @@ Homework:
   - https://en.wikipedia.org/wiki/Enterprise_Integration_Patterns
   - https://app.pluralsight.com/library/courses/microservices-architectural-design-patterns-playbook/table-of-contents
   - https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture
+
+## Azure Messaging Options
+- message brokers vs distributed logs
+  - message broker: queues/topics
+  - distributed log: records a stream of messages on a topic (and partition) to disk
+- topics & subscriptions
+  - reliability: consumer has to ACK before message is removed from message broker
+- message semantics are hard because problems with duplication
+  - at least once delivery
+  - at most once delivery
+  - exactly once, message broker can't do that for you; at least once + idempotency
+  - message ordering design patterns like message sequence & resequencer
+- competing consumers on queues
+  - one consume could process messages faster than others
+- partitions on distributed logs
+- cardinality
+  - used to mean as a message sender, how many receivers do I expect
+  - sender-receivers notation
+  - 1-1, 1-*, 1-any, *-1
+- message size
+- messaging options on Azure
+  - Azure Storage Queues
+    - part of Azure Storage
+    - supports 2k messages/s, 500TB
+    - supports at least once delivery
+    - processing messages, pass an InvisibilityWindow which is amount of time messages will be hidden on the queue and unavailable to other clients
+      - can be processed out of order, but this supports at least once
+    - usage
+      - simple queue
+      - audit trail of all messages 
+      - expect queue to exceed 80GB in size
+  - Azure Service Bus
+    - AMQP, async message queueing protocol
+    - supports larger message size (256kb vs 64kb)
+    - supports at least once and at most once
+    - guarantees FIFO, through message sessions
+    - can support transactions
+    - supports RBAC
+    - processing messages, can send and delete, or PeekLock, has invisibility/locked again based on subscriber
+    - max delivery count, put repeated failed messages to the dead letter queue
+      - ASB is a sub-queue to hold messages that can't be delivered/processed
+    - prefetching messages, can pull a group of messages at once but can cause more lock timeouts, problems with ordering
+    - relay performs two-synchronous operations between two sources
+  - Azure Event Grid
+    - pub/sub between topics and subscriptions
+    - supports Azure services already
+    - over HTTP
+    - use for HTTP connectivity
+    - advanced filtering
+    - pay per event
+  - Azure Event Hub
+    - distributed log platform
+    - 2-32 partitions on a topic
+    - millions events/s
+    - pub/sub
+    - real-time/batch processing
+    - capture
+      - can send all events immediately to Azure Data Lake or Blob Storage for permanent persistence, stored in Avro format
+    - choose when authenticating a large number of publishers
+      - saving stream of events
+      - aggregation or analytics on your event stream
+      - reliable messaging or resiliency
+  - Kafka on HDInsight
+    - current position, last committed offset, log end offset, high watermark (last safe message to read)

@@ -30,7 +30,7 @@
   - staff meetings, meeting with all of your most senior leaders
     - covers a range of topics that should at least affect two people
     - decide ahead if democratic, concensus, autocratic
-  - decision meetings, gather team to discuss final call, make sure someone is +1 to break aties
+  - decision meetings, gather team to discuss final call, make sure someone is +1 to break ties
   - operational reviews, functional unit presents progress, peers provide feedback and suggestions
 - peak performance
   - ask whether this person is capable if their life depended on it

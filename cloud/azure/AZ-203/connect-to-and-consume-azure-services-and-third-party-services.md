@@ -5,7 +5,7 @@
 - Azure logic apps is a cloud service to help orchestrate and automate tasks
 - every logic app starts with a trigger, creates new instance
 - write once, reuse often
-- pay fr what you use
+- pay for what you use
 - templates
 - visually build workflows
 - logic connectors proxy/wrap an API
@@ -43,6 +43,12 @@
 - `search` will look in searchable fields, indices
 - `filter` will apply a boolean predicate
 - some questions related to API; note patterns in the API instead
+
+# Message-based Solutions
+- don't expect that the message is returned, 
+- REST vs message
+  - synchronous, public facing API
+- transferring data within Azure region, inbound data transfer, and message storage is free, but outbound data transfer you have to pay for
 
 # Self-research
 
