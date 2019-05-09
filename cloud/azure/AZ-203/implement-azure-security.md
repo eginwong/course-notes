@@ -1,4 +1,4 @@
-# Azure Security´
+# Azure Security
 
 - 10-15% on the AZ-203 exam
 - implement authentication
@@ -206,7 +206,7 @@
 
 - understand role definitions for azure resources
   - role definition is a collection of permissions
-    - lists operations that ca bn be peformed
+    - lists operations that can be peformed
   - `Name, Id, IsCustom, Description, Actions [], NotActions[], DataActions [], NotDataActions [], AssignableScopes []`
     - `NotActions []` is not a deny rule, just convenience for excludes
   - operations are defined with strings as: `{Company}.{ProviderName}/{resourceType}/{action}`
