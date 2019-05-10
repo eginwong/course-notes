@@ -34,7 +34,7 @@
   - no extra cost
   - built-in logging and mgmt with Azure Portal
   - triggered vs. continuous
-    - cts runs on allinstances or you can restrict it if continuous; triggered will be on a single instance chosen for load balancing
+    - cts runs on all instances or you can restrict it if continuous; triggered will be on a single instance chosen for load balancing
   - App Service > Settings > Webjobs > Add WebJob
 - Diagnostics Logging
   - both web server and the web app
@@ -78,7 +78,7 @@
 - push notifications for Android/iOS
   - firebase integration
   - App Services > Settings > Push
-  - in .NET: `Microsoft.Azure.NotificationHubs` and ` Microsoft.Azure.Mobile.Server.Config;`
+  - in .NET: `Microsoft.Azure.NotificationHubs` and `Microsoft.Azure.Mobile.Server.Config`
 - enable offline sync for mobile app
   - changes are stored in a local db that are then synced with remote backend
   - read/write from sync table `IMobileServiceSyncTable`, part of the SQLite db on your device
@@ -157,7 +157,7 @@
       - `DurableOrchestrationClient.CreateCheckStatusResponse`
     - monitor
     - human interaction
-      - orchestrator function can wait for an event with `        Task<bool> approvalEvent = context.WaitForExternalEvent<bool>("ApprovalEvent");`
+      - orchestrator function can wait for an event with `Task<bool> approvalEvent = context.WaitForExternalEvent<bool>("ApprovalEvent");`
       - external client can deliver event notification via `DurableOrchestrationClient.RaiseEventAsync` 
   - must use `DurableOrchestrationContext` or `context.df` objects to invoke other fcns by name, params, retrieve fcn output
   - orchestrator must be deterministic as it will be replayed multiple times

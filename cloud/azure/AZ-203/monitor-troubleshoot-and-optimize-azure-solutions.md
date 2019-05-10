@@ -9,17 +9,12 @@
   - use session caching, store cookie
   - job and message queuing, defer longer running jobs
   - distributed transactions, executes a batch of commands as a single operation in the form of Transactions
-- TODO: know the tiers of Azure Redis
+- know the tiers of Azure Redis
   - premium (cluster, persistence, enhanced security, import/export, geo-replication, schedule updates), standard (includes SLA), basic (security via firewall rules, reboot)
-- know the Azure Redis integration API, `StackExchange`
-  - `ICacheable` and `IDatabase`
-  - know methods for execute, delete value, delete etc...
 
 # CDN
 - Content Delivery Network, distributed network of servers can efficiently deliver web content to users
 - minimize latency, point-of-presence (POP)
-- TODO: know the feature comparison for Microsoft, Akamai, Verizon, and Premium Verizon
-- TODO: Azure CDN lab
 - `using Microsoft.Azure.Management.Cdn`
 - to connect to CDN, require the `TokenCredentials` from `Microsoft.Rest` to authenticate
 - Caching Rules
@@ -47,14 +42,14 @@
     - rg > load balancer > inbound NAT rules
   - to create scale set in ps:
 ```s
-New-AzVmss `
-  -ResourceGroupName "myResourceGroupScaleSet" `
-  -Location "EastUS" `
-  -VMScaleSetName "myScaleSet" `
-  -VirtualNetworkName "myVnet" `
-  -SubnetName "mySubnet" `
-  -PublicIpAddressName "myPublicIPAddress" `
-  -LoadBalancerName "myLoadBalancer" `
+New-AzVmss 
+  -ResourceGroupName "myResourceGroupScaleSet" 
+  -Location "EastUS" 
+  -VMScaleSetName "myScaleSet" 
+  -VirtualNetworkName "myVnet" 
+  -SubnetName "mySubnet" 
+  -PublicIpAddressName "myPublicIPAddress" 
+  -LoadBalancerName "myLoadBalancer" 
   -UpgradePolicyMode "Automatic"
 ```
   - to allow access to webapp on vmss, create network security group, in ps:
@@ -141,7 +136,7 @@ az vmss create \
   --image UbuntuLTS \
   --upgrade-policy-mode automatic \
   --custom-data cloud-init.txt \
-  --a   dmin-username azureuser \
+  --admin-username azureuser \
   --generate-ssh-keys
 
 # allow traffic
@@ -168,13 +163,12 @@ az vmss disk attach \
     --size-gb 50 \
     --lun 2
 ```
-  -  
 
 - implement code that handles transient faults
   - momentary loss of network connectivity
   - in cloud, resources are shared, and throttling may occur; more potentially latency with moving parts; network conditions can be variable
   - app must be able to retry, detect faults as they occur, use an appropriate strategy for these mechanisms
-  - determine if operatino is suitable for trying, retry count and interval
+  - determine if operation is suitable for trying, retry count and interval
   - log them, use circuit breaker pattern
 
 

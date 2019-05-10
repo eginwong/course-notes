@@ -140,14 +140,14 @@
     - for self-signed certs, must use `-SkipCertificateChainValidation` in powershell to update the `AzApiManagementBackend`; otherwise, 500 errors
   - authorize developer accounts by using AAD in Azure API Mgmt
     - API Mgmt > Security > Identities > Add Identity Provider > Provider type is AAD > keep track of redirect URL
-    - THEN: go to AAD > Manage > App Registrations > New App REgistration  Create name for Web App / API. Sign-in URL is sign-in URL of the developer portal > Create
+    - THEN: go to AAD > Manage > App Registrations > New App Registration > Create name for Web App / API. Sign-in URL is sign-in URL of the developer portal > Create
     - Make sure the Reply URL == the Redirect URL
     - If multiple AAD instances will be used, set Multi-tenanted to Yes
     - Set app permissions by selecting Required permissions, select your app, select read directory data + Sign in and read user profile check boxes > grant permissions
     - Then, copy App ID, switch back to APIM, in add identity provider, paste app id value in the client-id box
     - switch back to AAD > Keys > create new key and save
     - switch back to APIM > paste key in client secret text box
-    - may have to get global administrator to accept consent, from `/aadadminconsent`, prefixe by the azure portal url
+    - may have to get global administrator to accept consent, from `/aadadminconsent`, prefixed by the azure portal url
     - in APIM, can associate AAD groups with permissions
 - define policies for APIs
   - can change behaviour through config
@@ -195,7 +195,7 @@
   - get Access Policies (not DefaultFullSharedAccessSignature as it is for backend only)
   - use PNSes, for authentication mode, select either cert or token
   - pricing tiers: free, basic, standard
-    - standard has unlimited namespaces, 10M active devices per namespace, rich telemtry, scheduled push, bulk import, multi-tenancy, SLA
+    - standard has unlimited namespaces, 10M active devices per namespace, rich telemetry, scheduled push, bulk import, multi-tenancy, SLA
   - hub is smallest resource/entity; namespace is a collection of hubs
   - can write custom code to send cross-platform notifications
   - `Notifications.Instance.Hub.Send_INSERT_HERE_NativeNotifications`
@@ -230,7 +230,7 @@
   - creating subscription in azcli: `az servicebus subscription create --resource-group myResourceGroup --namespace-name $namespaceName --topic-name myTopic --name S1`
   - message expiration; all messages have sequencing and timestamps
   - subscribers can add filters to define which messages they want to receive
-  - message sessions, can demultiplex by appending an id and creating a session object used in the constructor, then  receive method as normal
+  - message sessions, can demultiplex by appending an id and creating a session object used in the constructor, then receive method as normal
 - implement solutions that use Azure Queue Storage queues
   - provides cloud messaging between app components; for scale
   - access via HTTP/HTTPS; up to 64 KB in size, with q containing up to millions of messages limited by storage account

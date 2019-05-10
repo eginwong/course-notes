@@ -271,7 +271,7 @@
     - protocol
     - signature
     - service SAS has storage resource
-    - account SAS has service(s), storage resource types (service-level, container-level, object-lvel APIs)
+    - account SAS has service(s), storage resource types (service-level, container-level, object-lvl APIs)
   - can create ad hoc SAS (account must be of adhoc) or SAS with stored access policy
   - SAS is invalid when expiry time, expiry time of stored access policy is reached, stored access policy is deleted, account key is regenerated
   - authN from client app w/SAS

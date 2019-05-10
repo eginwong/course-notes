@@ -62,7 +62,7 @@
       - set quotas
       - automate deployments
       - switchover regions as part of normal operations
-```sh
+```s
 az group create \
     --name myResourceGroup \
     --location eastus2
@@ -257,7 +257,6 @@ string containerSasUrl = container.Uri.AbsoluteUri + containerSasToken;
 ```
 - writing output to container, have to differentiate storage path because dupes
 ```C#
-
 new CloudTask(taskId, "cmd /v:ON /c \"echo off && set && (FOR /L %i IN (1,1,100000) DO (ECHO !RANDOM!)) > output.txt\"")
 {
     OutputFiles = new List<OutputFile>

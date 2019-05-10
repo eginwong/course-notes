@@ -86,7 +86,7 @@
 - only pay for the agent nodes, not the masters
 - for improved security and mgmt, AKS can integrate with Azure AD and use K8s RBAC
 - for scaling, can use horizontal pod autoscaler or cluster autoscaler
-- supports creation of GPU enabld node pools (single or multiple GPU enabled VMs allowed)
+- supports creation of GPU enable d node pools (single or multiple GPU enabled VMs allowed)
 - can mount storage volumes for persistent data
 - can be deployed into an existing vnetwork and every pod in the cluster has an assigned IP address and can directly communicate with other pods in the cluster, and other nodes in the vnet
 - can work well with K8S ingress resources as normal
@@ -523,4 +523,3 @@ az vm encryption enable \
     --volume-type all
 ```
 - to check status: `az vm encryption show --resource-group $resourcegroup --name myVM --query 'status'`
-
