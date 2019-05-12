@@ -1,7 +1,7 @@
 # Inside Facebook's suicide algorithm: Here's how the company uses artificial intelligence to predict your mental state from your posts
 [ref](https://www.businessinsider.com/facebook-is-using-ai-to-try-to-predict-if-youre-suicidal-2018-12)
 
-@dlc
+@dlc last run: 2019-05-10
 
 > "It's not a question of if they get hacked, it's a question of when[.]"
 > "The technology companies, Facebook included, are no different than that they have to determine whether or not to activate law enforcement to save someone."
