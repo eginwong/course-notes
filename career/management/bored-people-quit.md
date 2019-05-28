@@ -4,6 +4,11 @@
 @dlc
 
 > They’ve quit, and when someone quits they are effectively saying, “I no longer believe in this company”. 
+> Boredom shows up quietly and appears to pose no immediate threat. This makes it both easy to address and easy to ignore.
+
+Questions:
+- Have you felt these symptoms of boredom before?
+- Do you think our culture is addressing the problem? If not, how might we?
 
 - people often leave because of boredom
 - detecting boredom

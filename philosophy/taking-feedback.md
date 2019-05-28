@@ -1,7 +1,7 @@
 # Taking Feedback
 [ref](http://katemats.com/taking-feedback/)
 
-@dlc
+@dlc 2019-05-22
 
 > Everyone has a reason, or an explanation as to why they did something, said something, or acted in a particular way. 
 > People who are open to feedback and criticism tend to get more feedback
