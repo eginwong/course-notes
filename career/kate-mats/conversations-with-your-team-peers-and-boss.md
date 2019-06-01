@@ -1,0 +1,35 @@
+# Conversations with your team, peers, and boss
+[ref](http://katemats.com/conversations-with-your-team-peers-and-boss-guide-for-new-leaders/)
+
+- on joining a new team
+  - what happens when things go wrong? How are issues handled?
+  - How are new employees onboarded?
+  - How are new ideas presented?
+  - Are meetings efficient?
+- make sure to take the time to meet with each of your direct reports
+  - what is your background and what brough you to company?
+  - what do you love most about working here?
+  - where do you want to take your career in 5 years?
+  - Greatest success or accomplishment at company? Why?
+  - Biggest challenges facing company?
+  - What would you do in my shoes?
+  - open floor for questions
+- meeting with your peers
+  - what made you successful at company?
+  - suggestions for working with our manager?
+  - impression of company culture?
+  - challenges?
+  - biggest challenge facing our industry?
+- meeting with manager
+  - what is most important thing to focus on?
+  - how to define company culture?
+  - biggest challenge facing company, what is my role in addressing them?
+  - key company metrics? 
+  - top performers on team?
+  - poor performers on team?
+- set up a rhythm
+  - how to communicate status
+  - email vs verbal
+  - how often?
+  - perf reviews?
+  - budget?
