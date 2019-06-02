@@ -1,0 +1,85 @@
+# Front End Interview Handbook
+[ref](https://github.com/yangshun/front-end-interview-handbook)
+
+## HTML Questions
+- What does a doctype do?
+  - DOCUMENT TYPE, with Document Type Definition (DTD)
+  - for user-agent to understand what version of HTML specs your document respects
+- how to serve pages with content in multiple languages?
+  - `<html lang="en">...</html>` with i18n placeholders in backend
+- What to look for when designing for multilingual sites?
+  - `lang` attribute
+  - make it easy for user to switch languages / detect it
+  - watch for layout overflow depending on language font
+  - be sensitive to color usage in different cultures
+  - date and currency formats
+  - language reading direction
+- What are `data-` attributes for?
+  - before js, can store attributes in DOM but not good idea anymore as for mgmt
+- Difference between cookie, sessionStorage, localStorage?
+  - kv storage mechanisms on client side, storing strings
+  - cookie is set on client or server, expiry is manually set, sent via `Cookie` header, 4kb
+  - localStorage is client, forever, persistent across browser sessions, 5MB
+  - sessionStorage is client, expires on tab close, 5MB, only within same tab
+- Difference between `<script>`, `<script async>`, `<script defer>`?
+  - script blocks HTML parsing, fetched and executed immediately, HTML parsing resumes
+  - async will fetch in parallel with HTML parsing and executes as soon as available, for analytics or other use cases where HTML doesn't matter
+  - defer will fetch in parallel with HTML parsing but only execute after finished parsing; will run in order of statements
+  - async and defer are ignored if no `src` attribute
+- What is progressive rendiner?
+  - techniques used to improve perf of webpage to render content for display ASAP
+  - lazy loading images, prioritizing above-the-fold content, async HTML fragments
+- Why would you use `srcset` attr in an image tag? 
+  - depends on device size, want to serve relative images
+
+## CSS Questions
+- How does CSS selector specificity work?
+  - inline, ID, classes, tags / pseudo-elements
+  - matrix to compare column by column going left to right
+  - equal specificity reads in the latest rule
+- How does `float` work?
+  - floated elements remain part of flow of page, but requires a height
+  - part of page unlike `position: absolute`
+
+## JavaScript Questions
+- Describe event delegation.
+  - Instead of adding a gajillion onclick listeners to many similar individual elements, use on common ancestor instead and check for `event.target` to find the individual child element for action
+  - better perf as less handlers
+  - no need to bind and unbind for new elements
+- Explain how `this` works in js.
+  - if `new` keyword is used when calling a function, `this` inside the function is a brand new object
+    - like a constructor
+  - `call`, `apply`, `bind`, `this` inside the function is the object that is passed in as an argument
+  - if function is called as a method, `this` is the object
+  - `this` is the global object if it is a free function invocation
+  - if using arrow function, `this` is the surrounding scope at the time it is created
+- AMD vs CommonJS?
+  - AMD is async, common is sync for server-side
+- What is a closure?
+  - functions that have access to the outer (enclosing) function's variables, scope chain even after the outer function has returned
+  - used for currying, module pattern, data privacy
+- forEach vs map?
+  - doesn't return value, callback for each element
+  - creates new array result instead
+- Typical use case for anonymous functions?
+  - IIFEs, functions only ever used once within a function as a callback
+- explain `Function.prototype.bind`.
+  - `bind` creates a new function that, when called, has its `this` keyword set to the provided value
+- difference between feature detection, feature inference, and using UA string?
+  - detection is to check if feature is available in browser and adjusting accordingly
+  - inference checks if feature exists and will call another feature based off of that, not recommended
+  - UA-string is to define user-agent, but can be parsed and spoofed
+- describe event bubbling.
+  - event triggers on a DOM elt, it will attempt to handle the event if there is a listener attached, then it will bubble up to its parent. 
+  - goes all the way up to the `document`
+- difference between attribute and property?
+  - attribute is from HTML, property is from DOM
+- Why use `use strict`?
+  - impossible to create accidental global variables
+  - fixes broken assignments, features, coding bloopers
+- what is event loop?
+  - single-threaded loop monitoring the call stack and checks to see if any work to be done in the task queue. If call stack is empty, will dequeue callback functions in the task queue to push onto call stack to execute
+- using function vs class to create objects?
+  - inheritance is more verbose in ES5 by having to use `Parent.call(this, params)` and then add supplementary props after
+- what is currying?
+  - partial application of a function to be determined later
