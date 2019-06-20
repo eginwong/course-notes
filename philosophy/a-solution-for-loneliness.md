@@ -8,4 +8,4 @@
 
 Questions:
 - What are your personal experiences with volunteering?
-- What do you think about our responsibility as consultants in corporate social responsibiltiy?
+- What do you think about our responsibility as consultants in corporate social responsibility?

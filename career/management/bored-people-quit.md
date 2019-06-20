@@ -1,7 +1,7 @@
 # Bored People Quit
 [ref](http://randsinrepose.com/archives/bored-people-quit/)
 
-@dlc
+@dlc 2019-06-05 08:49:37
 
 > They’ve quit, and when someone quits they are effectively saying, “I no longer believe in this company”. 
 > Boredom shows up quietly and appears to pose no immediate threat. This makes it both easy to address and easy to ignore.
