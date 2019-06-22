@@ -1,0 +1,272 @@
+# Effective Java, 2nd edition
+
+## Creating and Destroying Objects
+- consider static factory methods instead of constructors
+  - example would be `java.util.EnumSet`
+  - unrelated to Design Patterns
+  - advantages: 
+    - unlike constructors, these static factory methods have names
+    - not required to create a new object each time they're invoked, similar to Flyweight design pattern
+    - can return an object of any subtype of their return type
+    - class of the object returned by static factory methods may not even exist at the time the class containing the method is written
+    - flexible and allows for future changes
+  - disadvantages:
+    - cannot be subclassed if no public or protected constructors
+    - not readily distinguishable from other static methods
+      - `of`, `valueOf`, `getInstance`, `newInstance`, `getType`, `newType`
+- consider a builder when faced with many constructor parameters
+  - telescoping constructor sucks (increasing # of params for constructor)
+  - could create obj and use a bunch of setters, but that could lead to inconsistent state and makes it mutable
+  - builder patterns simulates named optional parameters
+- enforce the singleton property with a private constructor or an enum type
+  - to make singletons serializable, must mark all props to be `transient` and add a `readResolve()` 
+  - a single-element enum type is the best way to implement a singleton
+  - `public enum Elvis { INSTANCE; //...methods here}`
+- enforce noninstantiability with a private constructor
+  - add a default private constructor to enforce noninstantiability
+- avoid creating unnecessary objects
+  - prefer primitives to boxed primitives, and watch for unintentinoal autoboxing
+- eliminate obsolete object references  
+  - nulling out object references should be the exception rather than the norm
+    - prefer letting the variable fall out of scope, by having narrowly defined scopes
+  - whenever a class manages its own memory (like in a stack), beware of memory leaks
+  - another area would be in caches
+    - use `WeakHashMap` if object is only relevant while it has an external reference to it
+    - use an expiry otherwise
+  - another area for memory leaks is listeners and other callbacks
+    - may add listeners but never dereference them
+- avoid finalizers
+  - often dangerous and generally unnecessary
+  - never do anything time-critical in a finalizer
+    - execution depends on GC algorithm
+  - there's a huge performance penalty for usign finalizers
+  - use an explicit termination method instead
+  - put in `finally` blocks to be safe
+  - only use finalizers for safety net (when clients forgot to explicitly terminate) or to terminate noncritical native resources
+    - use `super.finalize()` if you have to
+    - don't use this in general
+
+## Methods Common to All Objects
+- obey the general contract when overridin `equals`
+  - don't do it if you don't care about equality for that object
+  - must be reflexive, symmetric, transitive, consistent
+  - for a good `equals` method, check the `==` operator first for short circuiting
+  - use `instanceof` to check if argument is correct type
+  - cast to correct type
+  - check each significant field (non-calculated fields)
+- always override `hashCode` when you override `equals`
+  - must consistently return the same integer on the same object in the same execution but not between executions of the same app
+  - if two objects are equal by `equal`, they must have the same `hashCode` value
+  - if two objects are unequal, they can still have the same `hashCode`
+  - ideally we have a good general distribution of hashed values
+  - for each field, make small modifications to the result integer * by a prime number
+- always override `toString`
+  - more informational, return all interesting pieces of info from the object
+- override `clone` judiciously
+  - would need to recursively call `super.clone()`
+- consider implementing `Comparable`
+  - means that the class indicates a natural ordering
+  - returns negative if this object is lt the specified object
+  - should be reversible, transitive, and equality must hold if it should
+  - we only need to return the sign, so you can have one field value subtract another
+    - caveat: we may get integer overflow if we have a large positive int - (negative integer); beware
+
+## Classes and Interfaces
+- minimize the accessibility of classes and members
+  - encapsulation is core to good software design
+    - access control, access modifiers
+    - private classes within the one class that uses it may be a good idea
+  - instances fields should never be public because otherwise, not thread-safe
+    - final field must be primitive or reference an immutable object to be thread-safe
+- in public classes, use accessor methods, not public fields
+  - must have getters/setters to enforce encapsulation
+- minimize mutability
+  - don't provide any mutators
+  - ensure class can't be extended
+  - make all fields final
+  - make all fields private
+  - ensure exclusive access to any mutable components
+  - inherently thread-safe, simple to use, can be shared freely
+  - downside is the increase in resources, especially for large computations
+  - beware of implementing `Serializable` with mutable properties on an immutable object
+  - classes should be immutable unless there's a real good reason to mutate them
+- favor composition over inheritance
+  - inheritance violates encapsulation
+- design and document for inheritance or else prohibit it
+  - only way to test a class designed for inheritance is to write subclasses
+  - don't put an overrideable method in the parent constructor as that will cause runtime problems
+  - or avoid the problem entirely
+- prefer interfaces to abstract classes
+  - Java only allows single inheritance which makes it limit scope 
+  - can retroactively implement interfaces but subclassing is more involved
+  - once interfaces are released, they are almost impossible to change without breaking everything
+- use interfaces only to define types
+  - don't use them to export constants
+- prefer class hierarchies to tagged classes
+  - just create extra classes through hierarchy using abstract classes
+- use function objects to represent strategies
+  - create class objects when you need to create anonymous class repeatedly, to save on memory
+- favor static member classes over nonstatic
+  - four types of nested classes: static member, nonstatic member, anonymous, and local
+  - should only exist to serve its enclosing class
+  - if you declare a member class that does not require access to an enclosing instance, always put the static modifier in its declaration
+
+## Generics
+- don't use raw types in new code
+  - will lose type safety otherwise
+- eliminate unchecked warnings
+  - every time you suppress warnings, add a comment for why this is safe to do so
+- prefer lists to arrays
+  - arrays are covariant, lists can catch incompatible types at compile time instead
+  - arrays are reified and apply at runtime, generics use erasure and enforce type constraints only at compile time and discard them at runtime to interop with legacy code
+    - because of this, cannot create an array with generics
+- favor generic types
+  - make data structures work with generics as best as possible
+- favor generic methods
+- use bounded wildcards to increase API flexibility
+  - parameterized types are invariant
+  - `? extends E`, to include subtypes of E as well as E
+  - PECS, producer-extends, consumer-super
+  - all comparables and comparators are consumers
+- consider typesafe heterogenous containers
+  - put generic on key to get flexibility, but niche application
+
+## Enums and Annotations
+- enums are typesafe enum patterns
+  - immutable
+  - can have constant-specific method implementations per enum, by declaring an abstract method in the enum
+- use instance fields instead of ordinals
+  - can easily add instance to the enum type instead of relying on the number in the list of enum types
+- use `EnumSet` instead of bit fields
+- use `EnumMap` instead of ordinal indexing
+- emulate extensible enums with interfaces
+- prefer annotations to naming patterns
+- consistently use the `Override` annotation
+- use marker interfaces to define types
+  - i.e., `Serializable`'
+
+## Methods
+- check parameters for validity
+- make defensive copies when needed
+- design method signatures carefully
+  - for parameter types, favor interfaces over classes
+- use overloading judiciously
+  - overriding is the norm and overloading is the exception
+- use varargs judiciously
+  - `T... args` as a parameter
+  - useful when you need 1+ values
+  - don't overuse
+- return empty arrays or collections, not nulls
+  - use null objects instead of null to avoid errors
+- write doc comments for all exposed API elements
+  - describe succinctly the contract between method and client
+  - remember to describe the thread safety of it
+  - for a method, start with a verb
+  - for a class, interface, and field, start with the noun description
+
+## General Programming 
+- minimize scope of local variables
+  - declare where first used
+  - contain an initializer
+  - prefer for loops to while loops, for more localization of variables
+- prefer for-each loops to traditional for loops
+  - cannot use when filtering, transforming, or parallel iteration
+  - otherwise, cleaner and less error-prone
+- know and use the libraries
+- avoit float and double if exact answers are required
+  - floating-point arithmetic
+- prefer primitive types to boxed primitives
+  - un-boxing and identity will screw you up if not careful
+- avoid strings where other types are more appropriate
+- beware the performance of string concatenation
+  - O(n^2)
+- refer to objects by their interfaces
+  - L in SOLID
+- prefer interfaces to reflection
+  - performance issues
+  - compile-time checking is lost
+- use native methods judiciously
+  - for low-level access at the C or C++ level
+  - don't use them unless you know what you're doing
+- optimize judiciously
+  - write good programs over fast ones
+  - consider the performance consequences of your API design decisions
+  - measure perf before and after each attempted optimization
+- adhere to generally accepted naming conventions
+
+## Exceptions
+- use exceptions only for exceptional conditions
+- use checked exceptions for recoverable conditions and runtime exceptions for programming errors
+  - checked exceptions, runtime exceptions, errors
+- avoid unnecessary use of checked exceptions
+- favour the use of standard exceptions
+- throw exceptions appropriate to the abstraction
+  - bubble up an appropriate exception for the level of abstraction that is currently being handled
+- document all exceptions thrown by each method
+- include failure-capture information in detail messages
+  - should contain all state that ontributed to the exception
+- strive for failure atomicity
+  - state should revert back to previous state before exception was thrown and error failed
+- don't ignore exceptions
+
+## Concurrency
+- synchronize access to shared mutable data
+  - synchronization is required for reliable communication between threads as well as for mutual exclusion
+  - synchronization has no effect unless both read and write operations are synchronized
+  - `volatile` guarantees that any thread that reads the field will see the most recently written value
+  - confine mutable data to a single thread or pass immutable data
+- avoid excessive synchronization
+  - to avoid liveness and saftey failures, never cede control to the client within a synchronized method or block
+    - don't let clients put code in synchronized blocks for this reason
+- prefer executors and tasks to threads
+- prefer concurrency utilities to wait and notify
+  - use high-level concurrent utilities now instead
+- document thread-safety
+  - clearly document what level is supported
+    - immutable
+    - unconditionally thread-safe
+      - use private lock property so that clients cannot interfere instead of `synchronized` block
+    - conditionally thread-safe
+    - not thread-safe
+    - thread-hostile (can't even be synched externally)
+- use lazy initialization judiciously
+  - can add performance issues or strange bugs
+  - can use the double check method, with second check being synchronized for initialization for instance fields
+  - for static fields, the lazy initialization holder class idiom
+- don't depend on the thread scheduler
+  - ideal is to have # of runnable threads to not be significantly greater than the # of processors
+  - threads should not busy wait
+  - reduce the number of concurrently runnable threads
+  - if you depend on thread scheduler, may not be very portable to other JVMs
+- avoid thread groups
+  - obsolete
+
+## Serialization
+- implement `Serializable` judiciously
+  - cost to implementing is that it decreases flexibility to change a class's implementation once released
+  - must support just like public API
+  - runtime will auto generate an explicit serial version UID to determine compatibility
+  - can lead to bugs and secruity holes
+  - more testing required for compatibility
+  - static member class can implement Serializable but not an inner class
+- consider using a custom serialized form
+  - don't use default serialized form if object's physical representation differs substantially from its logical data content
+    - permanently ties exported API to current internal representation
+    - consume excessive space / time
+    - can cause stack overflows
+  - custom serialized form is `readObject`, and `writeObject` with Object*Streams
+  - must declare explicit serial version UID 
+  - must add `synchronized` if any other method on object has `synchronized` to maintain state
+- write `readObject` methods defensively
+  - `readObject` is essentially another constructor
+  - should run `defaultReadObject` always and then check invariants after deserializing
+  - must defensively copy if any references can be exposed to user
+- for instance control, prefer enum types to `readResolve`
+  - any `Serializable` class is no longer a Singleton
+  - use enum types to enforce instance control invariants
+- consider serialization proxies instead of serialized instances
+  - design a private static nested class of the serializable class that concisely represents the logical state of an instance of the enclosing class
+    - should have a single constructor, param type is enclosing class
+    - only copies from one to to the other, and both must implement `Serializable`
+  - not compatible with classes that are extendable by their clients
+  - more costly to do this but easy to implement
