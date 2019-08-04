@@ -1,0 +1,37 @@
+# Writing Process
+[ref](https://www.julian.com/guide/write/first-draft-writing-process)
+
+- first draft is for generating ideas
+  - brainstorm talking points
+  - connect dots between those points to learn what you're *really* trying to say
+  - write the first draft for yourself, the second one for everyone else
+- start with your objective
+  - from the previous article
+  - reveals what must be accomplished to succeed in your goal
+- every argument has two types of talking points
+  - supporting points: which points are needed to make my argument
+  - resulting points: what are the implications of my argument being true?
+- the first draft process:
+  - choose an objective
+  - write a messy braindump of your ideas
+  - transfer best talking points to outline
+  - write first draft using that outline
+- ideas come from
+  - hooks, experience, research, experiments, brainstorming, mental models
+  - focus on interesting or surprising ideas
+  - skip everything that bores you
+  - > writing for yourself is the quickest path to writing something others love
+  - when stuck: 
+    - how can I make my point more convincing?
+    - what are the interesting implications of what I just said?
+- outline your talking points
+  - supporting points set the stage for your argument, resulting points explore what happens when your argument is true
+- write a draft using your outline
+  - let the flow of your argument naturally reshape your outline
+- writing an outro
+  - optional
+  - frame why your article was worth reading
+    - share a poignant takeaway
+      - make readers think - I should memorize this one-liner of advice
+    - provide next steps
+      - what next?

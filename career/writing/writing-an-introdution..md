@@ -1,0 +1,52 @@
+# Writing an Introduction
+[ref](https://www.julian.com/guide/write/introductions)
+
+Julian Shapiro
+
+- choose your topic
+  - write about the topic that you *can't not* write about
+  - choose an objective
+    - open people's eyes by proving status quo is wrong
+    - cut through the noise and articulate something everyone is thinking but no one is saying
+    - identify key trends on a topic and predict the future
+    - contribute original insights through research and experimentation
+    - distill an overwhelming topic into something approproachable
+    - share a solution to a tough problem
+    - tell a suspenseful and emotional story that imparts a lesson
+  - pair the objective with motivation
+    - does writing this article get something off your chest?
+    - does it help reason through a nagging, unsolved problem you have?
+    - does it persuade others to do something you believe is important?
+    - do you obsess over the topic and want to share the geekiness to others?
+- introductions with a twist, hook your readers into reading more
+  - as long as you fulfill the hook
+  - hook: half-told story
+    - pose an intriguing question without the answer
+    - share the beginning of the narrative but withhold conclusion
+    - highlight new findings, but only a portion
+    - present your case but not how you arrived at it
+  - hooks tease your best talking points
+  - generate hooks by finding questions you want answers to:
+    - what is the most captivating questions they could pose to make me excited to read this?
+    - write those questions down, even if you lack the answers
+    - rank your questions by how much they interest you
+    - top questions become your hooks and put them in your intro without the answers
+  - > Your questions$$ don’t have to be mind-blowingly interesting. They just have to be good enough for your target audience to keep reading.
+  - the answer to the hook will be an idea you explore in your article
+  - hooks show you what a job well done looks like
+  - ask for feedback after the intro, to know if people actually want to know your content
+- combatting skepticism
+  - superficial: readers don't believe you'll share things they don't already know
+    - tease your original insights in your intro
+  - irrelevant: readers don't believe you'll cover key points they care about
+    - list the points you'll cover
+  - sloppy: don't want to sit through more bad writing
+    - rewrite your intro to be clear, succinct, and intriguing
+  - implausible: don't believe you'll answer your hooks well
+    - make your hooks realistic
+  - untrustworthy: don't believe you're qualified to write about your topic
+    - share if you have relevant credentials and win them over!
+- feedback
+  - rate from 1-10, and ask what sort of questions they want to answer if they were writing about the topic
+  - re-write until you get an average 8/10
+  - don't chase perfection
