@@ -7,5 +7,5 @@
 > When you apply an assertive approach, you’re reflecting equality of respect. 
 
 Questions:
-- Have there been times where you have fallen under passive or aggressive or assertive?
+- Have there been times where you now recognize fall under passive or aggressive or assertive?
 - Are there ever appropriate times to passive or aggressive?
