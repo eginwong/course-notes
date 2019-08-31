@@ -31,7 +31,7 @@ Julian Shapiro
     - write those questions down, even if you lack the answers
     - rank your questions by how much they interest you
     - top questions become your hooks and put them in your intro without the answers
-  - > Your questions$$ don’t have to be mind-blowingly interesting. They just have to be good enough for your target audience to keep reading.
+  - > Your questions don’t have to be mind-blowingly interesting. They just have to be good enough for your target audience to keep reading.
   - the answer to the hook will be an idea you explore in your article
   - hooks show you what a job well done looks like
   - ask for feedback after the intro, to know if people actually want to know your content
