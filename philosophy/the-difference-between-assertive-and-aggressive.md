@@ -1,7 +1,7 @@
 # The Difference between Assertive and Aggressive
 [ref](http://executivesecretary.com/the-difference-between-assertive-and-aggressive/)
 
-@dlc
+@dlc 2019-08-30
 
 > Asserting yourself, although never intended, might hurt others.
 > When you apply an assertive approach, you’re reflecting equality of respect. 

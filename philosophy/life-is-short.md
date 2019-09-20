@@ -1,7 +1,7 @@
 # Life is short
 [ref](http://www.paulgraham.com/vb.html)
 
-@dlc
+@dlc 2019-09-20
 
 > And yet bullshit does have a distinctive character. There's something fake about it. It's the junk food of experience.
 > But while some amount of bullshit is inevitably forced on you, the bullshit that sneaks into your life by tricking you is no one's fault but your own.
