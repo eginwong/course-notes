@@ -3,6 +3,10 @@
 
 @dlc
 
+> Clarity is harder because it’s more immediate, and has to be based on what’s happening today—which means you need to confront what’s actually happening today—there’s no hiding behind “lack of vision.”
+> Sometimes it feels like we don’t have time to coach the people around us, but medium-term—not even long-term—we don’t have time not to.
+> As you are human and can only do so much at once, now comes the question, “What do I do first?”. Answering this question is a balance between impact and time.
+
 - begin with: "How do I create clarity? How do I create capacity?"
 - what is happening today? no hiding behind "lack of vision"
   - are we doing things because they are interesting or valuable?

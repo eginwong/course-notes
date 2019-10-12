@@ -3,7 +3,7 @@
 
 Richard A. Friedman
 
-@dlc
+@dlc 2019-10-11
 
 > Speed is not the goal; it is the result of perfect beautiful technique.
 > Trying too hard to be happy — downloading mindfulness apps, taking yoga classes, reading self-help books — mostly just stresses us out, she writes. 
