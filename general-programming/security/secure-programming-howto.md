@@ -43,4 +43,10 @@
 - processes may be created using fork, vfork (not recommended), or clone (spec to Linux)
 
 ### Files
-- 
+- Filesystem Object Attributes
+  - owning UID and GID
+  - permission bits (rwx) for owner, group, other
+  - timestamps
+- POSIX Access Control Lists (ACLs)
+  - extra layer of ACL entries that determine permission to access the File system object
+- change access control attributes via `chmod`, `fchmod`, `chown`, `chgrp`

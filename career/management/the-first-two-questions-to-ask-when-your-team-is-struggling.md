@@ -1,7 +1,7 @@
 # The first two questions to ask when your team is struggling
 [ref](https://qz.com/work/1408428/the-first-two-questions-to-ask-when-your-team-is-struggling/)
 
-@dlc
+@dlc 2019-11-15
 
 > Clarity is harder because it’s more immediate, and has to be based on what’s happening today—which means you need to confront what’s actually happening today—there’s no hiding behind “lack of vision.”
 > Sometimes it feels like we don’t have time to coach the people around us, but medium-term—not even long-term—we don’t have time not to.
