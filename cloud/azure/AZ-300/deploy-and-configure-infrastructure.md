@@ -1,0 +1,267 @@
+# Deploy and configure infrastructure
+
+## Udemy 
+### Subscriptions and Resources
+- management groups
+  - subscriptions
+    - resource groups
+      - resources
+- roles and permissions
+- Azure policies
+- tags
+
+### Create and Configure Virtual Machines
+- VM behaves like a real machine
+- 6 instance types
+  - general purpose
+    - B, development servers
+    - D, power servers
+    - DS
+    - A, slightly better than B
+    - DC 
+  - compute optimized (high CPU > mem)
+    - F, FS
+  - memory optimized (mem > CPU)
+    - E, ES, M, G, GS, D*, DS*
+    - db, cache, analytics
+  - storage optimized (disk/throughput)
+    - LS
+    - data warehousing, db
+  - GPU (graphic rendering)
+    - N: NV, NC, ND
+    - modelling
+  - High performance compute (fastest and most powerful)
+    - H, on RDMA network
+  - NOTE: (S) stands for SSD
+- Creating a virtual machine
+  - subscription, rg, vm name, region, availability, image, size
+  - inbound port rules
+  - disks, vnet (accelerated networking), management
+- Availability
+  - availability set will distribute machines across different fault domains so no single point of hardware failure (1-3)
+  - update domain (1-20), will deploy updates distributed as only one update domain is rebooted at a time
+    - 30 minutes of time in between to recover and do more maintenance
+  - availability zone: choose which datacentre the VM is being deployed to, to reduce fire/etc.
+  - no lb with availability sets/zones
+  - SLAs, 99.95% for availability set, 99.99% for zones
+- Monitor a VM 
+  - diagnostics settings
+  - enable guest-level monitoring to find CPU/disk/network usage
+  - metrics
+- Setting up Virtual Machine Scale Sets (VMSS)
+  - multiple instances at once
+  - autoscale with thresholds
+  - scale set requires load balancing or application gateway
+- Dedicated Hosts
+  - isolated VMs
+  - host group < dedicated host < VMs
+    - must be the same VM series
+  - guaranteed unaffected by other customers
+  - can mix availability zone and fault domains
+
+## Powershell Azure AZ Module
+- old version was Azure RM
+- requires new PS version, 6
+- `Install-Module - Name Az -AllowClobber -Scope Currentuser`
+- to login, `Connect-AzAccount`
+- to set context, `Get-AzSubscription`
+  - `$context = Get-AzSubscription -SubscriptionId (val)`
+  - `Set-AzContext $context` to set the context of your created resources
+- <verb>-Az<entity>
+  - `New-AzResourceGroup -Name _ -Location _`
+  - `New-AzVM -ResouceGroupName "_" -Name "_" -Location "_" -VirtualNetworkName "_" -SubnetName "_" -SecurityGroupName "_" -PublicIpAddressName "_" -OpenPorts "_"`
+    - no instance type, or OS but will default
+  - `Start-AzVM -ResouceGroupName "_" -Name "_"`
+- Working with ARM Templates
+  - review [samples](https://github.com/Azure/azure-quickstart-templates)
+  - can Download the template file
+  - template.json, parameters.json, and 4 ways to deploy
+    - rb, sh, ps1,
+    - $schema, contentVersion, parameters, variables, resources, outputs
+  - has `dependsOn` to handle dependencies
+  - TODO: REVIEW ARM TEMPLATES
+  - for a new VM, we need a new NIC, publicIpAddressName, vmName
+  - idempotent, desired state configuration to ensure properties are correct/same as laid out
+  - powershell will not deploy immediately without execution policy
+    - need to use: `Set-ExecutionPolicy -Scope Process - ExecutionPolicy Bypass`
+    - include variable params for the powershell script
+  - Linux ARM Templates
+    - `az vm image list --output table` to see the list of available images
+    - update `imageReference` section
+- Encrypt a Virtual Machine
+  - requires Key Vault resource
+  - requires the same region as resource
+  - can only do encryption on standard and above VMs
+  - in PS: `Set-AzVMDiskEncryptionExtension -ResourceGroupName "armtemplate" -VMName armtest2 -DiskEncryptionKeyVaultUrl $KeyVault.VaultUri -DiskEncryptionKeyVaultId $KeyVault.ResourceId`
+    - prompts to reboot after 10-15 min
+
+## Diagnostics Monitoring
+- Configure diagnostic settings on resources
+  - can turn on diagnostic loggings per VM
+  - Azure Monitor
+  - Diagnostic Settings
+    - agent needs to modified on VM, and stored in a storage account
+    - performance counters that check per sample rate
+    - crash dumps
+  - can check health and performance
+- Create a baseline, modify templates from old templates
+  - can use Automation Script to generate template (but not all resources)
+- test and alerts
+  - create rule and select a resource
+    - based off of an action group
+  - create and test metrics
+    - chart, and set resource, namespace, metric, aggregation
+    - pin to dashboard
+  - create action groups
+    - email, azure function, logic app, webhook, itsm, automation runbook
+  - monitor and measure azure costs
+  - Azure Advisor
+    - recommendations for resources to clean up
+    - Cloudyn, which manages costs from AWS, GCP, and Azure all over
+- Log analytics
+  - requires a workspace (storage account to store data)
+  - must connect to log analytics account to retrieve logs
+    - metrics and diagnostics are separate, but if managed, diagnostics don't matter
+  - can query like SQL with slightly different syntax
+
+## Create a storage account
+- create a storage account
+  - standard v premium (SSD)
+  - account kind: blob storage, storageV2
+  - replication: locally redundant (LRS), geo-redundant (GRS), read-access geo redundant
+  - access tier: hot, cold
+  - security, virtual networks (can select network)
+- add storage account to a virtual network
+  - > firewalls, specify what address range, exceptions, ip ranges, etc
+  - even if we had key, if we're not in that vnet, we cannot access the storage
+  - core way to access is via storage key1 or key2
+  - or use shared access signature (SAS) instead
+- Storage Explorer
+  - block, page, append blobs
+  - GUI to view files
+- Azure AD to storage account
+  - > Access control (IAM)
+    - > Add > role
+- Storage Redundancy
+  - LRS: 3 copies within same datacentre
+  - GRS: 3 copies, but is across datacentre
+  - RA-GRS: extra copies, but can be read-accessible
+- storage failover
+  - exists but still in preview mode
+
+## Virtual Networks
+- each vnet must have at least 1 subnet
+  - part of address space
+  - ddos protection is included, but standard is paid service
+  - can specify service endpoints (can specify which services exactly)
+  - can open firewall + subnet for that
+  - subnets used to section apps apart
+    - 5 reserved IP addresses in each subnet
+- to access private vnet, can use public IP address
+  - includes lb (ip version)
+  - static or dynamic IP address assignment
+  - include dns name label, idle timeout
+- routing traffic on a network
+  - create route table
+  - > Routes, can specify address prefix and next hop type
+    - must associate subnet with route
+- application security groups
+  - all app servers, or all db servers together in one security group
+  - limited to the region in which it was created
+
+## Connectivity Between Networks
+- VNET Peering
+  - vnets > Peerings
+    - connect two resources between two vnets 
+    - cannot have identical ip address ranges
+  - forwarded traffic (can you do multiple hops)
+  - gateway transit / use remote gateway (use other people's gateways or vice versa)
+  - must initiate the other peering settings from the other side to connect them
+  - pay per gb (0.01 per GB) for inbound and outbound
+- VNET Communication
+  - VNET to VNET, paying for bandwidth but not cap of data
+    - by S2S tunnels
+  - need gateways on both sides to connect them correctly
+- VPNs and ExpressRoute
+  - Point-to-site VPN (P2S)
+    - your computer -> Azure Virtual Network Gateway (Gateway Subnet) -> Subnet A (with VM)
+  - Site-to-Site VPN (S2S)
+    - your office network -> VPN Gateway Device locally -> Azure Virtual Network Gateway (Gateway Subnet) -> Subnet A (with VM)
+    - supports redundancy, multiple gateways, active-active
+  - Dual redundancy (multiple local VPN Gateway Device and multiple Azure Virtual Network Gateway)
+  - ExpressRoute (work with a communications provider)
+    - pay for traffic
+- ExpressRoute Direct
+  - provisioned directly through Microsoft
+  - 10 to 100 GBps
+  - multiple virtual circuits on one connection
+  - needed for massive data ingestion
+  - requires internal network that supports those speeds
+- Virtual WAN
+  - connect two endpoints together
+  - connect multiple offices together for Azure
+
+## Azure Active Directory
+- Free v Premium tiers
+  - Free, Premium P1, P2
+  - free: 500k obj limit, up to 10 apps, 
+  - premium: dynamic groups (based on names/properties, conditional access, information protection integration (DRM), 3rd party MFA)
+  - P2: vulnerability and risk account detection, risk events investigation, privileged identity management (PIM)
+- Create Azure AD
+  - create directory
+    - organizational name + domain name
+  - users, groups, roles
+- Adding a custom domain to Azure AD
+  - > Custom Domain Names
+  - must prove that the domain name is owned, adding a TXT record to dns
+- Upgrade Azure AD to Premium P2
+  - activate
+- Azure AD Identity Protection
+  - must create AAD Identity protection
+  - uses AI/ML for risk detection
+  - investigate
+  - configure policies
+    - sign-in risk policy based on conditions, controls, review
+      - controls: block or allow access, require MFA
+      - review: see what would impact
+      - enforce policy: on, off
+    - user-risk policy, same and enforce pw change
+- Setting up self-service pw reset
+  - none, selected, all
+  - authentication methods
+  - registration
+- Azure AD Conditional Access
+  - > Security > Conditional Access
+  - any administrators must have MFA and enable policy
+  - specify specific users/groups and apply policy to them
+  - specify cloud apps, conditions like device platform, location
+- Utilizing Access Reviews
+  - for premium level
+  - review and reduce employee memberships
+  - create an access review based on start date, end date, duration for frequency
+    - completion settings
+  - force group owners and application owners to review access
+- Azure AD Hybrid Entities
+  - on-prem identity provider integrated with AAD
+  - synchronization (windows server AD and sync to AAD)
+  - federation (trust another system to handle authN)
+  - seamless SSO (configure on-prem + key to be recognized)
+  - pass-through authN (TODO)
+
+## Hints
+    - Creating and configuring VMs (with a focus on Linux from my experience)
+    - Creating and configurng VNets and Subnets
+    - VNet peerings
+    - VPN Gateways and requirements
+    - Migrating workloads from on-prem to Azure. (Azure Migrate, Azure Site Recovery, Azure Recovery Services Vault)
+    - Load balancers, Application gateways, Traffic manager, and when to use which depending on a scenario
+    - BGPs
+    - VM SLA's based on availability groups and zones
+    - Fault and update domains
+    - Connecting VNets: Site-to-Site, Point-to-site, Express Route and what situations they're used for
+    - Azure AD Connect
+    - MFA and associated settings
+Monitoring:
+    - Azure Monitor
+    - Azure Advisor
+    - Viewing logs in storage accounts
