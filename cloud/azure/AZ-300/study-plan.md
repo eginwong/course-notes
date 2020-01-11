@@ -9,14 +9,17 @@
 - Analyze resource utilization and consumption
   - configure diagnostic settings on resources
   - create baseline for resources
+    - these are the > Export Template feature
   - create and test alerts
   - analyze alerts across subscription
   - analyze metrics across subscription
   - create action groups
   - monitor for unused resources
+    - Azure Monitor?
   - monitor spend
   - report on spend
   - utilize Log Search query functions
+    - Go to logs and spin up log analytics for your resource
   - view alerts in Azure Monitor logs
   - visualize diagnostics data using Azure Monitor Workbooks
 - Create and configure storage accounts
@@ -31,46 +34,71 @@
   - implement Azure storage account failover
 - Create and configure a VM for Windows and Linux
   - configure high availability
+    - [Availability](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/availability)
   - configure monitoring
   - configure networking
   - configure storage
   - configure virtual machine size
-  - **implement dedicated hosts**
+  - implement dedicated hosts
+    - [Azure Dedicated Hosts](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/dedicated-hosts)
+    - must create host group first, and then host, and then VM
   - deploy and configure scale sets
 - Automate deployment of VMs
   - modify Azure Resource Manager template
   - configure location of new VMs
-  - **configure VHD template**
+  - configure VHD template
+    - [virtual hard disk](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/prepare-for-upload-vhd-image)
+    - [deployment](https://docs.microsoft.com/en-us/azure/marketplace/cloud-partner-portal/virtual-machine/cpp-deploy-json-template)
+    - both VHD and VHDX, but depends on generation of vm
   - deploy from template
   - save a deployment as an Azure Resource Manager template
   - deploy Windows and Linux VMs
 - Create connectivity between virtual networks
-  - **create and configure Vnet peering**
-  - **create and configure Vnet to Vnet connections**
-  - **verify virtual network connectivity**
-  - **create virtual network gateway**
+  - create and configure Vnet peering
+    - > peerings
+  - create and configure Vnet to Vnet connections
+    - [Site2Site](https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-multi-site-to-site-resource-manager-portal)
+      - must be routebased, vpn gateway, vnet with Resource Manager model
+      - verified with `Get-AzVirtualNetworkGatewayConnection -Name VNet1toSite1 -ResourceGroupName TestRG1`
+    - [Vnet2Vnet](https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-vnet-vnet-resource-manager-portal)
+  - verify virtual network connectivity 
+    - Status is connected
+  - create virtual network gateway
+    - [Route-based VPN Gateway](https://docs.microsoft.com/en-us/azure/vpn-gateway/create-routebased-vpn-gateway-portal)
+    - ExpressRoute is a private connection to MSFT Cloud Services
+    - scales, where as vnet peerings do not scale + redundancy
+    - Border gateway protocol: to get on-prem to communicate with vnet (expressRoute or VPN)
 - Implement and manage virtual networking
   - configure private IP addressing
+    - [Concepts](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-ip-addresses-overview-arm)
   - configure public IP addresses
   - create and configure network routes
-  - **create and configure network interface**
+  - create and configure network interface
+    - [How-To](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-network-interface)
   - create and configure subnets
   - create and configure virtual network
-  - **create and configure Network Security Groups and Application** Security Groups
+  - create and configure Network Security Groups and Application
+    - [Concepts](https://docs.microsoft.com/en-us/azure/virtual-network/security-overview) 
+  - Security Groups
 - Manage Azure Active Directory
   - add custom domains
+    - [How-To](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/add-custom-domain)
   - configure Azure AD Identity Protection
   - configure Azure AD Join
   - configure self-service password reset
+    - > AD > Password Reset
   - implement conditional access policies
+    - > Conditional Access Policies
   - manage multiple directories
   - perform an access review
+    - > Identity Governance
 - Implement and manage hybrid identities
-  - install and configure Azure AD Connect
+  - **install and configure Azure AD Connect**
   - configure federation 
   - configure single sign-on
   - **manage and troubleshoot Azure AD Connect**
   - **troubleshoot password sync and writeback**
+    - [Guide](https://docs.microsoft.com/en-us/azure/active-directory/hybrid/how-to-connect-device-writeback)
 - Implement solutions that use virtual machines (VM)
   - provision VMs
   - create Azure Resource Manager templates
@@ -162,6 +190,7 @@
   - provision and configure relational databases
   - configure elastic pools for Azure SQL Database
   - implement Azure SQL Database managed instances
+    - [SQL MI](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-managed-instance-migrate#feedback)
   - create, read, update, and delete data tables by using code
 
 ## Misc
@@ -177,6 +206,60 @@
 
 ## Plan
 - [ x ] Watch Scott Duffy's 300 course
-- [ ] review area by area of the documentation to explore
-- [ ] measure up exam
-- [ ] [labs](https://github.com/MicrosoftLearning/AZ-300-MicrosoftAzureArchitectTechnologies/tree/master/Instructions)
+- [ x ] review area by area of the documentation to explore
+  - [ x ] create a NIC
+  - [ x ] create an App Security Group
+- [ x ] measure up exam
+- [ x ] [labs](https://github.com/MicrosoftLearning/AZ-300-MicrosoftAzureArchitectTechnologies/tree/master/Instructions) 
+  - [ x ] create Functions app that processes inputs to a blob container and outputs to a queue
+
+## Measure Up
+- Review 
+  - Availability Sets
+    - run across multiple physical servers
+  - Service Bus queues/namespaces/topics (when do you create each?)
+    - namespace serves as application container, with multiple queues and topics
+    - queue is single consumer, topic is one to many in pub-sub
+  - Cosmos DB Staleness when region failure
+  - Learn about SQL Managed Instances
+  - Difference between detailed error logs, app diagnostics logs, web server logs, failed trace requests
+    - [logging differences](https://docs.microsoft.com/en-us/azure/app-service/troubleshoot-diagnostic-logs)
+  - RequestRoutingRule
+    - path map for application gateway?
+  - ReliableSQLConnection
+  - Create custom image of an Azure VM with Azure Powershell
+    - [sysprep](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/capture-image-resource)
+  - NOTE: Cloud Apps required in Conditional Access Policies
+    - Conditional Access does not relate to Locations
+  - NOTE: ASR requires a storage account
+  - [Protect an API by using OAuth 2.0 with AAD and API Management](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-protect-backend-with-aad)
+  - NOTE: New-AzureQuickVM and New-AzureVM makes Azure templates, but third party templates use New-AzureRmResourceGroupDeployment
+  - Azure SQL Database Managed Instance T-SQL differences from SQL Server
+    - MI cannot access file shares or windows folders, so bulk inserts must come from blobs
+    - MIs do not support cmd commands
+  - Use SQL Database advanced data security with virtual networks and near 100% compatibility
+  - NOTE: access token for VM with managed identity is at 169.254.169.254
+  - [Enterprise state roaming](https://docs.microsoft.com/en-us/azure/active-directory/devices/enterprise-state-roaming-enable)
+  - NOTE: when using Resource Manager deployment, check powershell commands for `Rm`
+  - NOTE: LRS protects non-region wide, used with premium storage accounts
+  - NOTE: default replication for storage accounts is RA-GRS
+  - NOTE: certs are only required for P2S VPN, not for S2S, also S2S uses IPsec and IKE instead of SSTP/IKEv2 like P2S does
+  - NOTE: Notification Hub has 1-1 mapping with apps, hubs have 1-1 mappings with different versions or implementation of apps
+    - NOTE: access policy represents the connection string and access key for an Azure resource
+  - NOTE: Site Recovery Provider is used by ASR for Hyper-V host
+    - NOTE: Recovery Services Agent is used for files and folders by Azure backup
+    - [Set up disaster recovery of on-premises Hyper-V VMs to Azure](https://docs.microsoft.com/en-us/azure/site-recovery/hyper-v-azure-tutorial)
+      - prepare ASR, Vnet for migration
+    - [Hyper-V to Azure disaster recovery architecture](https://docs.microsoft.com/en-us/azure/site-recovery/hyper-v-azure-architecture)
+  - NOTE: App Service Plan limits based on CPU time, 60 minutes a day
+  - NOTE: for ISP with only layer 2 connectivity, need to: ExpressRoute circuit, peering, ER VNet Gateway, link between circuit and VNet
+  - NOTE: Service bus is brokered messaging system
+  - NOTE: SendGrid server host is always `smtp.sendgrid.net`
+    - NOTE: port is 587 for sendgrid, and 25 for regular
+    - NOTE: username is apikey for all sendgrid API clients
+  - NOTE: ADE is only supported for Standard and Premium Tier VMs, custom linux images not supported
+  - NOTE: boot volume before encrypting data volume on windows
+  - NOTE: azure key management service is prerequisite for implementing ADE
+  - NOTE: processing sensitive data can use Secure Enclave, which is only supported by DC-series
+  - NOTE: Time grain statistic is applied as a sample to each VM in the VMSS
+  - [App Gateway](https://docs.microsoft.com/en-us/azure/application-gateway/create-url-route-portal)

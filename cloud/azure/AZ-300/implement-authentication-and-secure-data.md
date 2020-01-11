@@ -27,3 +27,4 @@
     - `Set-AzKeyVaultAccessPolicy -VaultName .. -ResourceGroupName .. -ObjectId .. -PermissionsToSecrets get, list, set`
   - `Get-AzKeyVault -ResourceGroupName ..`
   - `Set-AzKeyVaultSecret -VaultName $vaultName -Name $secretName -SecretValue $secretValue`
+  - `PS C:\> $Secret = ConvertTo-SecureString -String 'Password' -AsPlainText -Force`

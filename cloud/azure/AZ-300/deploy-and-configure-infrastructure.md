@@ -76,7 +76,7 @@
   - review [samples](https://github.com/Azure/azure-quickstart-templates)
   - can Download the template file
   - template.json, parameters.json, and 4 ways to deploy
-    - rb, sh, ps1,
+    - rb, sh, ps1, cmd
     - $schema, contentVersion, parameters, variables, resources, outputs
   - has `dependsOn` to handle dependencies
   - TODO: REVIEW ARM TEMPLATES

@@ -31,6 +31,7 @@
 - message-based integration architecture
   - Sendgrid, REST API to send and receive email messages over HTTP
   - Event Grid, connects event sources inside Azure to a lot of event handlers
+    - `az provider register --namespace Microsoft.EventGrid`
   - Relay Service, allows message to be passed from Internet inside the company firewall to specific endpoints such as WCF
     - no changes required for firewall
     - messages pass over that link

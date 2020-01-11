@@ -56,6 +56,7 @@
   - standard, WAF (firewall), ...
   - scaling (autoscale, manual)
   - need to put onto vnet
+  - can handle external IPs as well, and handles cookies as well. LBs do not, but can handle TCP/UDP level calls
 - configure the app gateway
   - WAF has default backend pool
   - can use lb that points to external vm/containers via IP addresses
