@@ -1,7 +1,7 @@
 # Let Children Get Bored Again
 [ref](https://www.nytimes.com/2019/02/02/opinion/sunday/children-bored.html)
 
-@dlc
+@dlc Last run: 2020-01-31
 
 > But boredom is something to experience rather than hastily swipe away
 > The sooner you learn it's on you to make life interestingm the better off you'll be 
