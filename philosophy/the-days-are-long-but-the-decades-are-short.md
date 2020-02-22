@@ -1,7 +1,7 @@
 # The days are long but the decades are short
 [ref](https://blog.samaltman.com/the-days-are-long-but-the-decades-are-short)
 
-@dlc
+@dlc last run: 2020-02-21
 
 - never put your family, friends, or significant other low on your priority list
   - have parties
