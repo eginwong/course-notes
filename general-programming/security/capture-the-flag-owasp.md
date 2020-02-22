@@ -41,12 +41,20 @@ insertHintUrls: free
 - `az group create --name owasp-juice-shop --location canadacentral`
 - `az container create --resource-group owasp-juice-shop --name ctfd-avanade --image eginwong/ctfd-avanade:1 --dns-name-label scoreboard --ports 8000 --ip-address public`
 
+## Step #0a: create custom image
+- `git clone https://github.com/bkimminich/juice-shop`
+- add custom yaml file under `/config`
+- `docker build -t juice-shop-avanade .`
+- `// publish docker image to a registry so that it can get pulled from Azure; using Docker Registry for freebies`
+- `docker tag juice-shop-avanade eginwong/juice-shop-avanade:1`
+- `docker push eginwong/juice-shop-avanade:1`
+
 ## Step #1: create instances
 
 - running from Azure Container Instance
   - `az group create --name owasp-juice-shop --location canadacentral`
-  - `az container create --resource-group owasp-juice-shop --name team-1 --image bkimminich/juice-shop --dns-name-label ava-juice-shop --ports 3000 --ip-address public --environment-variables 'NODE_ENV'='ctf' 'CTF_KEY'=.ctfd_secret_key`
-  - `az container create --resource-group owasp-juice-shop --name team-2 --image bkimminich/juice-shop --dns-name-label ava-juice-shop2 --ports 3000 --ip-address public --environment-variables 'NODE_ENV'='ctf' 'CTF_KEY'=.ctfd_secret_key`
+  - `az container create --resource-group owasp-juice-shop --name team-1 --image eginwong/juice-shop-avanade:1 --dns-name-label ava-juice-shop --ports 3000 --ip-address public --environment-variables 'NODE_ENV'='avanade' 'CTF_KEY'=.ctfd_secret_key`
+  - `az container create --resource-group owasp-juice-shop --name team-2 --image eginwong/juice-shop-avanade:1 --dns-name-label ava-juice-shop2 --ports 3000 --ip-address public --environment-variables 'NODE_ENV'='avanade' 'CTF_KEY'=.ctfd_secret_key`
   - go to `http://ava-juice-shop.canadacentral.azurecontainer.io:3000`
   - go to `http://ava-juice-shop2.canadacentral.azurecontainer.io:3000`
 

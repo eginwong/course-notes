@@ -1,6 +1,9 @@
 # Git from the inside out
 [ref](https://maryrosecook.com/blog/post/git-from-the-inside-out)
 
+Another great resource on git is the [git parable](http://tom.preston-werner.com/2009/05/19/the-git-parable.html).
+Strongly recommend.
+
 - git is a graph
 - `git add` creates a blob in the `.git/objects`
   - `git hash-object` will hash something and will use that hash to create the folder structure
