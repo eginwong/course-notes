@@ -1,0 +1,143 @@
+# Design for deployment, migration, and integration
+
+## Compute Deployments
+- Visual Studio Publish
+- Chef / Puppet
+- Azure Pipelines
+- Deployment Groups to deploy a bunch of VMs at the same time
+  - custom script extensions, third party apps, ARM templates
+- Container Deployments
+  - Azure container Registry (ACR)
+  - using Helm, package manager for ACR containers
+- Database Deployments
+  - DACPAC
+    - SSDT
+    - storing schema
+  - old way was SQL scripts
+- Storage Deployments
+  - Azure Pipelines - Copy Task
+    - File Copy
+    - Windows Machine File Copy task
+    - Copy Files over SSH
+    - SSH
+  - AzCopy, asynchronous
+- Web App Deployments
+  - Visual Studio / WebDeploy
+  - Kudu for Eclipse / IDE
+  - GitHub integration
+  - OneDrive / DropBox
+  - FTP
+  - Azure Pipelines - Azure Web App Task
+- Service Fabric Deployments
+  - can publish directly into service fabric cluster
+  - powershell / cli
+  - Azure Pipelines
+
+## Design Migrations
+- migrating a working application is hard
+  - might be lift and shift
+  - refactoring at the same time makes it harder
+  - data is hard to handle
+  - minimize downtime
+  - risk
+  - predicting costs
+- Data Import / Export Strategy
+  - massive data
+  - data constantly changing
+  - bandwidth limits to uploading
+  - Azure Data Box
+    - for delivering huge data
+  - AzCopy
+  - could have serious lag between first upload and final migration
+  - Data Migration Assistant
+    - can include delta, only SQL
+  - Azure Database Migration Service
+    - handles DB2, pg, mysql, oracle, other
+    - many-to-many
+  - ASR
+- Application Migration Strategy
+  - application and data compatibility
+  - application rehosting
+    - physical VM to azure VM
+  - application refactoring
+  - application rearchitect
+  - application rebuild
+  - https://azure.microsoft.com/en-ca/migration/migration-journey/
+  - https://azure.microsoft.com/en-ca/migration/resources/
+
+## Design an API Integration Strategy
+- API integration
+- API Management Service
+  - hub for enterprise APIs
+  - consume / mediate / publish
+  - security layer around a public API
+  - hosts API documentation
+  - external / partner developer management
+  - wrap a bunch of different APIs into a single endpoint
+  - transformation of existing APIs
+  - API Usage analytics
+- API Policies
+  - inbound, outbound, backend, on-error
+  - inbound can add template to intercept inbound traffic etc.
+  - access restriction
+    - check http header
+    - limit call rate by key/subscription
+  - access, advanced, authN, caching, CORS, transformation policies
+
+
+## Design a Storage Strategy
+- unmanaged is pay per use (by GB)
+- managed store
+  - VHD only
+  - main or extended storage for VMs
+  - pay per tier
+  - premium vs standard
+  - 4.6 GB max size
+  - 5 PB upload, other places are 500 TB
+  - inbound 5-20 GBPS
+  - outbound 50 GBPS
+    - charge for outbound
+  - storage redundancy
+  - VMs support multiple additional disks, giving more performance
+- Setting Access Tiers
+  - General Purpose V1, V2, or Blob
+    - V1 is to be deprecated
+    - Blob = Premium Performance block blob storage
+    - V2 (blobs, files, tables, queues)
+      - hot, cool, archive for blobs
+- Storage Requirements
+  - basically unlimited storage
+  - 11 nines durability
+  - can failover files between regions
+  - unmanaged has IOPS challenges
+  - local storage vs attached storage vs storage accounts
+    - can move them around VMs
+    - need unmanaged SA for unmanaged VMs
+  - requires virtual network service endpoints
+- Storage Management
+  - TDE
+  - Azure Key Vault for encryption
+    - use your own key
+  - storage lifecycle
+    - moving blobs around to cheaper storage tiers
+  - Azure Storage Explorer
+  - use AzCopy instead for copying files between storage accounts
+
+## Design a Compute Strategy
+- compute options
+  - vm, vmss, web apps, azure batch, logic apps, service fabric, functions, containers
+  - ARM templates
+  - scaling affects compute
+- VMs
+  - IaaS
+  - VMSS
+  - App Services have auto scaling, but can't install extra applications on the windows registry
+  - Containers
+  - Functions
+  - Service Fabric
+  - Batch
+    - meant to be broken down for 10000+ tasks in parallel
+- High Performance Compute (HPC)
+  - Cray in Azure
+    - supercomputing solutions
+  - otherwise, H-series

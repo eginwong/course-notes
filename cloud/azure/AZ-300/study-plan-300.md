@@ -1,4 +1,4 @@
-# Study Plan
+# Study Plan 300
 
 - [Udemy](https://www.udemy.com/course/70534-azure/learn/lecture/17313412#content)
 - [Microsoft Learn](https://docs.microsoft.com/en-us/learn/modules/pillars-of-a-great-azure-architecture/2-pillars-of-a-great-azure-architecture)

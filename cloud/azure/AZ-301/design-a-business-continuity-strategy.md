@@ -1,0 +1,71 @@
+# Design a business continuity strategy
+
+## Site Recovery Strategy
+- Azure Site Recovery (ASR)
+  - Recovery Services Vault (don't put in same region)
+  - have a storage account cache asr in other region
+- Site failover/failback
+  - no data loss or downtime
+  - can test failover
+  - can initiate failover
+    - zero data loss option (by shutting VMs down)
+  - planned failover
+    - requires downtime
+- Recovery Objectives
+  - Crash Consistent
+    - update data every 5 minutes
+    - but does not recover in-memory
+    - no guarantee of data consistency
+  - App Consistent
+    - data on disk, in memory, and transactions in progress
+    - take longer to complete
+    - affects performance of app and machine
+- ASR Workloads
+  - any OS to another region
+  - on-prem VMware/Hyper-V/Physical VM to Azure
+  - on-prem to on-prem
+- ASR Geographies and Paired Regions
+  - geographical distribution
+  - paired regions are faster between each other
+  - cheaper between geographic clusters
+
+## Application Redundancy
+- avoid single point of failure
+- load-balancing
+  - local
+  - global
+  - allow for autoscaling
+- DDos Protection
+- Availability sets and zones
+- Resources that require HA
+  - essential vs non-essential
+  - highly available messaging and storage
+- Storage types for HA
+  - Azure Storage is highly durable
+  - GRS can initiate storage failover
+  - risk of latency/data loss
+  - Azure back for VMs
+  - can use AzCopy for moving files
+
+## Data Archiving Strategy 
+- Storage Account Access Tiers
+  - 30, 60, 180 day old backups
+  - governance and compliance purposes
+  - performance, hot, cold, archive tiers
+  - cheaper to store but more difficult to access
+- Access Tier Requirements
+  - blob storage and general purpose v2
+  - v2 has new features but v1 doesn't have
+  - default file is set at hot/cool tier at account level
+  - archive tier is at object-level only
+    - several hours of retrieval
+    - must remain at least for 180 days
+    - cannot be read/copied/overwritten/modified
+    - rehydration can take hours to complete
+      - standard/high priority
+  - can set up lifecycle management
+- Access Tier SLAs
+  - PREMIUM: 99.9% availability, no RA-GRS, no min storage duration, <10ms latency
+  - HOT: 99.9% availability, 99.99% RA-GRS read, no min duration, <1s latency
+  - COOL: 99% availability, 99.9% RA-GRS, 30 days min duration, < 1s latency
+  - ARCHIVE: no availability, no RA-GRS, 180 days min storage duration, hours latency  

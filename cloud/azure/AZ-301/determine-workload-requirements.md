@@ -1,0 +1,114 @@
+# Determine workload requirements
+
+## Gather Information and Requirements
+- Identify compliance requirements
+  - tax laws, quality, accessibility, data privacy, crypto
+  - IAM infrastructure
+    - AD?
+  - Service-Oriented Architecture
+    - integration?
+    - design patterns?
+    - RESTFUL/Stateful
+    - service discovery
+    - event-driven, message-driven, containerization, stateful/less
+- Identify Accessibility Requirements
+  - WCAG
+- Availability
+  - understand what is required for downtime and SLA
+  - Azure VMs have four 9s availability
+  - Availability Sets/Zones
+  - Load Balancers
+  - Fallback Options
+  - Traffic Manager
+- Capacity Planning and Scalability
+  - understand how intense the user will use it
+  - able to handle load dynamically through scaling
+  - Azure Site Recovery Capacity Planner
+  - Azure Migrate
+    - able to determine what sort of vms are required
+  - PaaS has manual/automatic scaling
+  - IaaS with load balancers
+  - Azure Batch
+    - can break down jobs
+- Deploy-ability
+  - ability to move through dev <-> test <-> prod with low effort
+  - ability to undo if problem occurs
+  - Azure Pipelines / ADO
+  - CI/CD 
+- Configurability
+  - ability to support different configurations in different environments
+  - PaaS - set app variables within Azure that gets replaced
+    - deployment slots with variables
+  - Key Vault - Scecrets, Keys, Certs
+- Governance
+  - control mechanism to ensure only authorized changes, that they are documented and transparent
+  - Azure Policy
+    - restrict control within rgs or sgs
+  - RBAC
+  - Azure Pipelines control deployment
+  - Company Process
+- Maintainability
+  - ability for application to be maintained
+  - diagnostics
+  - HDInsights
+  - Azure Monitor
+- Security
+  - authNZ, detecting attacks
+  - Azure AD
+    - MFA, AI
+  - RBAC
+  - Azure Advisor
+  - Azure Security Center
+- Sizing
+  - cost optimization
+  - Azure Monitor
+  - Cloudyn
+  - Cost Center
+  - Azure Advisor
+  - Reserved Instances
+    - pay up front, discount
+  - Hybrid Benefit for Windows / SQL Server
+  - dev/test licensing
+  - Autoscaling
+  - Serverless/Microservices/Consumption pricing
+- Change Request
+  - ADO Boards
+  - Azure Pipeline
+- Handling Workloads
+  - third-party integrations are strong with Azure
+  - externally hosted services
+  - Azure Relay Service
+  - Azure Marketplace
+- Testing Requirements
+  - ADO Test Plans
+  - DevTest Labs
+    - can create vms for freesies without impact on prod env
+
+## Optimize Costs
+- storage and entropy grows over time
+- can use pricing calculator for estimation
+- serverless/paas/iaas are generally cheaper than hosted
+- Azure Advisor can help
+- Azure Cost Management (enterprise only)
+- Cloudyn
+  - better tracking and reporting
+- Reserved Instances
+  - pay in advance, for 1-3 year contract up to 72% savings
+- Hybrid Benefit of saving licenses
+  - dev licenses available
+  - right sizing
+  - app scaling
+  - elastic pools for databases
+  - hot/cool/archive storage tiers
+  - regular cleanup
+  - tagging to identify owners
+
+## Design an auditing and monitoring strategy
+- Group Resources Using Tags
+  - add your own metadata for tracing
+  - can view costs by tags / rgs / subscriptions
+- Can create policies that enforce tags / process
+- Billing center will also show costs
+- Using Resource Diagnostics
+  - Diagnostic Settings per specific resource
+  - store in storage account, log analytics, event hub
