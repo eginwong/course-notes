@@ -1,7 +1,10 @@
 # Don't Yolo Hard Conversations
 [ref](http://randsinrepose.com/archives/dont-yolo-hard-conversations/)
 
-@dlc
+@dlc 2019-07-19
+
+> The moment that a human being hears hard news they stop listening. 
+> Their first reaction, the first words tell you, are not how they feel. 
 
 > The moment that a human being hears hard news they stop listening. 
 > Their first reaction, the first words tell you, are not how they feel. 

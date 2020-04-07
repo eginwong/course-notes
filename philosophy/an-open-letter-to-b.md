@@ -9,4 +9,3 @@
 Questions
 - What do you think about Kate's mention about "Life as a marathon, not a sprint"?
 - Do you ever feel the want or need to overwork yourself?
-- What really makes you happy, or will make you happy?
