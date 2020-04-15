@@ -1,0 +1,48 @@
+# How to Speak
+[ref](https://www.youtube.com/watch?v=Unzc731iCUY)
+
+- start with a promise
+- recognize collaborators early
+- build a fence around the idea
+- cycle back to the idea
+- ask questions
+- well-lit area
+- people are inspiring
+  - when they demonstrate passion
+- writing is good because it's slow enough for people to comprehend
+- use props
+- slides are for exposing, not informing
+- longest pause is about 7 seconds
+- for job talks
+  - demonstrate vision + having done something in first 5 minutes
+    - show problem and how we're different in approach
+    - state steps on how you work through the problem to realize the vision
+  - conclude by contributions
+- being famous
+  - you can get used to be famous 
+    - but you never get used to being ignored
+  - have a symbol that represents you
+  - have a slogan
+  - have a surprise
+  - salient idea
+    - idea that sticks out, not necessarily important
+  - tell the story
+- how to end?
+  - final slides
+  - leave contributions
+  - and what you get out of it
+  - can finish with a joke
+    - they've gotten used to you
+  - salute
+    - been a great time, I salute you for your efforts
+- don't:
+  - use laser pointers
+  - add too much text
+  - add logos
+  - make font size too small
+  - start with a joke
+  - stand away from the slides
+  - recommend collaborators at the end
+  - have a slide "questions" at the end
+  - have "see details for more"
+  - thank people for listening
