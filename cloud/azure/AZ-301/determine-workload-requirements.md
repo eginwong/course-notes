@@ -2,14 +2,67 @@
 
 ## Gather Information and Requirements
 - Identify compliance requirements
+  - Azure Blueprints
+    - declarative way to orchestrate the deployment of varying resource templates
+      - role assignmnets
+      - policy assignments
+      - ARM templates
+      - RGs
+  - Azure Policy
+    - place to create, assign, and manage policies
+    - for allow and deny system
+    - assigned to a particular scope
+    - contains parameters
+    - can create initiatives that are a group of policies for a specific goal 
+    - use an audit effect first to test out the impact of the policies
+    - enforce compliance at enterprise-level
+      - "not", "allOf", "anyOf", field, source, conditions
+  - Azure Security Center
+    - unified view of security across your workloads
+      - from firewalls, partner solutions
+      - actionable security recommendations
+      - apply security policies across hybrid cloud workload
+      - reads logs and identifies potential security breaches
   - tax laws, quality, accessibility, data privacy, crypto
   - IAM infrastructure
-    - AD?
+    - AD
+    - AAD has P1 and P2 levels that add features like self-service, monitoring, reporting
+    - P1 has hybrid capability, self-service pw reset
+    - P2 has PIM, risk-based Conditional Access
+    - AAD B2C
+      - customers can use their own socials or authentication and can access your business apps/apis/analytics
+      - white-label authN solution
+      - OpenID Connect, OAuth2, SAML
+      - can delegate to external CRM for customer data
+      - in the AAD tenant, register your applications, APIs
+      - custom user journeys are defined as custom policies; a workflow of federation, user input, and integration
+    - AAD B2B
+      - can use another company's email and create a new AAD account with your own email
+        - but you have to make your own password
+        - allows SSO to the other accounts (Salesforce, PluralSight, etc..)
+        - big thing is that we allow for access policies and proper security
+    - AAD Domain Services
+      - for lift/shift apps that depend on kerberos/NTLM/LDAP
+      - if lift/shift with rewrite, use AAD Join instead
+      - enables Kerberos / NTLM authN, LDAP access with Windows Server AD
+      - enables lift/shift for AD to AAD to replace LDAP/Kerberos dependencies
+      - cost-effective, no need for ExpressRoute/VPN Gateway
+      - AAD -> AAD Domain Services -> AD Managed Domain (managed by MSFT) 
+        - leverages AAD Connect to sync local AD to AAD
+      - AADDC Users / AADDC Computers containers as GPOs
   - Service-Oriented Architecture
-    - integration?
-    - design patterns?
-    - RESTFUL/Stateful
-    - service discovery
+    - Azure Architect Center
+    - Service-oriented architecture
+      - decomposing app into multiple services
+      - enterprise service bus and central orchestrators are part of SOA, but not microservices
+    - Service Fabric mesh
+      - managed service
+      - no need to manage VMs/apps
+      - upload code, specify resources needed, availability requirements, and resource limits
+      - automatically handles infra, ensuring HA
+        - auto span availability zones
+      - will create an ACR for you to store containers
+    - integration, design patterns, RESTFUL/Stateful, service discovery
     - event-driven, message-driven, containerization, stateful/less
 - Identify Accessibility Requirements
   - WCAG
@@ -20,6 +73,17 @@
   - Load Balancers
   - Fallback Options
   - Traffic Manager
+  - 99.5% AKS, 
+  - 99.9% for AAD / B2C / Domain Services only premium tiers
+  - 99.95% for App service with premium, App Gateway, Bastion, Data Bricks
+  - 99.9% Data Share, ADO with paid tier, Maps, Lab Services, Backup, Bot Service, BizTalk Services, Cache, Cognitive Services, CDN, single VM, Data Catalog, Data Explorer, Data Lake Analytics,  API mgmt, Event Hubs, HD Insight, IoT Central, IoT Hub, Key Vault, Logic Apps, Media Services, Mobile Services, Network Watcher, PowerBI, Scheduler, Cognitive Search, Security Center, Service Bus (Relays, Queues/Topics, Notification Hub, Event Hubs), SignalR, ASR, Stream Analytics, StorSimple
+  - 99.95-9% for Azure Firewall (1-1+ availability zones), Cloud Services + VM in 2 instances, ExpressRoute, Virtual WAN, VPN Gateway
+  - 99.99% AZ Front Door, DDos Protection, Event Grid, Load Balancer, DB for MySQL/PostGres/MariaDB, NetApp files, SAP HANA, Storage Accounts with RA-GRS, Traffic Manager
+  - NOTE: minus one 9 for Cool Tier
+  - 99.995% SQL DB Business critical
+  - 99.999% Cosmos at full throttle (4 nines otherwise)
+  - 100% DNS
+  - all DBs are 99.99%, most everything else is 99.9%
 - Capacity Planning and Scalability
   - understand how intense the user will use it
   - able to handle load dynamically through scaling
@@ -35,23 +99,38 @@
   - ability to undo if problem occurs
   - Azure Pipelines / ADO
   - CI/CD 
+  - using deployment slots, with separate host names
+  - make target slot production so that it is not affected by swap changes
+  - can specify custom warm-up scripts
 - Configurability
   - ability to support different configurations in different environments
   - PaaS - set app variables within Azure that gets replaced
     - deployment slots with variables
   - Key Vault - Scecrets, Keys, Certs
+  - Azure Automation
+    - process automation, configuration mgmt, update mgmt
+      - webhooks, runbooks in powershell
+    - kind of like chef/puppet/ansible and can maintain configuration of a node
 - Governance
   - control mechanism to ensure only authorized changes, that they are documented and transparent
   - Azure Policy
     - restrict control within rgs or sgs
+    - different from RBAC because that focuses on user actions
+    - policy focuses on resources themselves
   - RBAC
   - Azure Pipelines control deployment
   - Company Process
+  - Azure mgmt
+    - govern (policy), migrate (migrate), secure (security center), protect (backup/ASR), monitor (insights), configure (automation)
 - Maintainability
   - ability for application to be maintained
   - diagnostics
   - HDInsights
   - Azure Monitor
+  - logging
+    - control/mgmt logs (within Azure)
+    - data plane logs (app, event system, security logs from VM)
+    - processed events/alerts
 - Security
   - authNZ, detecting attacks
   - Azure AD
@@ -59,10 +138,18 @@
   - RBAC
   - Azure Advisor
   - Azure Security Center
+    - provides tailored recommendations from log analytics agents
+    - includes built-in Azure policies for audit
+    - can measure compliance and governance over time
+    - network map to see vulnerabilities
 - Sizing
   - cost optimization
   - Azure Monitor
   - Cloudyn
+    - track cloud usage and expenditures
+    - similar to Azure Cost Management
+    - being deprecated by end of 2020
+    - can create custom queries with type, timeframe, timePeriod, dataSet, granularity, aggregation, grouping
   - Cost Center
   - Azure Advisor
   - Reserved Instances
@@ -71,6 +158,7 @@
   - dev/test licensing
   - Autoscaling
   - Serverless/Microservices/Consumption pricing
+  - Pricing Calculator
 - Change Request
   - ADO Boards
   - Azure Pipeline
@@ -102,13 +190,57 @@
   - hot/cool/archive storage tiers
   - regular cleanup
   - tagging to identify owners
+- Optimize App Service
+  - multiple language support
+  - devops optimization
+  - global scale with HA
+  - serverless code
+  - CORS + API / Mobile features
+  - App Service Environments
+    - isolation and secure network access
+    - high scale
+    - high memory
+    - up to 100 App Instances per ASE
+      - three tiers of backend compute 1/3.5, 2CPU/7GB, 4/14
+    - deploys into your personal VNET 
+- Compute
+  - colocation
+  - auto-healing for a memory hog
+  - CPU spikes can be handled by scaling up or out 
+- Identity
+  - OAuth2, OpenID Connect
+- Network
+  - External ASE
+  - Internal Load Balancer ASE
+  - can't change ASE subnet later so make it right the first time
+  - overhead of 12-13 roles and increases every 15-20 App Instances
+  - workloads are migrated only after the new VM is spun up, so may end up with double the # of resources
+  - all internal ASE ports must be open because they change and inner component communication is required
+- Storage Costs
 
 ## Design an auditing and monitoring strategy
 - Group Resources Using Tags
   - add your own metadata for tracing
   - can view costs by tags / rgs / subscriptions
+  - New-AzTag or Update-AzTag
+  - can set through RM templates
+  - not all resource types support tags
+  - max amount of tags per resource is 50
 - Can create policies that enforce tags / process
 - Billing center will also show costs
 - Using Resource Diagnostics
   - Diagnostic Settings per specific resource
   - store in storage account, log analytics, event hub
+- Azure Storage analytics logging
+  - storage analytics logging not enabled by default
+  - all logs stored in block blobs in a container named $logs
+- Azure Monitor
+  - App Insights
+  - Alerts
+  - Autoscaling
+  - Visualization
+- Azure Event Grid
+  - first 100k operations are free
+- Design auditing for compliance requirements
+  - membership, permission, access level mgmt
+  - security levels: object, project, collection

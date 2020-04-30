@@ -1,1 +1,172 @@
 # Design an infrastructure strategy
+
+## Design a Storage Strategy
+- Storage Management Tools
+  - Azure Portal, Azure Storage Explorer, Microsoft Visual Studio Cloud Explorer
+- Azure Data Lake Storage Gen2
+  - capabilities dedicated to big data analytics built on Azure Blob storage
+  - hierarchal namespace to Blob storage
+    - cannot revert once set
+    - atomic manipulation
+  - Hadoop compatible access
+  - superset of POSIX permissions
+  - cost effective
+
+## Design a Compute Strategy
+- High Performance Computing in Azure
+  - allows dynamic scaling
+  - CPU-based VMs, GPU-enabled VMs
+  - Storage 
+    - Avere vFXT
+    - BeeGFS
+    - Storage Optimized VMs
+    - Azure Netapp Files
+    - SMB File Storage
+  - Networking
+    - RDMA Capable instances
+    - VNet
+    - ExpressRoute
+  - DIY
+    - set up your own cluster
+  - Azure Batch
+  - Azure CycleCloud
+  - Containers
+- What is Azure Batch?
+  - run parallel workloads
+  - batch supports rendering workloads and also AzureParallel R
+  - Azure Batch + Task + Compute Nodes + Azure Storage
+    - create a job in Batch account that has tasks
+    - when tasks are added to a job, Azure Batch auto schedules them for execution on compute nodes in the pool
+    - can query Batch for process of task execution
+- Use infra automation tools with VMs in Azure
+  - automate VM configuration
+    - Ansible, Chef, Puppet, ARM
+    - linux init automation: cloud-init, PowerShell Desired State Configuration (DSC), Azure Custom Script
+  - automate infra management
+    - Packer, Terraform
+    - Azure Automation
+- How to monitor VMs in Azure
+  - enable collection of boot diagnostics and guest OS diagnostics
+  - alerts
+  - Azure Service Health
+  - Azure Resource Health
+  - Azure Activity Log
+  - Advanced Monitoring through Azure Monitor for VMs and App Insights
+
+## Design a Networking Strategy
+- Azure network security overview
+  - NSG is basic stateful packet filtering firewall, and follows 5-tuple control access
+    - augmented security rules, service tags, application security groups
+    - also allows for JIT-VM access
+  - can also define routing tables in networking to limit access
+  - forced tunneling, to channel outbound requests through gateway
+  - Azure Firewall 
+    - HA, Cloud scalability, FQDN, Network traffic filtering rules
+  - connectivity
+    - point-to-site VPN
+      - SSTP, IKEv2, OpenVPN
+    - site-to-site VPN
+    - ExpressRoute for WAN
+    - use VNET peering for internal vnets
+  - availability
+    - http-based lb
+      - Azure App Gateway
+    - network level lb
+      - Azure LB, based on IP + port numbers
+    - global lb
+      - Traffic Manager
+      - DNS level
+  - name resolution
+    - Azure DNS
+    - or internal DNS server for on-prem
+  - Azure DDos Protection
+    - turn-key protection
+      - instant mitigation
+    - always-on traffic monitoring
+    - reports and tuning
+  - Azure Front Door
+    - global routing, WAF rules, rate limiting, TLS offloading
+    - protected by DDos Protection basic
+- Network Security Groups
+  - set priority
+  - source or destination
+  - protocol
+  - direction (inbound/outbound/both)
+  - port range
+  - action (allow/deny)
+  - subnet > network interface
+    - can have multiple levels of NSGs
+    - avoid both unless you know what you're doing
+  - there are some reserved IPs and ports for licensing, monitoring health
+- VNet service endpoints
+  - direct access to specific services like Azure Storage, SQL DB, Key Vault, Cosmos, ServiceBus, App Service, Event Hubs
+    - ACR is in public preview
+  - optimal routing for Azure service traffic and keep it internal to Azure backbone network
+  - less overhead
+  - only available through ARM deployment model
+  - only for Azure VNets, not on-prem
+  - for on-prem, need to reserve public IP for on-prem to connect to these Azure service resources
+  - special case for ExpressRoute
+  - for SQL DB and storage accounts, generally same region
+    - other resources can be in other regions
+  - to verify, the effective route should have: VirtualNetworkServiceEndpoint
+  - no additional charge
+- Configure VPN gateway transit for vnet peering
+  - allow gateway transit + use gateway for hub/spoke 
+  - gateway means VPN gateway
+- Azure best practices for network security
+  - use strong network controls
+    - centralize mgmt of core network functions like expressroute, vnets + subnet provisioning, ip addressing
+  - logically segment subnets
+    - class A (8), B (12), and C (16)
+    - avoid rules with broad ranges
+    - segment larger address space into subnets
+    - create NSG between subnets
+  - adopt zero trust approach
+    - AAD conditional access
+    - enable port access with JIT VM Access in Azure Security Center
+  - Control routing
+    - user-defined routes with a security appliance can control routing
+  - Use virtual network appliances
+    - firewall
+    - intrusion detection
+    - app control
+    - web filtering
+    - antivirus
+  - Deploy perimeter networks for security zones
+    - DMZ
+  - use VPNs to avoid exposure to internet
+    - ExpressRoute or S2S VPN
+  - use load balancers for availability and performance
+  - disable SSH/RDP access to VMs
+    - use VPNs instead
+- Plan vnets
+  - can have network filtering through a NVA
+- What is Azure Network Watcher?
+  - logging and monitoring just for Azure Network Watcher
+  - can display topology of networking pieces
+  - diagnosis
+    - verify IP flow
+    - verify next hop for DNS routing
+  - Security Group View
+  - Packet capture
+  - VPN diagnostics
+  - determine latencies between Azure regions + ISP
+  - aggregation of security rules 
+  - automatically created with new VNet
+
+
+## Design a Monitoring Strategy for Infrastructure
+- Overview of alerts in Microsoft Azure
+  - includes alerts previously managed by Log Analytics and Application Insights
+  - target resource, signal, criteria, name, description, severity
+  - app insights + service health not supported as of yet
+  - New, Acknowledged, Closed for alert status
+  - Smart groups are ML-defined aggregations of alerts together
+  - RBAC: monitoring contributor/reader
+- Understand how metric alerts work in Azure Monitor
+  - specify a target resource to be monitored, metric name, condition type, condition, action group
+  - dynamic conditions will use ML to determine an appropriate threshold
+  - will send resolved alerts when the resource metric has been put back to the correct threshold after 3 consecutive periods
+  - can monitor several instances with a single rule with multi-dimensions
+  - all limited to region by region

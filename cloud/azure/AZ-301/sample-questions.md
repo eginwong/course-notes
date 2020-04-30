@@ -1,0 +1,101 @@
+# Sample AZ301 Questions
+
+- Diagnostics
+  - archive to storage account means indefinite storage
+  - max time for SQLInsights data stored in Azure Log analytics is 730 days
+- Syncing Azure service health alerts to Service Manager
+  - ITSM Connector, using ITSMC
+- App Insights
+  - a feature of Azure Monitor
+  - for live apps, detect perf anomalies
+  - telemetry streams are integrated into Azure Monitor
+    - dependencies, AJX calls, session counts, custom events and metrics
+    - smart detection and manual alerts
+    - app maps
+    - profiler
+    - live metrics stream
+- Monitoring
+  - correlate Azure resource usage and perf data with app config and perf data: Azure Log Analytics
+  - Track requests + exceptions to specific line of code: App Insights
+  - Analyze users returning to app and how often they select a certain dropdown value: Azure Activity Log
+  - Azure AD Connect Health supports
+    - AD FS
+    - AD FS Proxy / Web App Proxy servers
+    - AAD Connect servers
+  - Azure Monitor can track current-state analysis, support longer-term analysis and for concurrent logins for Azure SQL DB
+    - SQL Server Profiler, dynamic management views, and trace flags are for SQL Server DB
+  - for notification setup: 
+    - create rg, create action group for alerts to email addresses, monitor service health + action required notifications
+  - get metrics on Azure infra through Azure Monitor
+  - determine causes of perf issues of functionality + security through log analytics
+- Migration
+  - before migration on AD forest to AAD with SSO, must use Microsoft Office 365 IdFix to identify formatting issues + sync issues
+- API Management
+  - policy to convert XML to JSON
+  - policy to strip headers
+  - need to add APIs to a Product
+- JIT access comes with PIM, Premium 2
+- Managed identities
+  - feature of AAD
+  - managed identity can authenticate to AAD instead of putting it in the app code
+  - IaaS VMs use the Azure Instance Metadata Service (IMDS) REST endpoint to verify, 169.254.169.254
+  - system-assigned
+    - tied to the instance itself and is destroyed when deleted
+  - user-assigned
+    - separate but can be assigned to multiple instances
+- to allow federation between two small companies and allow them access in your subscription, would use guest accounts 
+  - if SAML federation is set up, they can use their own login/pws
+- hybrid setup restricted to on-prem network is conditional access policy
+- PIM to find admin accounts not signed in
+- deploying additional domain controllers is easier than ADDS for minimizing management overhead
+- synchronized identity is AAD authenticating with on-prem pw
+- federated identity is with DC authenticating
+- App Gateway is also at layer 7, Traffic Manager is layer 6
+  - WAF is for SQL injection blocking
+- Can enable AADDS access from storage account, for SMB integration
+- Need to import security keys into Hardware Security Modules, must be in same region as VMs to be encrypted
+- Azure MFA Server on-prem is deprecated, but can be used for on-prem MFA
+- real-time powerBI is streaming to event hub, with SQL Analytics for Diagnostics data
+- MSI is used to support authorization to the other apps
+- use MFA for each enabled user if work is periodic
+- Compliance uses Azure Policy
+- you manage encryption keys = ADE
+- readonly cache for data files and no cache for log file
+- Premium managed disk for OS and DB, LRS for low cost
+- DB-level rules are configured through T-SQL and user access can be done through Powershell, T-SQL or Azure portal
+- Site recovery failover
+  - **latest: latest point with lowest RPO**
+  - **latest processed: latest recovery point already processed, low RTO** (for stateless)
+  - latest app-consistent: application-consistent
+  - Latest multi-vm processed: common VM failover
+    - for multi-vm consistency
+  - Azure Backup 7 years
+  - ASR is pricier than unmanaged disks in GRS
+  - routing from vnets to onprem locations with ExpressRoute is always BGP, same with failover routing
+  - RTO+VSS is Azure Backup, Recovery Services
+  - Premium + Standard db supports 35 day dailies and 120 months monthlies
+  - for mongo restore, cannot use Cosmos DB Migration
+  - instead of hybrid connection for on-prem db, use vnet if using expressroute
+  - DMA for SSIS package migration
+  - intrinisically parallel loads for cheap would be low-priority VMs
+  - Azure VPN + cert store is root CA with public key
+  - personal store is user cert + private key
+  - ISCSI -> StorSimple Array + Azure Storage
+  - subnet + gateway is 192.168.
+  - VMSS is not redundant in Azure region failures
+    - Availability zones are within a region
+  - internal channels: ExpressRoute + NSGs
+  - Event Hubs integrates with Functions
+  - Azure CDN can accelerate dynamic content
+  - App Gateway for ssl offloading and round robin routing
+  - Azure Network Security Group Analytics monitors MAC addresses for all devices on network
+  - Azure File Sync to have on-prem sync to Azure storage account, windows only
+    - includes File Sync agent on the server
+    - and Storage Sync Service in Azure
+  - cannot easily replicate from on-prem to Azure with Table storage or Data Lake
+  - for Accelerated Networking - use SR-IOV, for D and F series
+  - to minimize network latency + min vm processor to transfer data, use HPC + Remote direct memory access
+  - custom domains - 1
+  - apparently single db instance is acceptable for backend processing
+  - always encrypted with deterministic encryption
+  - transaction replication allows for minimal downtime of db replication

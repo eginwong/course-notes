@@ -32,6 +32,34 @@
   - can publish directly into service fabric cluster
   - powershell / cli
   - Azure Pipelines
+- Azure Container Instances
+  - fast startup, container access, custom sizes, persistent storage
+    - Azure Files shares
+- Azure Queues
+  - queue message can be up to 64KB in size
+  - storageaccount.queue.core.windows.net/<queue>
+- Core Azure Storage Services
+  - durable, highly available, secure, scalable, managed, accessible
+  - Blobs, Files, Queues, Tables, Disks
+  - encryption at rest
+  - supports AuthN through RBAC, SAS, keys, AD DS, anonymous access
+- Azure Blob
+  - block blobs, append blobs, page blobs (VHD)
+- Scalability
+  - Front Door is layer 7 LB that manages WAF and SSL offloading
+  - while Traffic Manager is at DNS level
+- Azure Logic Apps
+  - trigger off of events through connectors
+  - reuse
+  - access resources within Azure virtual networks
+  - minimal code writing
+- Azure Functions
+  - BYOfunctions
+  - consumption plan, premium plan, app service plan
+- WebJobs in Azure App Service
+  - run in same context as web app, API, or mobile app
+  - continuous vs triggered
+  - with CRON expressions, scheduled
 
 ## Design Migrations
 - migrating a working application is hard
@@ -64,6 +92,101 @@
   - application rebuild
   - https://azure.microsoft.com/en-ca/migration/migration-journey/
   - https://azure.microsoft.com/en-ca/migration/resources/
+- Best practices for securing and managing workloads migrated to Azure
+  - Work with Azure Security Center
+    - centralized policy mgmt
+    - continuous security assessment
+    - JIT access
+    - Adapative application controls
+    - File integrity monitoring
+  - Encrypt your Data
+    - ADE for VMs
+    - Azure Storage with FIPS + AES keys
+    - Always Encrypted for SSMS
+    - TDE for Azure SQL
+  - Set up antimalware
+  - Secure web apps
+    - Azure Key Vault
+    - App service environments
+      - fully isolate and dedicate env
+    - Web application firewall
+      - feature of Azure App Gateway
+  - Review subscriptions
+    - RBAC
+  - Work with logs
+    - review frequently if not using Premium 1/2
+  - Review other security features
+    - AAD Administrative units, requires Premium
+    - MFA
+    - Conditional access
+  - Manage Migrated workloads
+    - manage resources
+      - name rgs
+      - implement delete locks for rgs
+      - tag effectively
+    - blueprints
+      - for ARM templates, policy/role assignments, deployment of RGs
+      - stored in a globally distributed Cosmos DB
+    - review architectures
+    - set up management groups
+    - set up access policies
+      - deploy Azure policy
+    - implement a BCDR strategy
+      - data backup
+      - DR
+      - ASR, VM Backup, snapshots
+    - manage VMs
+      - managed disks and availability sets
+    - monitor resource usage
+      - Update Management in Azure Automation
+- Contoso Migration Series
+  - rehost, refactor, rearchitect, and rebuild
+  - 1. deploy a migration infrastructure
+    - set up subscriptions
+    - set up AAD
+      - can add custom domain name + DNS entry
+    - set up networking
+      - must remember to allow forwarded traffic + allow gateway transit configuration to do peer forwarding between vnets
+      - for hybrid network configuration, best to use on-prem DNS server and add a custom DNS IP to each vnet
+    - set up governance
+      - tagging and policies
+  - 2. Migration of DB
+    - use Database Migration Service (DMS) for this
+    - for SQL DB Managed Instance, needs a dedicated subnet, not gateway
+      - no NSG allowed
+      - minimum of 16 IP addresses
+    - install tools for Azure migrate and replicate on-prem to cloud
+  - 3. Always On Group Cluster migration
+    - use Database Migration Service (DMS) for this
+    - [review](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/migrate/azure-best-practices/contoso-migration-rehost-vm-sql-ag)
+- Cloud rationalization
+  - do it incrementally, hard to make decisions without time, and make few assumptions
+  - Rehost, Refactor, Rearchitect, Rebuild, Replace
+- Choose the right deployment option in Azure SQL
+  - Azure SQL (single, pool, server)
+  - SQL Managed Instances (most migrations to the cloud)
+  - SQL VMs
+- Data transfer for large datasets with moderate to high network bandwidth
+  - Azure Data Box family for offline transfers
+  - OR Azure import/export through physically shipping
+  - for smaller files / faster network bandwidth (1-100Gbps)
+    - AzCopy, Azure Storage REST API, Data Box, Data Factory
+- Orchestrate microservices and multi-container applications for high scalability and availability
+  - use AKS
+  - use Helm charts to deploy into K8s clusters
+  - can use Azure Dev Spaces to spin up a k8s with local copy
+- Azure Container instances and container orchestrators
+  - use these instead of dedicated VMs if scaling up and down is required
+- Choosing a batch processing technology in Azure
+  - Azure Synapse (DW) for analytics, massively parallel > 1 TB DATA
+  - Data Lake Analytics, optimized for distributed processing of very large data sets stored in Data Lake store
+  - HDInsight for Hadoop
+  - Azure Databricks
+    - Apache Spark-based platform
+    - auto scales
+    - does not support firewalls
+
+
 
 ## Design an API Integration Strategy
 - API integration
@@ -83,7 +206,92 @@
     - check http header
     - limit call rate by key/subscription
   - access, advanced, authN, caching, CORS, transformation policies
-
+- Web API Design
+  - APIs should be platform independent and be able to evolve
+  - REST often uses HTTP
+    - designed around resources that have identifiers
+    - stateless
+    - aim to revolve around nouns
+    - usually plurals
+    - as an abstraction layer
+    - GET, POST, PUT, PATCH, DELETE
+    - PUT is idempotent, not so with POST and PATCH
+  - handle media types
+  - filter and paginate data
+  - also potentially use HEAD requests to pass metadata first
+  - HATEOAS to enable navigation to related resources
+  - Versioning
+    - should minimize breaking changes
+- Web Api Implementation
+  - Processing Requests
+    - GET/PUT/DELETE/HEAD/PATCH should be idempotent
+    - avoid chatty POST/PUT/DELETE requests
+    - follow HTTP specification when sending a response
+  - Handling Exceptions
+    - provide meaningful responses
+  - Optimizing client-side data access
+    - client-side caching
+      - Cache-Control header
+    - provide ETags to optimize query processing
+      - can use optimistic concurrency with ETags
+  - Handling large requests and responses
+    - can return a 413 (Request Entity Too Large)
+    - can gzip files
+    - implement partial responses 
+    - support pagination
+    - provide async support for long-running requests
+      - signalR
+      - notification Hub
+  - ensure each request is stateless
+  - throttle clients to reduce DOS attacks
+  - Publishing and managing a web API
+    - all requests must be authN/Zed, with appropriate level of access
+    - meter requests for monetization
+    - SLA
+    - regulatory requirements
+    - ensure availability and health
+    - can cache requests in a middle layer
+  - Testing an API
+    - verify all routes and AuthN/Z
+    - test exception handling and meaningful errors
+    - correct status codes
+    - test async
+  - Use Azure API Management
+  - Document Operations
+  - Implement a client SDK
+  - Monitor usage, health, activity, 
+- API mgmt access restriction policies
+  - require policy statement
+  - Check HTTP header
+    - XML policy can terminate request immediately without a given header attribute
+    - can specify which values work
+    - used for inbound/outbound; all scopes
+  - Limit call rate by subscription
+    - can limit within a specific time period
+    - users will get a 429 Too Many Requests
+    - used for inbound; scopes: product, api, operation
+  - limit call rate by key
+    - prevents API usage spikes 
+    - can set which specific calls will increase counter
+    - used for inbound; all scopes
+  - restrict caller IPs
+    - specify an IP range
+    - used for inbound; all scopes
+  - set usage quota by subscription
+    - enforces renewable or lifetime call volume/bandwidth quota
+    - used for inbound; product scope
+  - set usage quota by key
+    - key can have an arbitrary string value
+    - can specify bandwidth, calls
+    - used for inbound; all scopes
+  - validate JWT
+    - requires that exp registered claim is included in JWT token
+    - used for inbound; all scopes
+- Advanced Request throttling with Azure API Mgmt
+  - product-based throttling
+  - rate-limit-by-key or quota-by-key are not available in Consumption tier
+    - can write custom expressions to block IP addresses, or user identity
+  - can combine policies
 
 ## Design a Storage Strategy
 - unmanaged is pay per use (by GB)

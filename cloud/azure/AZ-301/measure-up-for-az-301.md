@@ -1,0 +1,44 @@
+# Measure Up for AZ-301
+
+- ARM can deploy in parallel with JSON
+  - Powershell is one at a time
+- Availability Set has 2 fault domains by default
+  - max 3; should have multiple VMs in each
+- Availability sets have 5 update domains by default, up to 20
+- MARS agent can back up to Azure Backup but not baremetal recovery
+- Data Protection Manager can backup to on-prem storage or Azure storage, also to Azure vault
+- Stretch Database enables SQL server to handle data movement in the background without changing application
+  - allows data to be queried by the application without changing it
+- quota calls cannot be less than 3600 seconds for renewal period
+  - for an entire given time
+- TCO calculator is cost savings from on-prem infra to Azure
+- Standard Load Balancer required to support traffic across Availability Zones
+- Azure Sentinel to configure AAD as an object to be monitored
+- Bronze (3), Silver (5), Gold (7) for Service Fabric
+- Group expiration is only for Office 365 groups, not security groups
+- AD Connect searches dark web for password hash to verify compromise
+- oauth/openid (JWT) is authorization, not authN
+- ws-fed uses xml but no defined token format
+- always encrypted encrypts at rest and in transit, but specified for a column
+- ASSE protects back up files but not data / log files in use
+- Premium tier for Azure SQL DB supports in-memory OLTP
+  - 1000 DTU = 10GB
+  - 500 DTU = 4GB
+- Azure relay makes info available from on-prem and Azure
+- NVMe storage only available in Lv2
+- G series for SQL Server
+- Av2 is cheap
+- Queue and Table encryption keys are managed by MSFT
+  - File and Blob support BYOK
+- Azure Data Flow develops graph data transformation logic without writing code
+  - protects against schema drift
+- ASR for short RTO
+  - redeploy with ARM templates if longer RTO
+- Azure event hubs works well with third-party systems
+- User Access Administrator and Owner have access to create resource locks
+- Integrated Monitoring + Backup = ASR
+  - but this uses Recovery Services Provider
+  - If just backup = Azure Backup
+    - Recovery Services Agent
+- Polybase only supports Blob Storage + Data Lake Storage
+Review DATA FACTORY

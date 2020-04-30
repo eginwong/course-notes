@@ -28,6 +28,108 @@
   - geographical distribution
   - paired regions are faster between each other
   - cheaper between geographic clusters
+- Disaster Recovery for Azure Applications
+  - network outage
+  - manual responses
+    - alerts
+    - failover
+    - operational readiness testing
+  - data corruption and restoration
+    - restoring data from backups
+      - must handle potential data inconsistencies
+    - azure storage and azure SQL
+      - point-in-time restore or custom backup
+    - azure storage recovery
+      - block blob, azure files, azure table storage
+      - SQL database recovery
+    - SQL server on VMs
+      - traditional backups
+    - azure db for mysql/postgres
+      - 5 min backups
+    - CosmosDB
+      - auto backups
+    - azure VMs
+      - azure backup
+  - DR plan
+    - only complete when tested
+    - evaluate business impact
+    - process for contacting support and escalation
+    - automate process as much as possible
+    - document process
+  - backup strategy
+    - redeploy on disaster
+    - active/passive vs active/active
+  - resource mgmt
+    - duplicate only critical services to switchover quickly
+  - failover and failback testing
+    - can use ASR
+  - validating backups
+    - run a script to validate data integrity, schema, ueries
+  - backup storage
+  - application archives
+  - outage retros
+  - planning for regional failures
+- Configure and manage replication policies for VMWare DR
+  - Manage > Site Recovery Infrastructure
+    - Replication Policies
+    - specify RPO threshold
+      - alerts are generated at this point
+    - specify recovery point retention (24 - 72h premium vs standard)
+    - specify frequency
+  - now associate to configuration server
+- Plan capacity and scaling for VMWare DR to Azure
+  - replication (max 1 process server with 2TB change rate, storage account of up to 20k requests/s)
+  - inbuilt process server with configuration server can handle up to 200 VMs
+  - for process server
+    - handles data replication in ASR
+    - if daily change > 2TB, add scale-out process servers to handle load
+  - control network bandwidth
+    - throttle 
+    - or influence bandwidth by limiting download and upload threads per VM
+  - add extra master target server for:
+    - linux-based VMs
+    - current master-target server doesn't have access to datastore of VM
+    - total # of disks on master-target server > 60
+- Create and customize recovery plans
+  - in ASR, create recovery plan
+  - can only failover into Azure
+  - can customize a recovery plan by adding a script or manual action
+    - pre/post actions
+- About networking in Azure VM DR
+  - allow specific URLs if using a URL-based firewall proxy to allow proper ASR
+  - if using an NSG to control outbound connectivity
+    - ensure AAD, Storage, EventHubs, ASR, AKV, GuestAndHybridManagement service tags
+  - for a VM to replicate, allow HTTPS outbound to NSG
+  - create network service endpoint for storage so that it doesn't leave the Azure boundary
+- Azure Traffic Manager with ASR
+  - on-prem to Azure failover
+    - switch routing rule for Primary and Failover endpoints
+    - use health checks to be sure
+  - on-prem to Azure migration
+    - shift traffic to Azure over time with more weighting to ensure load capability
+  - Azure to Azure failover
+  - Protecting multi-region enterprise applications
+    - can use Priority routing or Geographic routing
+    - can nest profiles to handle more complex cases
+    - allows up to 10 levels of nested profiles
+- Azure ExpressRoute with ASR
+  - on-prem to Azure replication with ExpressRoute
+    - can use Microsoft peering for SR replication traffic
+    - replication is NOT supported over private peering
+  - Azure to Azure replication with ExpressRoute
+    - expressroute not really needed for VM DR
+    - can plan to re-establish ExpressRoute at the failover target region
+- Network Security Groups with ASR
+  - individual subnet, individual network interface can have 0-1 associated NSGs
+  - granular security rules
+  - ensure correct priorities are set in the NSG security rules
+  - ASR does not create NSGs so create them first before failover
+  - for Azure-Azure, ensure that outbound NSG connectivity works
+  - test the failover
+- Set up public IP addresses after failover
+  - not needed if using load balancer
+  - in recovery plan, can add a step to attach a public IP address
+  - or use Traffic Manager
 
 ## Application Redundancy
 - avoid single point of failure
@@ -46,6 +148,144 @@
   - risk of latency/data loss
   - Azure back for VMs
   - can use AzCopy for moving files
+- Resiliency Pillar
+  - recover gracefully from failures and are HA
+  - cost to support it vs cost of being down
+  - Define requirements
+    - identify workloads and usage
+      - each one has different requirements for availabiluty, scalability, consistency and DR
+    - plan for usage patterns
+      - critical vs non-critical times, like tax season
+    - establish availability metrics, mean-time-to-recovery MTTR, mean-time-between-failures MTBF
+    - establish recovery metrics, recovery time objective and recovery point objective (RPO)
+    - determine workload availability targers, SLA for each one
+    - understand SLAs
+  - Use architectural best practices
+    - failure mode analysis (FMA) to see what is required
+    - create redundancy plan
+    - use load-balancing
+    - implement resiliency strategy
+    - build availability requirements into your design
+    - manage your data by handling replication, testing failovers, and data recovery
+  - Test with simulations and forced failovers
+    - test common failure scenarios
+    - identify load failures, simulation tests, test health probes, monitoring systems
+    - run DR drills
+    - perform failover and failback testing
+  - Deploy the application consistently
+    - use blue-green deploys, automate, have rollback plan, log and audit, document process
+  - Monitor Application Health
+    - implement health probes, check functions, long-running workflows, application logs, measure statistics, transient exceptions/retries, early warning system, train multiple operators
+  - Respond to failures and disasters
+    - establish process for contacting supoort
+    - document and test recovery plan
+    - fail over manually when required
+    - recover from data corruption, network outage, dependent service failure, region-wide service disruptions
+- Autoscaling
+  - vertical vs horizontal scaling
+  - VMSS
+  - Service Fabric uses VMSS
+    - requires separate autoscale rules for each node type
+  - Azure App Service has built-in autoscaling
+    - averaging period is much shorter, about 5 minutes
+  - use Azure Monitor autoscale
+    - performed on a schedule, CPU, or memory usage
+    - ideally, predict load for anticipated peaks
+    - uses aggregate time periods to avoid spiking resources unnecessarily
+    - default time is 45 min
+    - scale out > scale in operations
+    - largest increase for scale out takes precedence, and the opposite for scale in
+  - prepare application to be horizontally scalable
+    - stateless, don't assume server process
+    - beware of long-running processes and scaling in
+    - break task into smaller processes to avoid this
+    - or create a checkpoint mechanism that records state
+- Manage availability of Windows VMs in Azure
+  - VM reboots occur because of unplanned HW maintenance, unexpected downtime, or planned maintenance
+  - use availability zones to protect from datacenter failures
+    - combo of fault and update domains
+  - configure multiple VMs in an availability set for redundancy
+    - should use premium SSD or Ultra Disk if by itself for 99.9% availability
+    - each VM is assigned an update domain and a fault domain
+      - distributed by 5 update domains
+      - fault domain are groups of VMs that share a common power source and NW switch
+    - default, availability set splits VMs across 3 fault domains
+  - use managed disks for VMs in availability set
+    - ensures sufficient isolation from each other, different fault domain
+    - otherwise, keep all of each VM in one storage account and have a separate one for each
+  - use scheduled events to proactively respond to VM impacing events
+    - to allow for planned interruptions
+  - configure each app tier into separate availability zones or sets
+    - data tier in one set, web tier in another set
+  - combine a load balancer with availability zones or sets
+- Resiliency checklist for specific Azure services
+  - App service
+    - avoid scaling up or down
+    - standard or premium tier
+    - store configuration as app settings
+    - create separate app service plans for prod and tests
+      - as load tests may affect prod environment
+    - separate web apps from web APIs
+    - avoid App service backup feature for Azure SQL
+    - deploy to staging slot
+    - create last known good deployment slot
+    - enable diagnostics
+    - log to blob storage
+    - create separate account for logs
+    - mointor erformance
+  - App Gateway
+    - create at least two instances
+  - Cosmos DB
+    - replicate across regions
+  - Event Hubs
+    - use checkpoints
+    - handle Dupes, exceptions
+    - use a dead-letter queue
+    - implement DR with a secondary Event Hubs namespace
+  - Azure Cache for Redis
+    - Geo-replication
+    - data persistence
+  - Search
+    - provision an extra one
+    - configure indexers for multi-region deployment
+      - point at same data source (for large data sets)
+  - Service Bus
+    - premium tier
+    - handle dupes, exceptions
+    - retry policy
+    - dead-letter queue
+    - geo-DR
+  - Storage
+    - use RA-GRS
+    - use managed disks for VMs
+    - create a backup queue in another region
+  - SQL DB
+    - enable auditing
+    - standard or premium tier
+    - Active Geo-Replication
+    - sharding, point-in-time restore
+  - Azure Synapse Analytics
+    - do not disable backup
+  - SQL Server in VM
+    - replicate db and backup
+  - Traffic Manager
+    - manual failback
+    - create health probe
+  - VM
+    - avoid running prod workload on a single VM
+    - specify availability set, and each tier in a separate one
+    - replicate VMs using ASR
+    - choose right VM size based on perf requirements
+    - managed disks for VHDs
+    - install apps on data disk, not OS
+    - Azure backup to back up VMs
+    - diagnostics
+  - VNET
+    - network security group to whitelist/blacklist
+    - create custom health probe
+    - don't block health prove
+    - enable LB logging
+
 
 ## Data Archiving Strategy 
 - Storage Account Access Tiers
@@ -53,6 +293,9 @@
   - governance and compliance purposes
   - performance, hot, cold, archive tiers
   - cheaper to store but more difficult to access
+  - archive access cannot be set at an account level
+  - archive is at least 180 days
+  - cool for at least 30 days
 - Access Tier Requirements
   - blob storage and general purpose v2
   - v2 has new features but v1 doesn't have
@@ -64,8 +307,46 @@
     - rehydration can take hours to complete
       - standard/high priority
   - can set up lifecycle management
+  - tiering is only supported for GPv2 accounts
+  - changing account access will toggle all inferred objects to switch
+  - prorated charges for early deletion of blobs
 - Access Tier SLAs
   - PREMIUM: 99.9% availability, no RA-GRS, no min storage duration, <10ms latency
   - HOT: 99.9% availability, 99.99% RA-GRS read, no min duration, <1s latency
   - COOL: 99% availability, 99.9% RA-GRS, 30 days min duration, < 1s latency
   - ARCHIVE: no availability, no RA-GRS, 180 days min storage duration, hours latency  
+  - 10 - 25% service credits for failing to meet SLAs
+- Storage compliance offerings
+  - FIPS, DoD, DoE, FDA, FERPA, ISO 9001, WCAG 2.0, etc.
+
+## Microsoft Learn
+- Azure Migrate is to perform assessment, not to actually migrate
+- Data Migration Assistant assesses SQL DBs for compat and migrates
+- Data Migration Tool is for Cosmos
+- Azure Db Migration Service is DMA + Azure, fully managed
+- Azure Backup is finer grained than ASR
+  - recovers files/folders vs whole VMs and workloads
+  - no limit retention times
+  - HA storage
+  - MARS agent is for Azure Linux
+  - DPM/Mabs for app-aware backups, can do Outlook, SQL
+  - to move to Recovery Services Vault, need MARS
+  - MARS for fine-grained Azure VMs or mix of virtual/physical for file folder
+- DB Backups
+  - Basic (1 week), Standard (5), Premium (5)
+  - DB backup occurs immediately after creation
+  - default location is RA-GRS
+  - Long-term retention is 10 years
+- Multiplying SLAs is a thing
+- auto-failover groups for DBs
+  - like active geo-replication but writable without custom code required
+- waaagent to prepare a linux vm for generalization to turn into vm image
+- go into Azure VM and click "Capture" to turn into image
+- Logic apps is design first for devs
+- H-series are not in all regions
+- vcores may have been exceeded in a subscription
+- HPC pack is good for on-prem and cloud
+- tags can't be applied to classic resources
+
+## Random Studying
+- storage account different from managed disks

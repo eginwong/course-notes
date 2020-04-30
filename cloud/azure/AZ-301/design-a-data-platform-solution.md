@@ -1,5 +1,30 @@
 # Design a data platform solution
 
+- Azure Application Architecture Guide
+  - Architecture style > Technology choices > App Architecture > Azure Architecture Framework
+  - Architecture Style
+    - N-Tier
+    - Web Queue Worker
+    - Microservices
+    - Event-driven architecture
+    - Big Data, Big Compute
+  - Technology Choices
+    - what sort of compute service (App Service, AKS, Batch, Container Instances, Functions, Service Fabric, VM)
+    - what data store (relational, kv, documents, graphs, column-families, files, object storage, time series db, search engine db, data analytics)
+    - what messaging service (Service Bus, Event Grid, Event Hubs)
+      - commands, events
+      - for decoupling, load balancing
+      - service bus
+        - pull model, guaranteed delivery, message ordering, message persistence, checkpoint long-running transactions, dead-letter queue, hybrid, topics and subscriptions
+      - event grid
+        - push model, integrated with Azure, custom topics, filtered events, high throughput, reslient delivery
+      - event hubs
+        - fast ingestion, pull model, partitioning, event hubs capture, Apache Kafka
+  - Architecture
+    - reference architecture, design principles/patterns, best practices
+  - Quality Pillars
+    - Cost, Devops, Resiliency, Scalability, Security
+
 ## Data Management
 - Unmanaged 
   - table storage
@@ -20,6 +45,12 @@
 - Relational vs Non-Relational
   - relational is good for lift/shift
   - OLTP (online-transaction processing)
+- Criteria for the right data store
+  - data format, size, scale, structure, relationship, consistency, schema flexibility, concurrency, data movement, data lifecycle
+  - performance, reliability, replication, limits
+  - portability, cost, licensing, region, managed
+- Products
+  - data warehousing - Azure Synapse Analytics
 
 ## Data Auditing and Caching
 - SQL database tracks events to an audit log
@@ -33,11 +64,38 @@
 - Cosmos DB Pricing
   - storage and throughput (RU/s)
   - reserving capacity
+- SQL Database auditing
+  - retain, report, analyze
+    - premium storage is not supported
+  - server policy and database policy
+    - avoid setting both because it duplicates db logs unless you want diffeerent slices
+  - keeps 4000 characters of data for character fields in an audit record
+  - can set retention days
+  - for geo-replicated dbs, turn on auditing on both primary and secondary servers
+  - for storage accounts behind vnets/firewalls, must enable "Allow trusted Microsoft services to access this storage account" on the storage account, and create a server managed identity with storage blob data contributor in RBAC
+- Caching
+  - shared cache or private cache
+  - determining what data should go in the cache
+  - cache data expiration
+  - Redis
+  - serialization
+  - HA, clustering, sharding, partitioning
+- Recommended DTU sizing
+  - Basic, Standard, Premium
+  - better max backup retention, CPU, IO throughput (1-5 vs. 1-5 vs. 25)
+  - IO latency (5ms read, 10 write, x2 vs. 2ms read/write)
+  - premium has in-memory OLTP
+  - max storage size (2GB > 1 TB > 4 TB)
+  - max DTU (5 > 3000 > 4000)
 
 ## Data Retention Strategy
 - automatic geo-redundant backups
   - 7-35 days point-restore
   - long-term retention policy up to 10 years
+- Store Azure SQL DB Backups for up to 10 years
+  - long-term retention (LTR)
+  - W=6, M=12, Y=10, WeekOfYear=16
+    - Each weekly full backup will be kept for six weeks. Except first full backup of each month, which will be kept for 12 months. Except the full backup taken on 16th week of year, which will be kept for 10 years.
 
 ## Data Availability, Consistency and Durability
 - availability: remove single point of failure
@@ -51,6 +109,30 @@
 - not used for transactions
 - roll up db from your OLTPs
 - Azure Analysis Services, PowerBI, Big Data
+- What is Azure Synapse Analytics?
+  - Synapse SQL: complete T-SQL based analytics
+  - analytics at scale, reduces data storage costs, and improves query performance
+  - scale-out architecture to distribute computational processing
+    - compute is separate from storage, which enables separate scaling
+  - data movement service (DMS) is a system-level internal service that moves data across nodes to ensure parallel queries and accurate results
+  - Control nodes to compute nodes
+  - different modes of distribution
+    - hash, round-robin, or replicated tables
+    - replicated is fast for small data sets
+    - round-robin is simplest
+    - hash requires hash function and depends on data set for collisions and data skew
+- Best practices for Synapse
+  - use DMVs to monitor and optimize queries
+  - maintain statistics
+  - pause and scale to reduce cost
+  - tune query perf with indices, result set caching, materialized views
+  - group inserts into batches
+  - polybase to load and export data quickly
+  - do not over partition
+  - use hash distribution when applicable
+  - minimize possible column size
+  - reduce query result sizes
+  - use temp heap tables for transient data
 
 ## Data Protection Strategy
 - geo-redundant storage (GRS)
@@ -85,6 +167,111 @@
   - PII, or PCI
   - passwords in plain text
   - Azure Information Protection (like DRM)
+- Define data protection strategy for your hybrid identity solution
+  - can protect sensitive files with Data Classification Toolkit + Automatic File Classification
+    - OR Azure Rights Management Service for encryption
+      - cloud service
+  - Content Management options
+    - Centralized on-prem (AD Rights Management Server)
+    - Centralized in the cloud (Azure RMS)
+    - Hybrid of both
+  - AAD reports for incidents
+    - anomaly, integrated application report, error, user-specific, activity logs
+- Azure Encryption Overview
+  - client-side encryption (outside of Azure)
+  - server-side encryption
+    - service-managed keys
+    - customer-managed keys
+    - service-managed keys in customer-controlled hardware
+  - ADE
+  - Azure storage service encryption SSE with 256-bit AES encryption
+  - TDE
+  - Always Encrypted in Azure SQL to always encrypt data prior to storing into db
+  - cell-level or column-level encryption CLE)
+  - TLS/SSL
+  - Azure Storage uses Shared Access Signatures (SAS)
+- Transparent Data Encryption (TDE)
+  - Azure SQL, SQL server, Azure SQL DW
+  - real-time I/O encryption and decryption of data and log files
+  - database encryption key (DEK)
+  - to enable
+    - create master key
+    - obtain cert protected by master key
+    - create a db encryption key and protect it with the cert
+    - set db to use encryption
+  - even backups will require this encryption key 
+  - there is a suspend and resume function to support encryption at non-business critical times
+  - replication does not automatically replicate data from a TDE-enabled db in an encrypted form
+  - FILESTREAM is not encrypted
+- Always Encrypted
+  - SQL server, Azure SQL
+  - can make it so that even admins can never see the customer data
+  - column encryption key and column master keys
+  - deterministic encryption or randomized encryption
+    - former for searching, grouping, indexing, and joining
+  - deterministic requires binary2 collations as the column
+  - can only be applied under certain conditions
+    - not to check constraints, masked, xml/json path, distributed queries, partitioning columns, etc
+- Row-level security
+  - SQL, Azure SQL, Azure SQL DW
+  - execution context or group membership to control access to rows in a db
+  - `CREATE SECURITY POLICY` T-SQL statement
+  - RLS supports two types of security predicates
+    - filter predicates
+    - block predicates that explicitly block write operations that violate the predicate
+    - to avoid read/write issues 
+    - functionally equivalent to appending a WHERE clause
+    - `ALTER ANY SECURITY POLICY` permission is for highly privileged users only
+      - avoid excessive joins for performance
+      - avoid character conversion in predicate
+    - carefully crafted queries can still be used to leak information
+  - some other features may cause issues with the RLS being able to protect the data
+- Dynamic Data Masking
+  - SQL, Azure SQL, Azure SQL DW
+  - Default, Email, Random, Custom String for masking types
+  - no special permissions required
+    - grant `UNMASK` permission to allow users to retrieve unmasked data
+  - will affect import/export DBs
+  - can search for masked columns with `sys.masked_columns`
+  - cannot be defined for FILESTREAM, encrypted columns, computed column
+  - can still get around with crafty queries
+
+## Design and Document Data Flows
+- Azure Data Explorer
+  - fast and scalable data exploration service for log and telemetry data
+  - scales to tb of data
+  - high volumes of structured and unstructured data
+  - has ingestion, storage, indexing, querying, and visualization
+  - create a cluster + database, then ingest data, query
+  - read-only queries
+- Select transformation in mapping data flow (Azure DF Mapping)
+  - transformation to rename, drop, or reorder columns
+    - does not affect source row data but filters and maps
+  - can do fixed, rule, or auto mapping
+  - > 50 columns is rule-based
+  - < 50 columns is fixed-based
+  - $$ syntax to reference input name of matched column for rules
+  - can handle duplicate columns or not
+  - schema drift is when columns don't exist in either source or sink
+    - can be dropped or preserved
+- What are mapping data flows?
+  - visually designed data transformations in Azure DF
+  - no coding required
+  - with Debug, Azure will spin up a Databricks cluster for interactive debugging
+  - can execute in parallel, serially (longestw but safest), or in a single data flow (jumbled)
+- Copy data from Azure blob storage to a SQL DB using Copy Data Tool
+  - Azure SQL Server > Security > Firewalls and virtual networks > Allow Azure services and resources to access this server (ON)
+  - follow wizard after creating Azure DF under analytics
+- Copy data from on-premises SQL db to Azure blob storage using Copy Data Tool
+  - Connect via integration runtime tool
+  - dl to machine as agent
+  - connect to Azure DF
+- Copy multiple tables in bulk by using ADF
+  - copying several Azure SQL DBs to Azure Synapse Analytics (SQL DW)
+  - pipelines can chain pipelines
+  - must create corresponding table schemas in Azure SQL DW
+  - must link different Azure services before using them in the pipeline
+  - can include dynamic content `@dataset().DWTableName`
 
 ## Data Monitoring Strategy
 - Monitoring within SQL DB
@@ -94,3 +281,39 @@
 - SQL Intelligent Insights through AI
 - Diagnostic Logs
 - Azure SQL Analytics in Monitor
+- Best practices for monitoring cloud applications
+  - meant for privacy, security, performance, availability, tracing and debugging
+  - trace statements throughout the system
+  - health monitoring
+    - rate of requests processed
+    - response times
+    - volume of data
+  - availability monitoring
+    - timeouts, network failures, retry attempts
+    - SLA
+  - performance monitoring
+    - KPIs
+    - concurrent number of requests, response rates, volume, average processing time
+    - memory utilization, # threads, CPU, IO/rates and errors, bytes read/written
+    - % of requests that fall under certain thresholds
+  - security monitoring
+    - sign-in attempts, operations performed by authenticated users, user session start and end
+  - SLA monitoring
+    - operational throughput, availability, response time
+  - auditing
+    - must log user activity and track all identifiable or unidentifiable network requests
+  - usage monitoring
+    - enforce quotas, see what functionality is important
+  - issue tracking
+    - crash dump, screen snapshot, date and time + environment info
+  - instrumenting an application
+    - good trace logs with categorization
+    - correlation of requests may occur through span and trace ids 
+    - coordinate date time so timezones don't confuse things
+    - make logs easy to read and parse
+    - identify source and context of each log
+    - log rotation and data retention
+- Find and apply perf recommendations
+  - SQL databases > Performance recommendation to view available suggestions
+  - can automate the tuning
+  - can revert or do manually
