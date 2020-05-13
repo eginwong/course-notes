@@ -1,0 +1,63 @@
+# AZ-500 Sample Questions
+- new stored access policies immediately revoke all tied to them beforehand
+- to connect Azure HDInsight cluster for hybrid AAD, need VNET, custom DNS server in Vnet, attach both, then configure forwarding between custom DNS and on-premise DNS
+  - can also allow through VPN
+- Synchronization Rules editor can filter out certain AD accounts from being synced
+- risks
+  - leaked = high
+  - sign-ins from anonymous ip + atypical travel + suspicious activity + unfamiliar = medium
+  - infected devices = low
+- create access review program, then a control, and then group owners
+- if members can review themselves, they are the only ones who can
+- to sign up for PIM
+  - consent to PIM, verify with MFA, sign up PIM for AAD roles
+- MFA enabled means pending registration but it is still required
+- Azure blueprints can be used to have same role assignments across subscriptions
+- ACR push can also pull images
+- to use custom domain name, requires app service plan to be non-free (scale up)
+- Azure Connect configuration requires global admin in AAD and enterprise admin in AD
+- hybrid AAD means AD with password authN to minimize auth for SQL db, not integrated auth because that is for federation
+- dynamically construct resource ID for key vault through Parameter file
+  - the template calls the parameters file
+- if outside of conditional access policy, must use MFA
+- can transfer subscriptions between AAD tenants only
+- deployifnotexists, template
+- updates are OS-specific
+- data plane: key vault access policy
+- management plane: RBAC
+- ADE requires standard tier level VMs and must be an IaaS VMs, so not A
+- Log Analytics not limited by RG or region now
+- AKS ingress controller handles TLS termination + RP + traffic routing
+- Antimalware can be added to VMs using an extension 
+- ASG can only be applied to within the same VNET
+- custom sensitive information type to create a custom sensitivity label
+- Security Playbook will use the Azure Logic Apps Designer 
+- custom alerts require a storage account + workspace; but would use Azure Sentinel instead, which relies on a Log Analytics Workspace
+- need workspace id and key
+- adding a tag is not an administrative option
+- computer group -> scope config -> apply config
+- to receive network traffic, use nsg flow logs and azure network watcher
+- Auto Provisioning turns on Log Analytics Agent for all supported VMs
+- OAuth 2 requires redirect URI for implicit grant type
+- DeployIfNotExists policy requires managed identity
+- create a role to access secret1 from the app
+- to rotate keys from within Azure Automation, create the account + import PS modules + connection resource in the AA account
+- last condition is the most sensitive and applies first
+- create AKV -> access policies for AKV -> Set disk encryption
+- Access policy for ADE 
+- a secret in KV can allow access to db for a contained db user
+- need to be global admin to enable PIM
+- dynamic membership, string and regex operations are not case-sensitive
+- JIT access not available with free tier of azure security center
+- if exclusively to an RG, need create a managed identity setting
+  - but should be scope if exclusive
+- create server, client, AKS, RBAC binding
+- traffic allowed by default without NSG
+- if in a different vnet, cannot ping through the internet
+- upgrade security center tier to standard for custom OS security config
+- for mutual, requires TLS1.2
+- managed disks in storage accounts, with subscriptions being the assignable scope
+- for AAD AuthN in SQL Server, need to connect SSMS, create contained db users, and then system-assigned managed identity
+- diagnostic logs stored in SA, retrieve through AzCopy
+- workspace first for alerts
+- unattended tests can be done through .webtest file in App Insights
