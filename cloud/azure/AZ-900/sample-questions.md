@@ -1,0 +1,29 @@
+# Sample Questions
+
+- Azure Storage is IaaS
+- private cloud for additional resources to users
+- tags do not cascade from an RG because not all resources support tags
+- powershell can be run on all OS's
+- DW has HA built-in
+- availability zone protects against data center failure
+- local network gateway for S2S VPN connection
+- firewall can limit inbound connections
+- data warehouse is MPP
+- Azure identity protection can detect threat levels and have actions associated
+- AKV stores secrets for AAD user accounts
+- each Azure subscription can be managed with a MSFT account only
+- donwloading from Azure to on-prem over VPN does not incur additional charges
+- Basic cannot open support request
+- Azure portal for support requests
+- feature availability in SLA
+- Enterprise Agreement is required for Azure Cost Mgmt
+- can't access data stored in Azure after trial is over
+- cannot fuse two subscriptions into one through a support request
+- cost to read/write in SA
+- MSFT warns 12 months notice before ending support for a service
+- cloud-init.txt for custom Linux VM bootups
+- rate limiting for sms alerts to be 1 / 5 min
+  - no more than 100 emails in an hour
+- Azure CLI supports zone file import / export for DNS, and ps and portal don't support
+- cannot view keys of a SA in read-only lock
+- appendonly policy applies for newly created resources
