@@ -1,0 +1,220 @@
+# US Mortgages
+
+- mortgage banking industry earns money through interest
+- mortgages can be risky because people can default on loans
+  - can sell mortgages to secondary market to offload risk
+- mortgage bankers are at the center of most of the lending, and is an intermediary between all parties
+- banks make money by mortgage lending and then selling them for premium, trading the mortgages themselves
+- interest rates are important because they determine the cost of borrowing and return on lending
+- not all mortgage banks are depository institutions
+
+## History
+- used to be a pain to collect payments from borrowers to give to investors, so servicers were born
+- mortgage-backed securities were created to open up to a new class of investors
+- thrift industry (S & L) died as interest rates rose and they couldn't match MBS
+- subprime is when credit score is low or forms are not filled out
+  - leads to new products with low rates that grew to higher rates after a period of time
+  - led to 2008 crisis
+  - as a result, Consumer Financial Protection Bureau (CFPB) came about and led to higher fees across all and increased risk
+- The New Deal introduced the Federal Housing Administration and Fannie Mae
+  - introduced 30-Year Fixed-Rate Mortgage
+
+## Entities
+- [useful overview](https://core-mba.bravais.com/api/dynamic/documentVersions/3788/files/211716/media/SS/RSF/Mtg%20Bnk%20Primer/PDFs/ResidentialFlowchart_2012.pdf)
+- Lender
+  - money from borrower -> lender
+    - mortgage payment includes principal owed + interest + escrows for taxes/insurance
+  - money from investor -> lender
+    - when investors purchase closed loans and mortgage servicing rights
+    - where lenders make most of their money
+  - plays the middle man between primary and secondary markets
+- Investor
+  - money from lender -> investor
+  - money flows to investors when servicers (original lender, subservicer, or another servicer who bought the servicing rights) pass monthly payments to investors (minus servicing fee)
+  - payments made throughout life of loan
+    - servicers also snipe a servicing fee
+- Warehouse Bank
+- Borrower
+  - money from lender -> borrower
+    - when promissory note and mortgage are signed
+
+## Loan Production 
+- originates the loan in the primary market
+- responsible for 
+  - taking loan app with borrower
+  - processing it
+  - underwriting the file (for approval/denial)
+  - preparing the closing package
+  - then wiring the funds
+- involves origination, processing, underwriting, closing
+
+## Funding, Warehousing, Shipping
+- mortgage banker funds the loan, using a warehouse line of credit
+- must manage warehouse line to ensure enough room to fund future loans the mortgage banker would like to close
+- once funded, shipping performs a QC check on loan and sends loan file to investor that is purchasing the loan
+- involves funding, warehousing, shipping/QC, shipping/delivery
+
+## Secondary Marketing
+- product mix that fits the mortgage banker's business model
+- determines interest rates
+- manages market risk and negotiates with investors for purchase of closed mortgage loans
+
+## Loan Administration
+- servicing
+- manages admin duties associated with loan until paid off
+- answering borrower questions, managing escrow accounts, loan payoffs, assumptions, loss mitigation, and foreclosures
+- generally larger firms because of economies of scale
+
+## Jobs
+- Mortgage banker
+  - fund loans at closing and service loans after closing
+  - may sell loans on secondary market
+- Correspondent
+  - do everything mortgage bankers do except service loans
+- Broker
+  - originate and sometimes process but generally do not underwrite or fund at closing
+- Wholesaler
+  - entities that purchase loans and rights to service those loans from a broker or correspondent
+  - may underwrite and fund loans or purchase loans that have been closed to resell to secondary market
+- Conduit
+  - purchase closed loans and pool them for sale to investors as MBS
+
+## Laws
+- Federal
+  - require mortgage lenders to disclose information about loan costs
+  - assure fair/equal treatment + confidentiality
+  - regulate debt collection practices
+- State
+  - licensing of mortgage bankers
+  - foreclosure/eviction process
+
+
+## Loan Production Basics
+- Goals of Loan Production
+  - originate investor-quality loans
+  - protect interests of consumer
+  - ensure compliance with all federal/state regulations
+- Functions of Loan Production
+  - takes loan from application to closing
+  - origination
+    - takes complete app and gathers supporting docs
+    - educate borrowers
+    - provide timely disclosure of loan terms and costs
+    - provide complete file to processor for processing
+  - processing
+    - review files for completeness/accuracy
+    - ensure system data is correct
+    - obtain third-party verifications
+    - provide complete loan file to underwriter
+  - underwriting
+    - determine ability/willingness to repay the loan
+    - determine property value to ensure meeting investor guidelines
+  - closing
+    - assemble pre-closing conditions/documents
+    - coordinate with closing agents for closing/funding of the transaction
+    - verify all fees/costs/premiums are collected
+- Mortgage Loan Originator (MLO)
+  - sales people
+  - generating business
+  - taking complete loan applications
+  - Uniform residential loan application (URLA) is the standard
+  - only people allowed to help borrowers complete a loan application
+- Processing 
+  - retrieve UW findings and credit report
+  - provide detailed findings
+  - dirty work to retrieve all relevant information, verifications
+  - document everything
+- Underwriting
+  - must receive approval from government agencies to underwrite
+  - auditor, essentially
+  - looks at transaction, borrowers, and property
+  - transactions
+    - purchase
+    - refinance
+  - potential issues
+    - non-arm's length
+    - down payment, are they actually paying this?
+    - potential fraud
+    - other debt to inflate or deflate the price
+    - is rental income actually going to happen
+  - 4 Cs of underwriting
+    - credit
+      - credit report
+      - can rescore if there is a mistake on the report
+    - capacity
+      - can they pay it back?
+      - principal, interest, taxes, hazard insurance, mortgage insurance (PITI payment)
+      - front ratio: housing to income ratio, 28%
+      - back ratio: debt to income ratio, 36%
+      - underwriter can be flexical depending on factors
+    - capital
+      - checking, savings, CDs, MMA, stocks and bonds, mutual funds, retirement, other investments
+      - reserves always strengthen in case of job loss
+    - collateral
+      - property types
+        - Single family residence (SFR)
+        - Planned Unit Development (PUD) attached or detached that has common areas
+        - Condo
+        - Cooperative
+        - 2-4 Family
+      - occupancy types
+        - owner occupied
+        - second home
+        - investment property
+    - loan-to-value (LTV) ratio
+      - loan amount / (lesser of appraised value / sales price)
+- Closing
+  - execution of closing documents
+    - depends on state, investor, insurer requirements
+    - depends on financing method and loan type
+    - typical documents:
+      - promissory note
+      - security instruments: mortgage and deed of trust (foreclosure without court proceeding)
+      - closing disclosure
+      - hazard insurance policy
+      - title insurance policy
+    - notarizing is required for the public record
+    - attorney / title states have different rules to see who can perform duties of closing
+  - transfer of funds
+  - transfer of title of property
+- types of loans
+  - conventional loans
+    - not insured by VA, FHA, USDA
+    - requires private mortgage insurance if loan amount > 80% of value of mortaged property
+  - FHA loans
+    - insured by federal housing administration
+    - insures lenders against borrower default
+    - for lower income borrowers, with mortgage insurance premiums baked in
+  - VA loans
+    - veteran affairs 
+  - Jumbo loans
+    - nonconforming
+    - large loan amounts
+  - Alt-A loans
+    - non-traditional in qualification, documentation, or other loan characteristic
+    - higher risk, so premiums to the investor
+- Affordable housing programs
+  - HomeReady mortgage (Fannie Mae)
+  - Home Possible mortgage (Freddic Mac)
+- Common Financing methods
+  - fixed rate mortgage
+  - adjustable rate mortgage
+  - balloon mortgage
+    - equal monthly payments for a fixed time until the full balance is due
+  - graduated payment mortgage
+    - interest rate is fixed but payments continue to increase over years and then level off
+  - growing equity mortgage
+    - fixed rate with payments that rise yearly until mortgage is paid off
+    - paid directly to principal balance to lower debt faster
+    - alternative to a 15-year fixed rate mortgage
+- Regulations
+  - Equal Credit Opportunity Act (ECOA)
+  - Fair Housing Act
+  - Truth in Lending Act (TILA)
+  - Real Estate Settlement Procedures Act (RESPA)
+    - promotes consumer notification and protection
+  - Home Mortgage Disclosure Act (HMDA)
+  - Home Ownership and Equity Protection Act (HOEPA)
+  - Secure and Fair Enforcement for Mortgage Licensing Act (SAFE)
+    - requires MLO and licensing standards
+  - also aims to protect against predatory lending
