@@ -1,0 +1,90 @@
+# The Basics of User Experience Design
+by Interaction Design Foundation
+
+[book]
+
+- UX is about guiding produt development to shape how users feels when using our products
+- Design Thinking
+  - empathise, define, ideate, prototype, test
+  - ask significant questions and challenge assumptions
+  - iterative and non-linear
+- Factors that influence UX
+  - useful
+  - usable
+  - findable
+  - credible
+  - desirable
+  - accessible
+  - valuable
+- Usability
+  - effectiveness
+    - simple language
+    - [Hemingway App](http://www.hemingwayapp.com/) is a good reference for language
+  - efficiency
+  - engagement
+  - error tolerance
+    - restricting opportunities to do the wrong thing
+    - offering redo
+    - assume everyone is going to break your app
+  - ease of learning
+- user interviews
+  - often what people *say* they will do, and not necessarily as they do it
+  - users aren't designers
+  - what to ask
+    - background
+    - use of technology in general
+    - use of product
+    - main objectives and motivations
+    - pain points
+  - keep it short
+  - have a purpose
+  - explain how the data will be used
+  - keep leading questions to a minimum
+- UX Research Techniques
+  - card sorting
+    - cheap and simple
+    - easy to get user input
+  - expert review
+  - eye movement tracking
+    - affordable
+  - field studies
+    - observing users behave as they will use your product
+  - usability testing
+    - watch users do stuff
+  - user personas
+    - fictional representation of ideal user to focus on their goals/characteristics
+- Interaction Design
+  - interaction between users and products
+  - words
+    - button labels
+  - visual representations
+    - images, typography, icons
+    - supplement words we use to communicate info to users
+  - physical objects or space
+  - time
+    - can users track their progress or resume interaction later?
+  - behavior
+    - how do users perform actions on the website?
+    - how do users operate the product?
+  - can color give a clue to the function?
+  - what error messages provide helpful explanations?
+  - what feedback do we provide to a user once an action is performed?
+- Mobile Web UX Design
+  - microtasking
+  - local
+  - bored
+  - small screens
+    - define content for each size of device
+  - keep navigation simple
+    - 30x30 pixel space for touch screen tap points
+  - keep content to a minimum
+  - reduce required user input
+  - NOTE: unstable connections
+  - continuous integrated experiences
+    - continuity from web to mobile to desktop
+    - maintain brand
+- Information Visualization
+  - presentation
+    - understanding or persuasion
+  - explorative analysis
+  - confirmation analysis

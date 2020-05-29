@@ -1,0 +1,85 @@
+# Sample Questions
+- Log Analytics, can search in table with `search in (tableName) "querytext"`
+- App Service Plan must remain in same rg and region
+- max fault domain count is 2-3, depending on region
+- max platform update domain count is 20
+- management of access permissions is Microsoft/Authorization/*
+- for LB, all VMs have to be in same availability set
+- Azure backup allowed for 99 years for VMs
+  - 190 days for File shares
+- old storage account option works for all, but has less features / pricing
+- for preventing users from accidentally deleting blob data + 14 day backup
+  - can create recovery services vault + backup schedule, must go to windows VM to set up the agent
+  - or set up soft delete for blob storage + lock on the storage account itself
+    - Blob Service > Data Protection > Retention Policies
+- for Azure import/export, requires driveset and dataset CSVs
+- to sync Azure File Sync Storage service, need sync group
+  - install agent, register, and add server endpoint
+- SMB port is 445
+- without allow microsoft trusted, cannot have azure backups automatically for storage accounts
+- go from VM perspective to add Recovery Service Vault option
+- GPv1 storage accounts do not support tiering (hot, cold, archive)
+- stop backup of recovery services vault first before deletion
+- use service endpoint to ensure optimal routing for Azure Storage service to VMs
+  - for extending Vnets to Azure service resources
+- start of week is sunday
+  - pay special attention to day offsets
+- azure policy will enforce VMs by deallocating them
+- blobs allow for https access
+- attach external disk, waimportexport -> create import job -> detach disks -> update import job
+- Azure File Sync begins with the Service and then the agent -> Register Server -> Sync Group -> Server endpoint
+- ZRS is synchronous, while GRS/RA-GRS are async
+- file recovery -> select restore point -> download and run a script -> copy files using AzCopy
+- 99.95 is availability set, 99.99 is availability zone
+- in storage explorer, can review Account mgmt properties to see unattached disks
+- warning occurs for Backup pre-check if WaAppAgent.exe is old
+- for maintenance, redeploying a VM should be sufficient to swap hosts
+- for file restore, requires the same OS
+- Azure backup restore should go to a new VM
+- create backup policy
+- to move VMs between RGs/Vnets, must delete and re-create
+- to direct traffic to a single vm, use inbound nat rule, not lb rule
+- use remote gateway + gateway transit if asked for peering two vnets without proper virtual appliance
+- use vnet gateways for subscription-subscription connection of vms
+- cannot add ip ranges to vnet if peering
+- slb requires nsgs because of zero-trust approach
+- policy-based vpn is looking at prefixes from both networks 
+  - route-based is looking at traffic selectors
+- IP flow verifies whether packet is allowed/denied
+- next hop looks at outbound logic
+- vnets are limited to a single region
+- load balancer, floating ip when backend port is reused
+- Packet capture to inspect network traffic, connection monitor for verifying connectivity
+- basic SKU of lb only supports same availability set
+- must reinstall VPN client if network topology changes have been made
+- IaaS machines + PaaS will automatically receive private IP addresses through address spaces
+- if ip address range is taken already, requires network interface
+- if IP forwarding + network interface, can send traffic from a different source
+- Set-AzureRMVNetGatewayDefaultSite to point to a single gateway
+- create gateway subnet first
+- for querying log data, need Log Analytics (with its own data store)
+- Set-AzureRMContext to configure default sign-in tenant regarding AAD
+- MFA supports conditional access for PIM
+- if staging mode is on, pw-hash sync is disabled
+- to set up admin on all computers, use device settings from Devices blade
+- grant control policy will force how the sign-users are allowed to receive access
+- to add custom domain name: 
+  - add custom domain name -> add record to DNS -> verify
+- to add subdomain, include NS record
+- to create new Azure DNS zone, New-AzPrivateDnsZone, add zone link (AzPrivateDnsVirtualNetworkLink)
+- if user is not assigned, they will not fall under the assigned group
+- can enable MFA for all users
+- add custom domain name for AAD if domains are different
+- to speed up future deployments, add automation account, then add to library the scripts, and then share template
+- only registration network subnet can register hostname records
+- all resources connected to a vnet automatically connect to internet by default
+- from Azure, vnet gateway + local network gateway
+  - s2s connection
+- storage account + insights + network watcher to record successful/failed connection attempts to VM
+- TCP 3389 is RDP
+- can only set group expiration with Office 365 Groups
+- require app password if issues with logging in to outlook from mobile device
+- DSCs are in PS
+- for DSC
+  - import node configuration
+  - then compile
