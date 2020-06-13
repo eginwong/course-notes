@@ -1,0 +1,129 @@
+# SignalR
+
+- [Microsoft Docs](https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/introduction-to-signalr)
+
+
+- ASP.NET SignalR is a library for real-time web functionality to apps
+  - push model of information
+  - examples include chat, dashboards/monitoring, real-time forms
+- simple API for server-to-client RPC calls that call JS functions in client browsers from server-side .NET
+- handles connection mgmt automatically and broadcasts
+- persistent connection
+- open-source
+- built-in providers to scale out to 1000s of clients
+  - Redis, Service Bus, SQL Server
+- underneath, uses WebSockets and will default to older technology for older clients
+  - WebSocket is most efficient for server memory, lowest latency, and underlying features
+  - > WebSocket requires the server to be using Windows Server 2012 or Windows 8, and .NET Framework 4.5
+  - for older clients, Server Sent Events (aka EventSource)
+- SignalR connection begins as HTTP and then upgrades to WebSocket if possible
+- on the client side, there are two transports that follow the Comet web application model
+  - ajax long polling
+    - call until server responds, then close connection, then request a new connection immediately
+  - forever frame (IE only)
+    - hidden IFrame which requests to an endpoint that server does not complete
+      - from server to client
+    - client to server creates new connection as per usual
+- SignalR has logic to determine when to use Long Polling vs. WebSockets
+- SignalR has two models for communicating between clients and servers
+  - persistent connections
+  - hubs
+    - higher-level pipeline that allows client/server to call methods on each other directly
+  - recommendation is to use Hubs API
+    - Connections to be used for:
+      - message format needs to be specified
+      - preference for messaging + dispatching over RPC model
+      - legacy port of applications
+- Requirements
+  - Windows OSs > 2008 r2
+  - only supported on .NET Framework 4.5
+  - IIS 8 Express for WebSocket 
+- Server API
+  - on startup of application, add Configuration method with `app.MapSignalR()` for bootstrapping
+  - default URL for clients to connect is `/signalr`
+    - in `$.connection.hub.url = "/signalr"` with generated proxy
+    - `$.hubConnection("/signalr", { useDefaultPath: false })` without generated proxy
+  - to create a hub, extend from the `Microsoft.Aspnet.Signalr.Hub` class
+  - default camelcase when referring to hub from js client
+    - can modify with `HubName` attribute to override this option
+  - one SignalR connection will be used for all Hubs defined by the service
+    - no performance difference
+    - all hubs will receive the same HTTP request headers
+  - generated js proxies file will contain proxies for all hubs in a one file
+  - groups are defined within Hubs
+    - named groups broadcast to subsets of connected clients
+    - maintained separately for each hub
+  - for methods that the client can call
+- communication over JSON
+- same camelCase rule applies for js proxy
+- if task is asynchronous, can use async/await syntax
+- can determine if all clients, only the specific caller, others, by group, in other groups, user id,  or by client id will get the SignalR message
+- if no method is found on the client, no error is raised
+- user group membership must be set on every new connection
+- there are lifecycle hooks to use for connecting to a hub
+- Context object for HubCallerContext
+  - can retrieve connectionid, guid
+  - request headers
+  - query string data
+  - can also retrieve user identity, role, name from context
+- can also pass a state object from client/server that is dynamic
+  - NOTE: SINCE REMOVED IN ASP.NET CORE SIGNALR because it wasn't working as expected for users
+- to enable tracing, add system.diagnostics element to Web.config
+- there is unit testing supported through Nuget packages
+- Security
+  - hooks into whatever the user has been authenticated/authorized by
+  - has an Authorize attribute to specify which users have access to hub/method
+    - for Hubs
+    - for Persistent Connections, must override `AuthorizeRequest`
+  - has CSRF mitigations
+  - do not use groups as a security mechanism
+  - can override AuthorizeAttribute for more customized behavior
+  - can use windows auth, validation form, connection header, certificate
+- SignalR Performance
+  - can throttle to avoid spamming server unnecessarily
+  - reducing message size is faster
+    - change name using `JsonProperty()` and then remap on server side
+  - can configure `DefaultMessageBufferSize` if messages are too big, default is 1k
+  - same for IIS configurations with max concurrent requests + app pool queue length
+  - verify that WebSocket is being used, as that has perf advantages
+  - can use performance counter apps to better trace perf
+  - scale out with Azure Service Bus, Redis, or SQL Server
+    - every message sent out on server bus
+  - load testing tool is [Crank](https://docs.microsoft.com/en-us/aspnet/signalr/overview/performance/signalr-connection-density-testing-with-crank), from dev branch of SignalR codebase
+- SignalR Connection Lifetime
+  - connection id remains the same even if underlying transport connection changes
+    - transport connection being: websockets, long-polling, forever frame, server-sent events
+  - disconnect occurs when
+    - client calls the `Stop` method
+    - connectivity is lost and disconnected timeout period ends
+    - if server dies, client will disconnect after timeout period ends
+    - if client dies, server will disconnect after timeout period ends
+  - server sends keepalive packet to client every 10s by default
+  - varying interruptions will not trigger the Reconnected event unless it is longer than the default frequency of 10s
+  - there is a `ConnectionSlow` event that appears after 2/3 of the keepalive timeout
+    - keepalive timeout = 20s
+    - client checks for keepalive pings every 2s
+  - if transport API realizes there is a disconnection, it will skip the `ConnectionSlow` event entirely
+  - certain connection events may not occur - depending on network environment
+  - modify connectiontimeout and disconnectTimeout and keepalive times by setting the `GlobalHost.Configuration` object
+  - can use event listeners in clientside to provide feedback to user about disconnect/slow
+- for streaming
+  - use signalR.Subject() 
+    - subscribe like regular rxjs
+- Code sections
+  - Server-side
+    - ClientHubInvoker:
+      - // communicate to all clients that we have the connection ids for in our list of Hub Connections
+      - SignalRSession.GetSignalRConnections().AsParallel().ForAll(connectionId => _context.Clients.Client(connectionId).RulesUpdated(resp));
+    - define interface for Hub to list expected events to emit to clientside
+    - Task defines asynchronous operation
+    - define public method to be called from client-side
+  - Client-side
+    - `connection.listenFor("EventName")`
+- GOOD POCS:
+  - base app 
+    - [guide](https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr)
+  - base app + redis or azure service bus?
+    - [guide](https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/real-time-web-applications-with-signalr#Exercise2)
+  - base app + crank testing
+    - [Crankier](https://staffordwilliams.com/blog/2019/06/10/load-testing-aspnet-core-signalr/)
