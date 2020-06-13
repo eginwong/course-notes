@@ -4,7 +4,7 @@
 @reread
 @dlc
 
-- The chocie and successful pursuit of a profession is but one tool for achieving your purpose. But without a purpose, life can become hollow.
+- The choice and successful pursuit of a profession is but one tool for achieving your purpose. But without a purpose, life can become hollow.
 - You have to design them into your family's culture
 - You've got to define for yourself what you stand for and draw the line in a safe place.
 
