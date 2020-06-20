@@ -1,0 +1,34 @@
+# SSH Agent Explained
+[ref](https://smallstep.com/blog/ssh-agent-explained/)
+
+- `ssh-agent` is a key manager for SSH
+  - holds keys and certs in memory, unencrypted, to be used for ssh
+  - doesn't write any key material to disk
+  - doesn't allow private keys to be exported
+  - only uses keys for signing a message
+  - process
+    - client sends public key to server
+    - server asks to send something back signed
+    - ssh-agent signs with private key
+    - server says okay
+    - later in handshake process, new ephemeral and symmetric keys are generated and used to encrypt SSH session traffic
+- ssh agent protocol
+  - add regular key pair
+  - add a constrained key pair
+  - add a key from a smart card
+  - remove a key
+  - list keys stored in agent
+  - sign a message with a key stored in agent
+  - lock or unlock the entire agent with a passphrase
+  - NOTE: constrained key is limited lifetime or one that demands explicit user confirmation when used
+- `ssh-add` is the API to call the protocol except signing
+  - default keys: `~/.ssh/id_rsa, id_ed25519, id_dsa, id_ecdsa`
+- agent forwarding
+  - allows local SSH agent to reach through an existing SSH connection and transparently authenticate on a more distant server
+  - `ssh -A`
+  - there is a risk because you open up your ssh-agent's unix domain socket to anyone who has root on the distant server
+  - prevention
+    - don't auto-turn on `ForwardAgent Yes`
+    - lock your ssh agent with password when using agent forwarding with `ssh-add -x` and `ssh-add -X` to unlock
+- use `ProxyJump` instead as safer alternative
+  - SSHing within an SSH session, except ssh program never runs on the middle section
