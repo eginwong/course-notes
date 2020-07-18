@@ -1,0 +1,32 @@
+# A Crash Course in Compilers
+[ref](https://increment.com/programming-languages/crash-course-in-compilers/)
+
+- programming language is a formal language used to communicate instructions to a computer
+- any Turing complete machine/language can implement any computable algorithm
+  - generally any notion of state (variables/argument passing) and conditionals
+- computer programs are typically used to feed code to produce an effect
+  - compilers
+    - translate source code into a target code with the same meaning
+    - goes through several phases as pipe transformations
+    - parsing
+      - Lisp reading
+        - code is data and vice versa, language syntax constructed entirely out of data structures
+      - scanning/parsing
+        - new languages are more complicated
+        - scanner (lexical analyzer) reads source text and produces a stream of tokens
+        - parser reads the tokens to transform into nodes in an AST
+    - analysis
+      - AST - what did the user mean?
+      - semantics
+      - name resolution, control flow, function invocation
+    - emission
+      - most will use the LLVM toolchain
+        - unifies hardware platforms and optimizations under one target
+      - targeting the IR (intermediate representation) that a compiler would emit allows for further optimizations written in C/C++ for free
+      - LLVM exposes C++ and C API to generate IR
+    - tooling and ecosystems
+  - interpreters
+    - take source code and immediately implement its effects
+    - simple
+    - execute faster than compilers
+    - ability to run in environments where compiling new code is prohibited

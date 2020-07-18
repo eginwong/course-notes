@@ -1,0 +1,41 @@
+# awk in 20 minutes
+[ref](https://ferd.ca/awk-in-20-minutes.html)
+
+- awk allows transformation and processing of data
+- structure is as follows: `pattern1 { ACTIONS; }`
+- will match against all patterns until input has been read entirely
+- awk has two main data types
+  - string
+  - numbers
+  - assignment through `=`
+  - default value of var is `""`
+  - arrays as `var[key] = value`
+- patterns
+  - regular and boolean expressions
+  - `/admin/ { ... }`
+    - cannot be used to capture groups, only for matching content
+  - &&, ||, !, == are available in the style of js
+  - both patterns can be mixed `/admin/ || debug == true`
+  - patterns are optional
+  - special patterns
+    - BEGIN/END which matches once before or after all input
+  - Fields
+    - by default separated by white space
+    - $0 is the whole line
+    - $1 is first bit before white space, etc etc
+    - can modify the line by assigning to $0, but generally avoid
+- Actions
+  - `{ print $0; }`
+  - `{ exit; }`
+  - `{ next; }`
+  - `{ a=$1; b=$0; }`
+  - `{ if (BOOLEAN) {ACTION} else if (BOOLEAN) { ACTION } else { ACTION } }`
+  - for loops too
+  - variables are all global
+- Functions
+- `{somecall($2)}`
+  - [limited number of built-in functions](https://www.gnu.org/software/gawk/manual/html_node/Built_002din.html#Built_002din)
+  - user defined functions
+  - `function add1(val) {return val+1;}`
+- Special variables
+  - FS, RS (lines), OFS, ORS, NF, NR, ARGV/ARGC
