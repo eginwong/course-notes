@@ -1,0 +1,112 @@
+# Define and implement a continuous delivery and release management strategy (10-15%)
+
+random websites here
+- on-prem can be self-managed with complete control
+  - expensive up front and hopefully cheaper in the long run
+- cloud has better scaling and easy to get started
+  - pay-as-you-go
+  - reliability depends on internet connectivity
+  - less means of customization
+  - potentially less secure
+- Ansible has azure hooks
+  - open-source for provisioning, config management, and deployments
+  - requires an ssh client on a linux server
+  - ansible playbooks in yaml
+- Terraform has azure hooks
+- use AKV to pass secure param value during deployment
+  - reference key vault id
+  - can exist in a different subscription than the rg you're deploying to
+  - enable kv for template deployment
+  - template defines a parameter
+    - parameter file with same name for param value
+  - can also create a nested template to enable dynamic id for kv secret
+- using linked and nested templates when deploying Azure resources
+  - nested templates done through "Incremental" mode under resources
+  - for expression evaluation in nested templates, must define `expressionEvaluationOptions` to be `scope: "inner"`
+  - for linked templates, use `templateLink` and `parametersLink`
+    - can't specify both `parametersLink` and `parameters`
+  - can define variables for url
+  - can pass containerSasToken for private storage account templates
+- understand the structure and syntax of ARM templates
+  - $schema, contentVersion, apiProfile, parameters, variables, functions, resources, outputs
+  - 256 params max
+  - dataTypes and variables are like array/json syntax
+  - user functions, can't access variables
+- circleCI as a build tool
+- jenkins as a build tool
+- agent pools
+  - scoped to entire organization
+  - roles for agent pool in organization setting
+    - reader
+    - service account
+    - administrator
+  - roles for agent pool in project settings
+    - reader
+    - user
+    - administrator
+
+
+- Continuous Delivery
+  - automate everything
+  - separating technical and functional release
+  - deployment stages/triggers
+  - release gates
+    - approvals/gates
+    - pre-deployment/post-deployment conditions/manual intervention
+    - gates:
+      - incident/issues management
+      - seek approvals outside Azure Pipelines
+      - Quality validation
+      - security scan
+      - change management
+      - UX relative to baseline
+      - infra health
+    - automated way to query, invoke Azure function/API
+    - can set time re-evaluation of gates
+    - timeout of gates
+    - pre: approve first then gate
+    - post: gate first then approve
+- difference between technical and functional documentation
+- appropriate deployment pattern
+  - blue-green
+    - deployment slots
+    - drain old sessions before transitioning to the new version
+  - canary release
+    - Azure traffic manager
+  - dark launching
+    - more for features on frontend, instead of backend performance
+  - A/B testing
+    - Azure PlayFab Game Manager to set up ab tests
+  - progressive exposure deployment
+- ADO build/pipeline
+  - task groups
+  - variable groups
+  - custom tasks
+  - secrets in release pipeline
+    - Service connections
+    - secret variables
+    - AKV
+  - yaml release pipelines
+    - azure-pipelines.yml
+      - can add files / docker / k8s files to repo directly
+
+## Develop deployment scripts and templates
+- recommend a deployment solution (e.g. GitHub Actions, Azure Pipelines, Jenkins, CircleCI, etc.)
+- design and implement Infrastructure as code (ARM, Terraform, PowerShell, CLI)
+- develop application deployment process (container, binary, scripts)
+- develop database deployment process (migrations, data movement, ETL)
+- integrate configuration management as part of the release process
+- develop complex deployments (IoT, Azure IoT Edge, mobile, App Center, DR, multiregion, CDN, sovereign cloud, Azure Stack, etc.)
+
+## Implement an orchestration automation solution
+- combine release targets depending on release deliverable (e.g., Infrastructure, code, assets, etc.)
+- design the release pipeline to ensure reliable order of dependency deployments
+- organize shared release configurations and process (YAML templates, variable groups)
+- design and implement release gates and approval processes
+
+## Plan the deployment environment strategy
+- design a release strategy (blue/green, canary, ring)
+- implement the release strategy (using deployment slots, load balancer configurations, Azure Traffic Manager, feature toggle, etc.)
+- select the appropriate desired state solution for a deployment environment (PowerShell DSC, Chef, Puppet, etc.)
+- plan for minimizing downtime during deployments (VIP Swap, Load balancer, rolling deployments, etc.)
+- design a hotfix path plan for responding to high priority code fixes

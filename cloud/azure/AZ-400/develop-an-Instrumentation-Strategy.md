@@ -1,0 +1,104 @@
+# Develop an Instrumentation Strategy (5-10%)
+
+## Design and implement logging
+- assess and Configure a log framework
+- design a log aggregation and storage strategy (e.g. Azure storage)
+- design a log aggregation using Azure Monitor
+- manage access control to logs (workspace-centric/resource-centric)
+- integrate crash analytics (App Center Crashes, Crashlytics)
+
+## Design and implement telemetry
+- design and implement distributed tracing
+- inspect application performance indicators
+- inspect infrastructure performance indicators
+- define and measure key metrics (CPU, memory, disk, network)
+- implement alerts on key metrics (email, SMS, webhooks, Teams/Slack)
+- integrate user analytics (e.g. Application Insights funnels, Visual Studio App Center, TestFlight, Google Analytics)
+
+## Integrate logging and monitoring solutions
+- configure and integrate container monitoring (Azure Monitor, Prometheus, etc.)
+- configure and integrate with monitoring tools (Azure Monitor Application Insights, Dynatrace, New Relic, Naggios, Zabbix)
+- create feedback loop from platform monitoring tools (e.g. Azure Diagnostics VM extensions, Azure Platform Logs, Event Grid)
+- manage Access control to the monitoring platform
+
+- logging
+  - logging to fs automatically disabled after 12 hours due to perf / storage concerns
+  - not all app envs have fs AND blob storage ability, Windows OS only
+  - `az webapp log tail` for live logging
+  - Windows app log files are under `D:\Home\LogFiles`
+  - kudu can also download logs
+- App Center for mobile apps
+  - runs automated UI testing
+  - iOS, Android, UWP, tvOS appss
+  - can launch test on real devices with screenshots of result
+  - App Center Test
+    - device set, device configuration, device tier
+  - App Center Distribute
+    - distribution groups, public or private
+    - shared distribution group across organization, i.e., for Android and iOS users
+    - users join via email or AAD
+    - can track installs and unique installs for releases
+    - release to app store
+  - App Center Diagnostics
+    - will send on re-launch of crashed app
+    - can track specific events when app is running
+    - `Crashes.TrackError` only for Xamarin, Unity, WPF, and WinForms SDK
+    - can also assign user ID to data sent to App Center
+    - Data Retention is 90 days by default or 28 by choice
+  - App Center Analytics
+    - can also track custom events
+- Performance efficiency
+  - scaling up and out
+    - consider start up time
+  - throttling
+  - serverless
+  - containers
+  - for network latency
+    - cache
+    - load balancers
+    - CDN
+    - ExpressRoute
+  - for storage
+    - SSD, HDD, Local/Standard/Premium
+    - polyglot persistence
+    - caching
+  - perf bottlenecks in application
+    - Azure Monitor
+    - Log Analytics, centralized logging
+    - App Insights
+- Operational excellence
+  - DevOps
+  - CICD
+  - Microservices
+  - Environment Consistency
+  - Activity Log for Azure Admin
+  - Log Analytics for all logs
+  - APM for app-specific
+  - IaC, ARM Templates
+  - Azure Automation
+- Azure Monitor
+  - collects metrics and logs
+  - Kusto QL
+  - Log-Management Platforms
+    - Correlation, Normalization, Reporting
+  - APM
+    - NewRelic is an example
+  - Agent-less
+    - Sumo, which reads Linux syslog
+  - Tracing
+    - Promotheus
+  - USE: Utilization, Saturation, Errors
+  - RED: Rate, Errors, Duration
+  - every day remediation to reduce errors before breaking
+- App Insights
+  - Runtime vs Build-time instrumentation
+    - runtime only supported for Windows web apps, IIS
+    - APPINSIGHTS_JAVASCRIPT_ENABLED for client-side js automatic telemetry in appsettings
+  - use Telemetry client to track custom events from SDK
+- Azure Security Center for protection against security threats
+  - Azure Sentinel to get info on Office 365, AAdvanced Threat Protection, etc
+  - playbooks to automate response to alerts
+  - can use continuous monitoring gate in release pipelines to stop deployments with issues
+  - Log Analytics to write queries
+  - Log Analytic Agent to gather info from resources into a workspace
+  - cross-resource query to get ASC/AppInsights workspaces together
