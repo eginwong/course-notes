@@ -1,0 +1,42 @@
+# How to learn D3.js
+[ref](https://wattenberger.com/blog/d3)
+
+- grabbing data
+  - d3-fetch
+    - json, dsv, svg, image, html, xml
+- manipulating data
+  - d3-array
+    - max, min, extent, mean, median, quantile, variance, deviation
+    - pass in dataset + accessor function (optional)
+      - accessor if map/manipulation is required
+  - transformations
+    - group, rollup, cross, permute, shuffle, range, zip
+  - d3-random
+- manipulating the DOM
+  - d3-selection
+    - select, on, dispatch, mouse, touch, attr, style, property
+  - d3-selection-multi for bulk changes
+- visualization
+  - can use DOM, Canvas, WebGL, or SVG
+  - d3-shape
+    - arc, pie, line, area
+      - can create curves for your lines
+    - links, symbols
+  - d3-path for drawing your own shapes
+  - d3-polygon
+- presenting objects
+  - d3-scale
+    - creating charts with ranges
+- colors
+  - d3-color
+  - d3-scale-chromatic
+- dealing with datetimes
+  - d3-time-format
+  - d3-time
+- animation
+  - d3-interpolate
+  - d3-transition
+  - d3-ease for better animations
+  - d3-timer to handle timed animations
+- maps and globes
+- d3-geo
