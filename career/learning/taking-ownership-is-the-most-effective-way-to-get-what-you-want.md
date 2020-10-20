@@ -33,4 +33,3 @@
 - Do you have personal experiences with learned helplessness?
 - How can I apply the ownership mindset in my day-to-day?
 - How can we foster this mindset in the work culture at large?
-- 

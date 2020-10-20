@@ -1,7 +1,7 @@
 # How to Get Lucky: Focus On The Fat Tails
 [ref](https://taylorpearson.me/luck/)
 
-@dlc 2020-06=12
+@dlc 2020-06-12
 
 ## Questions
 - how can we apply focusing on fat tails

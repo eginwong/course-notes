@@ -2,7 +2,7 @@
 [ref](https://hbr.org/2010/07/how-will-you-measure-your-life)
 
 @reread
-@dlc
+@dlc 2020-04-24
 
 - The choice and successful pursuit of a profession is but one tool for achieving your purpose. But without a purpose, life can become hollow.
 - You have to design them into your family's culture

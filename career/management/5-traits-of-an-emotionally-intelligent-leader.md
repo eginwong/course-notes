@@ -1,7 +1,7 @@
 # Emotionally Intelligent Leaders Have These 5 Traits
 [ref](https://www.pluralsight.com/blog/teams/5-traits-of-an-emotionally-intelligent-leader)
 
-@dlc
+@dlc 2020-07-10
 
 - thoughtful and approachable
   - > When challenging situations arise, they’re able to navigate them professionally without suppressing their emotions personally or unleashing them on unsuspecting team members.
