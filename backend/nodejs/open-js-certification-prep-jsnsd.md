@@ -131,6 +131,19 @@ If you work with Node.js every day and you frequently use frameworks like Expres
       - `ADDERSERVICE_PORT_8080_TCP_PROTO`, `ADDERSERVICE_PORT_8080_TCP_ADDR`, `ADDERSERVICE_PORT`
   - `concordant` library has a `dns` object used to resolve values
   - `fuge` also handles service discovery with the proper flags
+- hn-latest-stream for streaming data
+- sending a js response back for error is sending a JSON object back with type, status, message, and stack
+- in express, don't use async functions for the callbacks
+  - due to the legacy nature of express, it does not handle rejected promises well and can cause memory leaks
+  - add delete/put/post that maps to the internal libraries
+  - use process.env to inject service ports as needed
+  - beware, may need to add headers individually if trying to forward as "headers" doesn't always work. May need to "setHeader" explicitly
+  - express-http-proxy for full proxy
+  - sometimes input can be string or arrays, watch out because "split" or "toUpperCase" may not be on arrays
+  - `Number.isSafeInteger(Number(n))`
+  - to crash with parameter pollution, can pass multiple like `?un=a&un=b`
+  - use JSON Schema to validate input or AJV
+  - use `req.socket.remoteAddress` for block the ip
 
 ## Tips
 - know how to write interceptors in your node web framework of choice
