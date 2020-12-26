@@ -150,4 +150,4 @@ If you work with Node.js every day and you frequently use frameworks like Expres
 - blacklist/whitelist IPs and methods
 - know how to call requests within a request
 - know and understand how to display errors and status codes
-- know how to validate input
+- know how to validate inputodel
