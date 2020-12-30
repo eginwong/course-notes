@@ -1,0 +1,45 @@
+# Scaling Yourself, Scott Hanselman
+[ref](https://www.youtube.com/watch?v=FS1mnISoG7U&feature=youtu.be)
+
+- the less you do, the more you can do
+- > I just need to stay up late to catch up on work
+  - hope is not a strategy
+- effectiveness vs. efficiency
+  - effectiveness: doing the right thing
+  - efficiency: doing things quickly
+- suggestions
+  - inbox issues
+    - triage/classify
+    - predefined work
+    - work as it appears
+    - defining works
+  - 4 Ds
+    - do it
+    - drop it
+    - delegate it
+    - dump it
+  - communication is fault-tolerant
+    - dropping the ball is sometimes the right answer
+  - psychic weight
+  - rule of 3
+    - for the day
+    - for the week
+    - for the year
+  - busy == laziness
+  - being creative is the opposite of hanging out
+  - let it go
+  - efficiency
+    - sort your list and manage your input streams
+  - don't check your email in the morning, because people will reply
+  - **don't put energy into things you don't want more of.**
+  - conserve your keystrokes
+    - if it's long, put it in the wiki
+    - email is where your keystrokes go to die
+  - pomodoro technique?
+  - turn off notifications
+  - everything important will find its way to you many times
+  - multitasking fails
+    - workout + podcasts
+    - read + commute
+  - remove guilt systems
+  **- if it's not helping me to _, if it's not improving my life, it's mental clutter and its out.**
