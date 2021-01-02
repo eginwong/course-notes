@@ -1,0 +1,117 @@
+# Exam DA-100: Analyzing Data with Microsoft Power BI
+- data is to be
+  - descriptive
+  - diagnostic
+  - predictive
+  - prescriptive
+  - cognitive
+- data analysts' responsibilities
+  - prepare, analyze, model, visualize, manage
+- PowerBI parts
+  - Power BI Service (SaaS)
+  - Power BI Desktop
+  - PowerBI Apps
+  - there are preset apps that pull data for you and allow you to refresh dataset whenever
+- Power Query to amass info from different data sources
+  - can also import via a SQL query
+    - ideally create a view instead, to take advantage of optimizations like query folding on retrieval
+  - DirectQuery is ideal because it will not store a local copy re: storage modes
+  - performance tuning depends on the type of data source
+  - query folding offloads sql manipulation when possible in the form of `SELECT` statements
+  - Query diagnostics can also help
+  - data preview tools in Power Query Editor
+    - column quality
+    - column distribution
+    - column profile
+- Transformation of data
+  - transforming when loading in data will save the transformations for the next time that the data is loaded in
+  - remove columns earlier to simplify the data set
+  - can also merge tables together
+    - left, full, inner
+  - or append tables togeether
+  - M code is used to write power queries
+- Data Model Design
+  - Fact vs Dimension tables
+- Workspace Management
+  - can create apps, workspaces
+  - can view usage metrics
+  - can monitor performance
+  - can have development lifecycles (Premium)
+  - there's a Lineage view for Premium Pro, for admin, contributor, member roles
+  - add sensitivity labels
+- Security
+  - row-level security
+    - static
+      - create RLS roles using DAX and add members to them in PBIS
+    - dynamic
+      - `userPrincipalName()` in the DAX query
+- Manage Datasets
+  - can toggle data with `what-if analysis` in the Modelling section
+  - can have PowerBI gateway for ata processing in a centralized location
+    - includes refresh schedule
+  - incremental refresh can also select what to store and retrieve based on a datetime; RangeStart, RangeEnd
+  - there's an endorsement setting in workspace for dataset to show availability of data
+  - for premium or embedded, can get Query Caching per user
+  - mark as date table
+  - can create data hierarchies
+  - M-M can lead to ambiguities, and the same with bi-directional cross-filtering
+- DAX
+  - calculated columns have a value for each row in the table
+  - measures operate over the entire table
+  - `CALCULATE` is powerful to create measures
+  - `USERELATIONSHIP` allows phantom relationships for measures
+  - `TOTALYTD` or `PREVIOUSMONTH`
+- Performance Optimizations for a PBI Report
+  - start with emptying visual cache
+    - create new blank page, save and close, and then try the performance analyzer
+    - restart PowerBI Desktop
+  - to help, review
+    - relationships
+      - may have bad ones setup
+    - columns
+      - delete unneeded records/data
+    - visuals
+      - don't overcrowd
+    - DAX
+      - crappy performance
+      - add variables?
+    - Auto date/time
+      - can be turned off in global options if you already have a date time value
+  - aggregate data and lose detail to save space
+  - can create aggregations in power query or in data source
+- Data Analysis
+  - can do AI, clustering, outliers, grouping, topN
+  - Q&A visual can also be taught
+  - decomposition tree
+  - key influencers to explain specific breakdown
+- Visuals
+  - can add bookmarks and buttons
+  - cross-report drillthrough
+  - edit interactions to minimize performance drag
+- Dashboards
+  - no filters, visualization, or fields panes
+  - single page
+  - can add alert rules
+    - can only set alerts on specific kinds of visuals in PBIS
+  - stream real-time data to dashboard
+  - data classification
+  - mobile view
+- Power BI Report Builder
+  - different application for pagination and reports
+
+## Review Questions
+- to reduce model size, split datetime column into two
+- further redution via group by + correct relationships
+- web content tile for a Microsoft Stream video
+- profiling occurs on the first 1k rows, which can be modified
+- remove columns + select + endswith
+- for json, expand records -> convert list to table > expand column
+- different environments of data can be toggled via parameter
+- cannot change data type for an "at" value to Date
+  - rather create a new column with correct date type
+- RELATEDTABLE and RELATED should be merged tables
+- roles are additive in PBI
+- one-to-many, and single cross-filtering
+- create one active relationship and one inactive for use in specific queries to minimize model size
+- R visual has a data size limitation of around 150k rows
+- group type is list for not numeric or date, and bin is
