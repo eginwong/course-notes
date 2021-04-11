@@ -1,0 +1,33 @@
+# MANAGERS: WHAT DO YOU DO WHEN YOUR TEAMMATE SHARES THEIR GRIEF?
+[ref](https://larahogan.me/blog/managers-when-teammate-shares-grief/)
+
+- have a handy simple response ready
+  - > I'm so sorry
+  - > That sounds incredibly tough
+  - > Would it be helpful to talk about it?
+  - Thank you for sharing the news with you
+  - allow for silence
+- don't hop into problem-solving, don't make this about you
+- ask open questions instead
+  - research what resources your company has for employees EAP
+  - > would it be helpful to brainstorm together?
+  - > would it be helpful to take a day and talk again tomorrow?
+  - > would it help to take the rest of the week off?
+  - keep your tone level and body language open
+  - don't share details of your own story right now
+- mirror their energy
+  - nod at the pace they're talking at or slightly slower
+  - soft eye contact
+  - lean in (a little is fine)
+- create lots of silence and space
+  - > i'm here
+  - > take the time you need
+- consider your role
+  - you are not a therapist, it's okay to defer to someone else
+  - > I am here for you and though I'm not equipped, I want to help you find the people you need that can help
+  - steer them back into what you can do if it's too therapeutic
+- following up
+  - write cards (etsy!) that don't need to have a response
+  - send flowers
+  - care package
+  - > wanted to check in, anything else I can help with?
