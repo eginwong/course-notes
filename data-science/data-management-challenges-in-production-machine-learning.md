@@ -1,0 +1,87 @@
+# Data Management Challenges in Production Machine Learning
+[ref](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45a9dcf23dbdfa24dbced358f825636c58518afa.pdf)
+
+- training model -> train -> model
+- model -> serve -> serving data
+- invalid data can cause outages in prod
+- preparing the data
+  - what features can be derived from data?
+  - how are features generated in training and serving?
+  - what properties of the feature values?
+  - what are best practices to transcode values for ML?
+- getting to a good model
+  - good model?
+  - should data be encoded differently?
+  - more data? more features?
+- data failure
+  - cost of retraining models can be expensive
+  - catch them early!
+- prepare -> validate (which data props are significantly affecting quality of model? any infra/data dependencies?) -> training data
+  - what are possible deviations between training and serving data? significant?
+- fixing data
+  - will the fix help the data and improve the model?
+  - what is the fix?
+  - how to backfill fix into data
+- Data understanding in ML pipeline
+  - questions to ask
+    - check feature's min/max/mean value
+    - histograms of cts or categorical values are as expected
+    - whether a feature is enough in enough examples
+      - data prop A is in 70% of the examples
+    - whether cardinality is correct
+  - visualization can help with understanding shape of data
+    - SeeDB: data driven viz
+    - QUDE: controlling false discoveries
+      - multiple hypothesis testing
+- Feature-based Analysis
+  - types of ML analysis
+    - given a model, identify training data slices that lead to high/low quality model
+    - given serving logs, detect training/serving skew
+  - data cube analysis
+    - allow varying slices of features to find significance
+- Data lifecycle analysis
+  - provenance and metadata analysis tools
+    - Google Data Search (GOODS)
+      - track datasets post-hoc
+    - ProvDB
+      - unified maintenance for complex collab data science workflows
+      - data lifecycle management
+- Open questions for ML Analysis
+  - is the model fair?
+  - are there new kings of spam?
+- Data Validation
+  - what if? 
+    - change of casing
+      - auto-corrections
+    - loss of property
+      - find where and notify user to fix
+    - unit conversion
+      - create a new clean field
+  - observe issue in training input data
+  - fix issue in serving data
+  - need to detect problems
+  - current best practice
+    - alert + playbook
+- outline-data validation
+  - rank alerts from most actionable to least
+  - understand how fields are used
+  - balance recall and precision
+- how to design alerts
+  - check missing fields
+  - check the most common value is not more common than before
+  - check if domain of values has increased for format changes
+  - time series-analysis checks
+    - use on only most critical features, not everything
+      - significant change over weekly time period, week over week
+- Data Preparation
+  - difficult, requires expert knowledge
+  - adding new attrib or examples to training data
+  - instead of generating small high-quality data set, generate large low-quality and tune with features
+  - feature transforms
+    - normalization
+    - buketization
+    - winsorizing
+    - one-hot encoding
+    - feature crosses
+  - getting ML to create the features is resource and data-intensive
+  - active learning (semi-supervised) can help to improve outcome of better labelling and quality
