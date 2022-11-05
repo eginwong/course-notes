@@ -1,0 +1,439 @@
+# Build a Modern Computer From First Principles, Part I
+[Coursera](https://www.coursera.org/learn/build-a-computer/home/welcome)
+
+## Week 1
+- hardware course, second part is software course
+- ROM <-> CPU <-> RAM
+- process
+  - chip diagram > HCL > test script > chip operation
+  - week 1: elementary logic gates
+  - 2: arithmethic + logic unit
+  - 3: registers and memory
+  - 4: low-level programs
+  - 5: computer arch
+  - 6: assembler
+- Module 1: Boolean Functions and Gate Logic Roadmap
+  - HDL has interface and implementation
+    - cannot change input names, follow the APIs
+  - case-sensitive
+  - pins
+    - input, output, internal
+    - fan-in 1 and unlimited fan-out
+    - multi-bit value is called a bas
+    - default is single bit value for each pin
+  - chips
+    - sequential: changes at next cycle, called clocked
+    - combinational: immediately, async
+    - feedback loops only work with sequential chips
+      - otherwise, you get race conditions
+  - 1: Boolean Logic
+    - Nand has the special property that all other operations can be derived from it: Not and
+    - composite gates are just multiple gates together
+    - HDL: hardware definition language to reduce cost of needing to physically optimize and test
+      - composed of header + parts
+        - header: interface
+        - parts: implementation
+    - types
+      - multiplexor
+        - take multiple inputs and switch based on a selector to one output
+      - demultiplexor
+        - take one input + switch, and output a and b, depending on what the switch is on
+      - multi-bit
+        - same operations but on an array of bits
+      - multi-way bit
+        - same operations but with an array of switches and input/output arrays
+    - canonical representation
+      - 1. write out truth table
+      - 2. look at all rows with output = 1
+      - 3. for each such row, construct a term by AND-ing together literals that fix the values for all the row's inputs
+      - 4. now, OR together all these terms and we get an equation
+    - HOW TO SOLVE HDL LOGIC GATES:
+      - create equation via canonical representation and write in HDL
+  - homework:
+    - [✅] And
+    - [✅] DMux4Way
+    - [✅] Mux16
+    - [✅] Not
+    - [✅] Or16
+    - [✅] And16
+    - [✅] DMux8Way
+    - [✅] Mux4Way16
+    - [✅] Not16
+    - [✅] Or8Way
+    - [✅] DMux
+    - [✅] Mux
+    - [✅] Mux8Way16
+    - [✅] Or
+    - [✅] Xor
+
+## Week 2
+- Module 2: Boolean Arithmetic and the ALU Roadmap
+  - central processing unit - CPU
+  - binary operations
+    - in addition, the overflow is dropped and we have the modulo response
+    - only need two chips: half adder, full adder, and then combine
+  - two's complement for negative numbers
+    - easier for addition because also modulo 2^n
+    - to convert, it is positive number, then invert, then add 1
+    - -5 = 0101 > 1010 > 1011
+    - -6 = 0110 > 1001 > 1010 
+  - arithmetic logic unit - ALU
+    - CPU contains the ALU
+    - ALU: input1 + input2 + function 
+      - function is integer addition/multiplication/division...
+        - or logical operation
+      - hardware/software tradeoff
+    - hack ALU
+      - 6 functions leading to 18 outputs
+      - 2 output flags
+      - if out == 0, zr = 1
+      - if out < 0, ng = 1
+  - TIPS:
+    - if you have to negate to do ORs, consider XOR
+    - use Mux for selection in if statements
+    - can output multiple sub pins, not in the input
+  - homework:
+    - [✅] HalfAdder
+    - [✅] FullAdder
+    - [✅] Add16
+    - [✅] Inc16
+    - [✅] ALU
+
+## Week 3
+- Module 3: Memory Roadmap
+  - Sequential Logic
+    - previously: no concept of time
+    - want to store state
+      - memory
+      - counters
+  - Flip Flops
+    - flips between 0 and 1, trivial and given
+    - can store data via load in a bit
+  - Memory Units
+    - von neumann architecture: memory -> cpu
+    - RAM
+      - volatile, dies when power cut
+      - data
+      - instructions
+      - has a bunch of registers inside, but only one can be loaded each time, at its specific bit address
+      - all registers have the same w width
+    - disks
+      - non-volatile
+    - register has multiple bits in it
+    - use flip flop as basic building block
+      - derived from two nand gates in loop forever, which is strange to think about but works between clocks
+      - can also do this via physical hardware
+    - use dmux, mux gates for fanning in and out the selection of which memory address in the RAM chip
+    - NOTE: the first 3 bits are reserved the registry's memory
+  - Counters
+    - in, load, inc, reset, out
+      - inc is default operation of counter, by +1
+      - load is to set a value
+      - reset is to set counter to 0
+    - order of operations is:
+      - reset > load > inc
+  - TIPS:
+    - implementation, you flip order of if/else statements to go last first
+  - perspectives
+    - types of memory
+      - flash (rw)
+      - ROM (read only + non-volatile)
+      - RAM (read + volatile)
+      - cache
+
+## Week 4
+- Module 4: Machine Language Roadmap
+  - elements
+    - machine language is usually in sync with hardware and software interfaces
+    - the more complicated the machine language, the more cost in implementing
+    - operations
+      - arithmetic
+      - logical
+      - goto
+    - data types?
+    - memory retrieval can be expensive, so make memory hierarchy
+    - CPU contains small amounts of registers for fast access
+    - data registers or address registers
+    - addressing modes
+      - register
+        - R1 + R2
+      - direct
+        - R1 + M[200]
+      - indirect
+        - R1 + M[A]
+      - immediate
+        - R1 + 8
+    - input/output
+      - drivers translate devices into registers
+  - hack computer
+    - D holds 16 bit value
+    - A holds 16 bit value
+    - M represents the selected 16 bit RAM register addressed by A
+    - A-instruction does an assignment for M
+    - C-instruction
+      - assign computation, can store in multiple containers
+      - jump allows for conditionals, compared to 0
+  - hack language spec
+    - can write in either binary code or symbolic language
+    - op code determines whether a or c-instruction
+    - next two bits are not used
+    - next are comp bits (6)
+    - next are dest bits (3)
+    - next are jump bits (3)
+  - i/o
+    - keyboard memory map is 1 16-bit register
+    - all keys have a scan code which is represented in binary
+    - pointers
+      - represented with A = (some operator +/-) M
+
+## Week 5
+- Module 5: Computer Architecture Roadmap
+  - Von Neumann Architecture
+    - information flows
+      - control
+      - data
+        - arithmetic logic unit
+          - also takes information from the control bus based on the data
+      - access
+        - registers
+          - also linked with data too
+      - memory includes program and data memory types
+  - The Fetch-Execute Cycle
+    - fetch instructions
+    - execute instructions
+    - can separate program and data memory to avoid swapping between the two during execution
+  - Central Processing Unit
+    - all calculations of the machine take place here
+    - connected to instruction and data memory
+    - contains the ALU
+    - inputs
+      - data value
+      - instruction
+      - reset
+    - outputs
+      - data value
+      - write to memory?
+      - memory address
+      - address of next instruction
+  - The Hack Computer
+
+## Week 6
+- Module 6: Assembler Roadmap
+  - Assembly Languages and Assemblers
+    - what is between chips and machine language
+    - process
+      - parse assembly language command
+      - break into fields
+      - lookup binary code for each field, in some table
+      - combine code into a single machine language command
+    - handling symbols
+      - lookup labels
+        - forward references are when referenced before assigned
+  - Hack Assembly Language
+    - A-instruction
+    - C-instruction
+    - Symbol
+      - label
+      - variable
+      - pre-defined symbols
+    - White space
+      - empty lines, indentation
+      - comments
+      - in-line comments
+    - how to write an assembly
+      - skip white space
+  - Assembly Process - Handling Instructions
+    - A-instruction
+      - op-code starts with 0
+      - generate value into a 15-bit binary constant
+    - C-instruction
+      - symbolic syntax -> binary syntax
+      - use the table to reverse engineer the binary syntax
+  - Assembly Process - Handling Symbols
+    - variable
+      - only apply to A-instructions
+    - label
+    - pre-defined
+    - solution
+      - 1. construct empty symbol table
+        - add predefined table of symbols
+      - 2. first pass
+        - add labels into symbol table
+      - 3. second pass
+        - set n to 16
+        - if there is a variable (@symbol), look up the symbol value in table and replace
+          - if not found, add to table and n++ for next variable counter
+  - Developing a Hack Assembler
+    - parser breaks down current command (A-command, C-command, label)
+    - code class converts parsed output to binary
+    - combine at the end
+  - Programming
+    - Parser
+    - Code: field into bin value
+    - SymbolTable: manages table
+    - Main: I/O and process
+
+## Week 7 (Part II)
+- Module 0 Machine Language Overview
+  - review of Week 4
+- Module 1 Virtual Machine Part I
+  - Java -> Jvav Compiler -> VM Code -> JVM Implementation for each OS
+  - The Stack
+    - functions: pops argument(s) from stack, computes function on arguments, push result back
+    - handles arithmetic, logic, branching, function commands
+  - Memory Segments
+    - virtual memory segments for closure or scoping of variables
+    - segments
+      - local
+      - argument
+      - this
+      - that
+      - constant
+      - static
+      - pointer
+      - temp
+  - Pointer Manipulation
+    - *p means we use the value of p and do a memory lookup to find the actual value, look for the value of the pointer
+    - regular p is a variable
+    - `@SP; A=M; M=D`
+  - implementation
+    - stack base addr is 256
+    - `A=M`, M means do a lookup based on the current address register; A is the current address register
+  - you can place local address to start anywhere, can go with 1015
+  - and pointer is at 1
+  - static variables go into RAM[16-255]
+  - temp variables has 8, for compiling purposes, from RAM[5-12]
+  - pointer 0 is `this`
+  - pointer 1 is `that`
+  - push: assign, and then increment
+  - pop: decrement, and then assign
+  - architecture
+    - Parser
+      - parse into lexical components
+      - ignores all white space and comments
+      - arg1, arg2
+    - CodeWriter
+      - output file stream as input
+      - 
+    - Main
+      - I/O: filename.vm -> filename.asm
+      - create Parser, create CodeWriter, parse each line of input file and generate code
+
+## Week 7+8
+- branching
+  - unconditional branching
+  - conditional branching
+- function
+  - call and return creates separate stack and communicates between the two
+  - block scope between functions, can store saved frame of the caller and revert back when complete
+  - store the stack frame of previous function invocation and when complete, return to previous stack frame with result
+  - contract
+    - function must return at the end of method
+    - local stack is allocated and emptied to zeros
+    - must return
+  - call vs function
+    - call invokes a function
+    - return will go back to return address that was stored in a temp variable
+    - make sure to move back the 4 pointers (lcl, arg, this, that)
+  - this is a two-tier compiler, which makes the overall compiler much easier
+    - similar to JVM, C++, C#
+    - less efficient than a single tier compiler
+    - more secure because you can see the intermediate or IL and analyze that for security leaks, + sandbox or jailing to ensure root access isn't gained
+
+## Week 9
+- review of Stack and Heap, OO programming, good software arch
+
+## Week 10
+- Compiler I: Syntax Analysis
+  - tokenizing
+  - grammars
+  - parsing
+  - parse tree
+    - the type of parser
+      - LL grammar
+        - can be parsed recursively without backtracking
+      - LL(k) parser
+        - can be parsed with lookahead of at most k tokens
+  - XML/mark-up
+  - compilation
+  - handling data
+
+## Week 11
+- Compiler II: Code Generation
+  - use symbol tables for storing variable metadata
+    - name
+    - type
+    - kind
+    - scope
+    - count
+  - for compilation, have class-level and subroutine-level symbol tables
+  - nested scoping handled via use of linked lists and scopes
+- handling expressions
+  - we read infix
+  - stacks use postfix
+    - need to convert from one to the other
+    - use DFS to read parse tree to convert parse tree into code generated VM
+    - OR codewrite algorithm
+- objects
+  - this is for objects
+  - that is for arrays
+  - need to use pointer to anchor these segments in the heap
+  - call Memory.alloc 1 to create pointer, and then pop it as a pointer
+    - constructor returns the object created, which would be push pointer 0
+  - void methods must return a response according to the contract, so any ol' dummy value is fine
+- handling arrays
+  - make sure to generalize for expression assignment of arrays
+  - make use of the temp memory segment as needed
+
+## Week 12
+- Operating System
+  - typical OS services and libraries
+    - mathematical
+    - abstract data types
+    - input functions
+    - textual output
+    - graphical output
+  - system oriented services
+    - memory management
+    - file system
+    - IO devices
+    - UI management
+    - multi-tasking
+    - networking
+    - security
+  - efficiency matters
+    - because it's low level, it's super important to be efficient!
+    - multiplication
+      - shift multiplicand by width of digits in multiplier
+      - dot product with actual 1 or 0 in binary representation
+      - add
+      - log n
+    - division
+      - use long division, which is faster
+      - log n again
+    - sqrt
+      - binary search
+      - log n
+  - memory access
+    - RAM, loosely typed array access for JACK specifically
+  - heap management
+    - alloc(size)
+      - segment size + 2, we say segment is possible
+      - we have a freelist of linked lists that helps us find the first possible segment
+        - first fit (find first available)
+        - best fit (smallest possible segment)
+      - carve a block of size +2 from the free list, and return remainder back to free list
+    - dealloc
+      - append object back to free list
+      - the more we recycle, the more the free list becomes fragmented
+  - graphics
+    - bitmap vs vector
+      - bits are on and off for the colour
+      - vector draws line
+        - can scale better
+        - better stored, can be turned into bitmap
+        - drawPixel, drawLine, drawCircle
+          - Memory.peek, Memory.poke
+  - text
+    - consider cursor class
+    - fonts
