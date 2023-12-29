@@ -1,0 +1,71 @@
+# Kubernetes Deconstructed Understanding Kubernetes By Breaking It Down, Carson Anderson
+- [ref](https://www.youtube.com/watch?v=90kZRyPcRZw)
+
+- pod is what k8s executes
+  - can include containers, volumes, sidecars, etc
+- deployment can create pods
+  - pod specifications
+- need services to access pods
+  - load balancing layer AND abstraction layer
+  - service can do the rolling image updates
+- ingress is for outside the cluster to inside the cluster, to access the service
+- declaratives specify all the details of k8s
+- container is
+  - label
+  - metadata
+  - tar file of app data
+  - ideally one app/container
+- k8s is:
+  - kube-apiserver
+    - all pods live in etcd cluster, distributed etc.
+    - on all master nodes
+  - kube-scheduler
+    - watches apiserver
+    - identifies where pods go where
+    - can customize scheduler
+    - on all master nodes but only one is active at one time
+  - kube-controller-manager
+    - the brain
+    - doesn't do anywork
+    - has core controllers
+      - namespace controller
+      - deployment controller
+      - replicaset-controller
+    - on all master nodes, only one is active at one time, not always same as scheduler
+  - kubelet
+    - talks to container runtime, creates pod in node
+    - does liveliness/readiness probes
+    - runs on all master nodes
+  - kube-proxy
+    - talk to api server
+    - makes services real
+    - network provider, load balancer
+- basic networking
+- node have ip, pods have cidrs
+- pods talk to each other with network provider
+  - conditions for communication
+    - all containers can communicate with all othe rcontainers without NAT
+    - all nodes can communicate with pods or nodes without NAT
+    - IP that a container sees itself as the same IP as other see it
+- services have a selector and 1-M ports, and a type (load balancer, node port, clusterIP, and 1 more)
+  - clusterIP
+    - everything resolves down to IP but you can use name, namespace, cluster + namespace + name etc
+    - the pod speaks to its ip tables which then resolves to the service which then points to underlying pods
+      - this is done via the kube-proxy, which keeps all the data up to date
+    - for networking within the cluster ONLY
+  - nodePort
+    - also gets a cluster IP but also a port, now external can hit those node ports which redirectes from internal ip tables to those pods
+  - loadBalancer
+    - this is one is cloud-specific
+    - external clients hit the load balancer service which then go to the underlying node ports/clusterIPs
+    - yes, creates all three (incl. two above) that does all the routing
+  - [ref](https://stackoverflow.com/questions/41509439/whats-the-difference-between-clusterip-nodeport-and-loadbalancer-service-types)
+- ingress controller
+  - rules for networking
+  - each node has an ingress controller pod, and then potentially an ingress service
+  - and then we hit the ingress controller which hits the ingress service nodes which then routes to the app nodes
+- bonus
+  - can apply SecurityContext on to nodes or pods
+- network policy, can apply to pod, services
+- config maps are for kvp with secrets as volumes or as env vars
+- affinity helps scheduler provide hints on how we want to situate pods across your nodes
